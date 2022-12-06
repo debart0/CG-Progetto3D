@@ -1,10 +1,11 @@
 #pragma once
+#pragma once
 #include "Lib.h"
- 
+
 #include <string>
 
 
- 
+
 struct {
 	vec4 position;
 	vec4 target;
@@ -88,7 +89,7 @@ typedef struct {
 	vector <GLuint>  indici;
 	vector<vec3> normali;
 	vector<vec2> texCoords;
-	mat4 Model;
+	mat4 ModelM;
 	int sceltaVS;
 	int sceltaFS;
 	GLuint VAO;
@@ -104,5 +105,26 @@ typedef struct {
 	vec4 ancora_world;
 } Mesh;
 
+typedef struct {
+	vector<vec3> vertici;
+	vector<vec4> colori;
+	vector <GLuint>  indici;
+	vector<vec3> normali;
+	vector<vec2> texCoords;
+	mat4 ModelM;
+	int sceltaVS;
+	int sceltaFS;
+	GLuint VAO;
+	GLuint VBO_G;
+	GLuint VBO_C;
+	GLuint VBO_normali;
+	GLuint EBO_indici;
+	GLuint VBO_coord_texture;
+	ShadingType shading;
+	Material materiale;
+	string nome;
+	vec4 ancora_obj;
+	vec4 ancora_world;
+} MeshObj;
 
 static vector<Mesh> Scena;

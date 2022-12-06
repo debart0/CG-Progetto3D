@@ -6,7 +6,7 @@ in vec3 N, L,R,V,H;
   uniform float time;
  uniform vec2 resolution;
  uniform int sceltaFS;
- 
+ float strenght=0.1;
 struct PointLight{
 	vec3 position;
 	vec3 color;
@@ -35,13 +35,13 @@ void main()
     {
     //Shading interpolativo
     
-      FragColor=mix(ourColor,texture(id_tex,vec2(frag_coord_st.x,frag_coord_st.y)),0.5);
+      FragColor=mix(ourColor,texture(id_tex,vec2(frag_coord_st.x,frag_coord_st.y)),0.3);
       }         
        else if (sceltaFS==3)
 	 {
-     //Shading di Phong
+     //Shading di Phong per modello di illuminazione di Phong
 
-            vec3 ambient = light.power * material.ambient;
+            vec3 ambient = strenght*light.power * material.ambient;
 
             //diffuse
             float coseno_angolo_theta= max(dot(L,N), 0);
@@ -55,6 +55,27 @@ void main()
 
             FragColor = vec4(ambient + diffuse + specular, 1.0);      
 
-            FragColor=mix(FragColor,texture(id_tex,vec2(frag_coord_st.x,frag_coord_st.y)),0.5);
-    }   
+            FragColor=mix(FragColor,texture(id_tex,vec2(frag_coord_st.x,frag_coord_st.y)),0.3);
+    } 
+    else if (sceltaFS==5)
+	 FragColor=ourColor;
+     else if (sceltaFS==6)
+	 {
+     //Shading di Phong per modello di illuminazione di Phong senza texturing da usare per mesh obj
+
+            vec3 ambient = strenght*light.power * material.ambient;
+
+            //diffuse
+            float coseno_angolo_theta= max(dot(L,N), 0);
+
+            vec3 diffuse = light.power * light.color * coseno_angolo_theta * material.diffuse;
+
+            //speculare
+            float coseno_angolo_alfa =  pow(max(dot(V,R),0),material.shininess);
+
+            vec3 specular =  light.power * light.color * coseno_angolo_alfa * material.specular;
+
+            FragColor = vec4(ambient + diffuse + specular, 1.0);      
+
+              } 
 }

@@ -113,9 +113,9 @@ void crea_piano(Mesh* mesh, vec4 color)
 	mesh->normali.push_back(vec3(0.0, 1.0, 0.0));
 	mesh->normali.push_back(vec3(0.0, 1.0, 0.0));
 
-	mesh->texCoords.push_back(vec2(0.0, 2.0));
-	mesh->texCoords.push_back(vec2(2.0, 2.0));
-	mesh->texCoords.push_back(vec2(2.0, 0.0));
+	mesh->texCoords.push_back(vec2(0.0,10.0));
+	mesh->texCoords.push_back(vec2(10.0,10.0));
+	mesh->texCoords.push_back(vec2(10.0, 0.0));
 	mesh->texCoords.push_back(vec2(0.0, 0.0));
 
 

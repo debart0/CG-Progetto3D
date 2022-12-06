@@ -137,25 +137,34 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="geometria.cpp" />
     <ClCompile Include="gestioneTexture.cpp" />
+    <ClCompile Include="load_meshes_assimp.cpp" />
     <ClCompile Include="Progetto3D.cpp" />
     <ClCompile Include="ShaderMaker.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="geometria.h" />
-    <ClInclude Include="GestioneTesto.h" />
-    <ClInclude Include="gestioneTexture.h" />
-    <ClInclude Include="Lib.h" />
-    <ClInclude Include="ShaderMaker.h" />
-    <ClInclude Include="stb_image.h" />
-    <ClInclude Include="Strutture.h" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="enum.h" />
+    <ClInclude Include="geometria.h" />
+    <ClInclude Include="gestioneTexture.h" />
+    <ClInclude Include="gestione_menu.h" />
+    <ClInclude Include="gestione_mouse.h" />
+    <ClInclude Include="gestione_telecamera.h" />
+    <ClInclude Include="Lib.h" />
+    <ClInclude Include="load_meshes_assimp.hpp" />
+    <ClInclude Include="materiali_base.h" />
+    <ClInclude Include="ShaderMaker.h" />
+    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Strutture.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -18,8 +18,8 @@ struct PointLight{
 	vec3 color;
 	float power;
  };
-
- //definizione di una varialie uniform che hala struttura PointLight
+ float strenght=0.1;
+ //definizione di una variabile uniform che hala struttura PointLight
 uniform PointLight light;
 
 //Struttura per la gestione di un materiale
@@ -56,17 +56,16 @@ void main()
             //Trasformare le coordinate del vertice da elaborare (aPos) in coordinate di vista
             vec4 eyePosition= View*Model*vec4(aPos,1.0);
 
-            //Trasformia la posizione della luce nelle coordinate di vista
+            //Trasformiamo la posizione della luce nelle coordinate di vista
 
             vec4 eyeLightPos= View * vec4(light.position, 1.0);
 
             //trasformare le normali nel vertice in esame nel sistema di coordinate di vista
 
             //
-           
-              N=  normalize(transpose(inverse(mat3(View*Model)))*vertexNormal);
-           
-                     
+            
+             mat3 G= mat3(transpose(inverse(View*Model)));
+             N= normalize(G*vertexNormal);     
 
             
             //Calcoliamo la direzione della luce L, la direzione riflessione R e di vista
@@ -77,7 +76,7 @@ void main()
 
 
             //ambientale
-            vec3 ambient = light.power * material.ambient;
+            vec3 ambient = strenght*light.power * material.ambient;
 
             //diffuse
             float coseno_angolo_theta= max(dot(L,N), 0);
@@ -112,8 +111,8 @@ void main()
 
             //
            
-              N=  normalize(transpose(inverse(mat3(View*Model)))*vertexNormal);
-           
+           mat3 G= mat3(transpose(inverse(View*Model)));
+            N= normalize(G*vertexNormal);
                      
 
             
@@ -121,10 +120,10 @@ void main()
 
               V= normalize(viewPos - eyePosition.xyz);
               L = normalize((eyeLightPos- eyePosition).xyz);
-              //R = reflect(-L,N);  //Costruisce la direzione riflessa di L rispesso alla normale
-              H=normalize(L+V);
+             
+              H=normalize(L+V); //Costruisce il vettore H a metà tra direzione di luce e di vista
             //ambientale
-            vec3 ambient = light.power * material.ambient;
+            vec3 ambient = strenght*light.power * material.ambient;
 
             //diffuse
             float coseno_angolo_theta= max(dot(L,N), 0);
@@ -154,8 +153,9 @@ void main()
 
             //trasformare le normali nel vertice in esame nel sistema di coordinate di vista
 
-             N=  normalize(transpose(inverse(mat3(View*Model)))*vertexNormal);
-           
+              mat3 G= mat3(transpose(inverse(View*Model)));
+             N= normalize(G*vertexNormal);     
+
                      
 
             
@@ -170,7 +170,7 @@ void main()
     }
      if (sceltaVS==4)
     {
-
+    //Shader  tipo cartoon
         gl_Position = Projection*View*Model*vec4(aPos, 1.0);
         //Trasformare le coordinate del vertice da elaborare (aPos) in coordinate di vista
         
@@ -179,7 +179,9 @@ void main()
 
         vec4 eyeLightPos= View * vec4(light.position, 1.0);
         L = normalize((eyeLightPos- eyePosition).xyz);
-        N=  normalize(transpose(inverse(mat3(View*Model)))*vertexNormal);
+          mat3 G= mat3(transpose(inverse(View*Model)));
+             N= normalize(G*vertexNormal);     
+
         float intensity= normalize(dot(L,N));
         if (intensity > 0.95)
 	    	ourColor  = vec4(1.0,0.5,0.5,1.0);
