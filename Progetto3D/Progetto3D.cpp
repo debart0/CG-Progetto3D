@@ -318,7 +318,7 @@ void INIT_VAO(void)
 	Piano.nome = "Terreno";
 	Piano.ModelM = mat4(1.0);
 	Piano.ModelM = translate(Piano.ModelM, vec3(0.0, -5.0, 0.0));
-	Piano.ModelM = scale(Piano.ModelM, vec3(500.0f, 1.0f, 500.0f));
+	Piano.ModelM = scale(Piano.ModelM, vec3(200.0f, 1.0f, 200.0f));
 	Piano.sceltaVS = 1;
 	Piano.sceltaFS = 1;
 	Piano.material = MaterialType::EMERALD;
@@ -552,7 +552,7 @@ void INIT_CAMERA_PROJECTION(void)
 	//Imposto la telecamera
 
 	ViewSetup = {};
-	ViewSetup.position = glm::vec4(0.0, 0.5, 70.0, 0.0);
+	ViewSetup.position = glm::vec4(0.0, 0.2, 50.0, 0.0);
 	ViewSetup.target = glm::vec4(0.0, 0.0, 0.0, 0.0);
 	ViewSetup.direction = ViewSetup.target - ViewSetup.position;
 	ViewSetup.upVector = glm::vec4(0.0, 1.0, 0.0, 0.0);

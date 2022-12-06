@@ -457,8 +457,88 @@ void crea_casa(Mesh* mesh, vec4 coloret, vec4 coloreb)
 	mesh->indici.push_back(6); mesh->indici.push_back(7); mesh->indici.push_back(8);
 	mesh->indici.push_back(8); mesh->indici.push_back(9); mesh->indici.push_back(6);
 
-
-
-
 }
 
+void crea_albero(Mesh* mesh, vec4 colore_top, vec4 colore_bot) {
+	int Stacks = 30;  //numero di suddivisioni sull'asse x
+	int Slices = 30;  // numero di suddivisioni sull'asse y
+	int nVertici_piramide;
+
+	//Parte della piramide
+	mesh->vertici.push_back(vec3(-1.0, 0.0, 1.0));
+	mesh->colori.push_back(colore_top);
+	mesh->vertici.push_back(vec3(1.0, 0.0, 1.0));
+	mesh->colori.push_back(colore_top);
+	mesh->vertici.push_back(vec3(1.0, 0.0, -1.0));
+	mesh->colori.push_back(colore_top);
+	mesh->vertici.push_back(vec3(-1.0, 0.0, -1.0));
+	mesh->colori.push_back(colore_top);
+	// Apice piramide
+	mesh->vertici.push_back(vec3(0.0, 1.0, 0.0));
+	mesh->colori.push_back(colore_top);
+
+	for (int i = 0; i < mesh->vertici.size(); i++)
+		mesh->normali.push_back(vec3(0.0));
+
+	mesh->indici.push_back(0); mesh->indici.push_back(1); mesh->indici.push_back(2);
+	mesh->indici.push_back(0); mesh->indici.push_back(2); mesh->indici.push_back(3);
+
+	mesh->indici.push_back(0); mesh->indici.push_back(4); mesh->indici.push_back(3);
+	mesh->indici.push_back(0); mesh->indici.push_back(1); mesh->indici.push_back(4);
+
+	mesh->indici.push_back(3); mesh->indici.push_back(2); mesh->indici.push_back(4);
+	mesh->indici.push_back(1); mesh->indici.push_back(2); mesh->indici.push_back(4);
+
+	//Parte del tronco
+	nVertici_piramide = mesh->vertici.size();
+	float s, t;
+	//Calc The Vertices
+	for (int i = 0; i <= Stacks; ++i) {
+
+		float V = i / (float)Stacks;
+		float h = V;
+
+		// Loop Through Slices
+		for (int j = 0; j <= Slices; ++j) {
+
+			float U = j / (float)Slices;
+			float theta = U * (glm::pi <float>() * 2);
+
+			// Calc The Vertex Positions
+			float x = cosf(theta);
+			float y = h;
+			float z = sinf(theta);
+
+
+			// Push Back Vertex Data
+			mesh->vertici.push_back(vec3(x, y, z));
+			mesh->colori.push_back(colore_bot);
+			//Normale nel vertice
+			mesh->normali.push_back(vec3(normalize(vec3(cos(theta), 0, sin(theta)))));
+
+			//Coordinata di texture
+			s = U;
+			t = V;
+			mesh->texCoords.push_back(vec2(s, t));
+		}
+	}
+
+	// Calc The Index Positions
+	for (int i = 0; i < Slices * Stacks + Slices; ++i) {
+
+		mesh->indici.push_back(i);
+		mesh->indici.push_back(i + Slices + 1);
+		mesh->indici.push_back(i + Slices);
+
+
+		mesh->indici.push_back(i + Slices + 1);
+		mesh->indici.push_back(i);
+		mesh->indici.push_back(i + 1);
+	}
+
+	mesh->vertici.push_back(vec3(0.0, 0.3, 0.0));
+	mesh->colori.push_back(vec4(0.0, 1.0, 0.0, 1.0));
+	mesh->ancora_obj = (vec4(0.0, 0.3, 0.0, 1.0));
+	int nv = mesh->vertici.size();
+	mesh->indici.push_back(nv - 1);
+}
