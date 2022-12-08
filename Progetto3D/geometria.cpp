@@ -307,7 +307,7 @@ void crea_toro(Mesh* mesh, vec4 colore)
 
 }
 
-void crea_cono(Mesh* mesh, vec4 colore, int Stacks, int Slices)
+void crea_cono(Mesh* mesh, vec4 colore, int Stacks, int Slices, vec2 fattori)
 {
 	float s, t;
 
@@ -337,8 +337,8 @@ void crea_cono(Mesh* mesh, vec4 colore, int Stacks, int Slices)
 			mesh->normali.push_back(normalize(vec3(cos(theta) / sqrt(2.0f), -1 / sqrt(2.0f), sin(theta) / sqrt(2.0f))));
 
 			//coordinata di texture
-			s = U;
-			t = V;
+			s = U * fattori.x;
+			t = V * fattori.y;
 			mesh->texCoords.push_back(vec2(s, t));
 
 		}

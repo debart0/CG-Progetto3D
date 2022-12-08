@@ -342,8 +342,8 @@ void INIT_VAO(void)
 	crea_VAO_Vector(&Albero);
 	Albero.nome = "Albero";
 	Albero.ModelM = mat4(1.0);
-	Albero.ModelM = translate(Albero.ModelM, vec3(0, 0, 40.0));
-	Albero.ModelM = scale(Albero.ModelM, vec3(3.0f, 3.0f, 3.0f));
+	Albero.ModelM = translate(Albero.ModelM, vec3(0, 0, 20.0));
+	Albero.ModelM = scale(Albero.ModelM, vec3(2.0f, 5.0f, 2.0f));
 	Albero.ModelM = rotate(Albero.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
 	Albero.sceltaVS = 1;
 	Albero.sceltaFS = 1;
@@ -356,7 +356,7 @@ void INIT_VAO(void)
 
 
 	//cono
-	crea_cono(&Cono, vec4(1.0, 0.0, 0.0, 1.0), 30, 30);
+	crea_cono(&Cono, vec4(1.0, 0.0, 0.0, 1.0), 30, 30, vec2(1.0, 1.0));
 	crea_VAO_Vector(&Cono);
 	Cono.nome = "Cono";
 	Cono.ModelM = mat4(1.0);
@@ -466,12 +466,12 @@ void INIT_VAO(void)
 
 		crea_VAO_Vector_MeshObj(&Model3D[i]);
 		Model3D[i].ModelM = mat4(1.0);
-		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(5.0, -12.0, 15.0));
-		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(1.0, 1.0, 1.0));
+		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(5.0, -5.0, 5.0));
+		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(0.6, 0.6, 0.6));
 		Model3D[i].nome = "Well";
 
 		Model3D[i].sceltaVS = 1;
-		Model3D[i].sceltaFS = 5;
+		Model3D[i].sceltaFS = 6;
 
 
 	}
