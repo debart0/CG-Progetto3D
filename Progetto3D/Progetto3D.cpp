@@ -49,7 +49,7 @@ static unsigned int loc_view_pos, MatModelR, MatViewR, MatrixProjR, loc_view_pos
 
  
 
-unsigned int idTex, texture, texture1, cubemapTexture, texturePiano, programIdr;
+unsigned int idTex, texture, texture1, cubemapTexture, texturePiano, textureLegno, textureFoglie, programIdr;
 
 float raggio_sfera=2.5;
 
@@ -131,7 +131,7 @@ void INIT_Illuminazione()
 
 	//Setup dei materiali
 	// Materials setup
-	materials.resize(8);
+	materials.resize(9);
 	materials[MaterialType::RED_PLASTIC].name = "Red Plastic";
 	materials[MaterialType::RED_PLASTIC].ambient = red_plastic_ambient;
 	materials[MaterialType::RED_PLASTIC].diffuse = red_plastic_diffuse;
@@ -173,6 +173,13 @@ void INIT_Illuminazione()
 	materials[MaterialType::MARRONE].diffuse = marrone_diffuse;
 	materials[MaterialType::MARRONE].specular = marrone_specular;
 	materials[MaterialType::MARRONE].shininess = marrone_shininess;
+
+	materials[MaterialType::BRONZO].name = "BRONZO";
+	materials[MaterialType::BRONZO].ambient = copper_ambient;
+	materials[MaterialType::BRONZO].diffuse = copper_diffuse;
+	materials[MaterialType::BRONZO].specular = copper_specular;
+	materials[MaterialType::BRONZO].shininess = copper_shininess;
+
 	materials[MaterialType::NO_MATERIAL].name = "NO_MATERIAL";
 	materials[MaterialType::NO_MATERIAL].ambient = glm::vec3(1, 1, 1);
 	materials[MaterialType::NO_MATERIAL].diffuse = glm::vec3(0, 0, 0);
@@ -283,7 +290,7 @@ void crea_VAO_Vector(Mesh* mesh)
 void INIT_VAO(void)
 {
 
-	Mesh Pannello, Sfondo, Sfera, Cono, Cilindro, Toro, Sky, Piano;
+	Mesh Pannello, Sfondo, Sfera, Cono, Cilindro, Toro, Sky, Piano, Albero;
 	string name = "muromattoni.jpg";
 	string path = Imagedir + name;
 	texture = loadTexture(path.c_str(), 0);
@@ -294,6 +301,10 @@ void INIT_VAO(void)
 	name = "grass_seamless.jpg";
 	path = Imagedir + name;
 	texturePiano = loadTexture(path.c_str(), 0);
+
+	name = "bark_brown.jpg";
+	path = Imagedir + name;
+	textureLegno = loadTexture(path.c_str(), 0);
 
 	cubemapTexture = loadCubemap(faces,0);
 	//Sky
@@ -324,9 +335,28 @@ void INIT_VAO(void)
 	Piano.material = MaterialType::EMERALD;
 	Scena.push_back(Piano);
 
+	//Albero test
+	vec4 verde = vec4(0.09, 0.20, 0.05, 1.0);
+	vec4 marrone = vec4(0.28, 0.15, 0.09, 1.0);
+	crea_cilindro(&Albero, marrone, 8, 8, vec2(4.0, 1.0));
+	crea_VAO_Vector(&Albero);
+	Albero.nome = "Albero";
+	Albero.ModelM = mat4(1.0);
+	Albero.ModelM = translate(Albero.ModelM, vec3(0, 0, 40.0));
+	Albero.ModelM = scale(Albero.ModelM, vec3(3.0f, 3.0f, 3.0f));
+	Albero.ModelM = rotate(Albero.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
+	Albero.sceltaVS = 1;
+	Albero.sceltaFS = 1;
+	Albero.material = MaterialType::MARRONE;
+	printf("Vertici albero: %d\n", Albero.vertici.size());
+	for (int i = 0; i < Albero.vertici.size(); i++) {
+		printf("[%d] = %f, %f, %f\n", i, Albero.vertici[i].x, Albero.vertici[i].y, Albero.vertici[i].z);
+	}
+	Scena.push_back(Albero);
+
 
 	//cono
-	crea_cono(&Cono, vec4(1.0, 0.0, 0.0, 1.0));
+	crea_cono(&Cono, vec4(1.0, 0.0, 0.0, 1.0), 30, 30);
 	crea_VAO_Vector(&Cono);
 	Cono.nome = "Cono";
 	Cono.ModelM = mat4(1.0);
@@ -339,7 +369,7 @@ void INIT_VAO(void)
 	Scena.push_back(Cono);
 
 	//CILIDNRO
-	crea_cilindro(&Cilindro, vec4(1.0, 0.0, 0.0, 1.0));
+	crea_cilindro(&Cilindro, vec4(1.0, 0.0, 0.0, 1.0), 30, 30, vec2(1.0, 1.0));
 	crea_VAO_Vector(&Cilindro);
 	Cilindro.ModelM = mat4(1.0);
 	Cilindro.ModelM = translate(Cilindro.ModelM, vec3(7.0, -4.0, 7.0));
@@ -377,36 +407,10 @@ void INIT_VAO(void)
 
 
 	bool obj;
-	
-	 name = "legend.obj";
-	  path = Meshdir + name;
-	obj = loadAssImp(path.c_str(), Model3D);   //OK ombrellone.obj, divano.obj, low_poly_house,man
-
-
-	int nmeshes = Model3D.size();
-
-	for (int i = 0; i < nmeshes; i++)
-	{
-		crea_VAO_Vector_MeshObj(&Model3D[i]);
-		Model3D[i].ModelM = mat4(1.0);
-		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(-6.0, -4.0, 12.0));
-		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(4.0, 4.0, 4.0));
-		Model3D[i].nome = "Automobili";
-		Model3D[i].sceltaVS = 1;
-		Model3D[i].sceltaFS = 5;
-
-
-	}
-
-	ScenaObj.push_back(Model3D);
-
-	Model3D.clear();
-
+	int nmeshes;
 	name = "Cartoon_boy.obj";
 	path = Meshdir + name;
 	obj = loadAssImp(path.c_str(), Model3D);   //OK ombrellone.obj, divano.obj, low_poly_house,man
-
- 
 
 	nmeshes = Model3D.size();
 
@@ -443,56 +447,6 @@ void INIT_VAO(void)
 
 		Model3D[i].sceltaVS = 1;
 		Model3D[i].sceltaFS = 5;   //No texture
-
-
-	}
-	ScenaObj.push_back(Model3D);
-
-	Model3D.clear();
-	
-	 name = "piper_pa18.obj";
-	  path = Meshdir + name;
-	obj = loadAssImp(path.c_str(), Model3D);   //OK ombrellone.obj, divano.obj, low_poly_house,man
-
-	nmeshes = Model3D.size();
-
-	for (int i = 0; i < nmeshes; i++)
-	{
-
-
-		crea_VAO_Vector_MeshObj(&Model3D[i]);
-		Model3D[i].ModelM = mat4(1.0);
-	 	Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(light.position.x, light.position.y, light.position.z));
-		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(2.5, 2.5, 2.5));
-		Model3D[i].nome = "Piper";
-
-		Model3D[i].sceltaVS = 1;
-		Model3D[i].sceltaFS = 5;
-
-
-	}
-	ScenaObj.push_back(Model3D);
-
-	Model3D.clear();
-
-	name = "Shine_Sprite.obj";
-	path = Meshdir + name;
-	obj = loadAssImp(path.c_str(), Model3D);   //OK ombrellone.obj, divano.obj, low_poly_house,man
-
-	nmeshes = Model3D.size();
-
-	for (int i = 0; i < nmeshes; i++)
-	{
-
-
-		crea_VAO_Vector_MeshObj(&Model3D[i]);
-		Model3D[i].ModelM = mat4(1.0);
-		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(-16.0,6.0,3.0));
-		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(2.5, 2.5, 2.5));
-		Model3D[i].nome = "Shine";
-
-		Model3D[i].sceltaVS = 1;
-		Model3D[i].sceltaFS = 5;
 
 
 	}
@@ -597,8 +551,6 @@ void resize(int w, int h)
 void drawScene(void)
 {
 
-	 
-
 	glUniformMatrix4fv(MatrixProj, 1, GL_FALSE, value_ptr(Projection));
 	View = lookAt(vec3(ViewSetup.position), vec3(ViewSetup.target), vec3(ViewSetup.upVector));
 	glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -659,7 +611,7 @@ void drawScene(void)
 		Scena[k].ancora_world = Scena[k].ancora_obj;
 		Scena[k].ancora_world = Scena[k].ModelM * Scena[k].ancora_world;
 		//Passo al Vertex Shader il puntatore alla matrice Model dell'oggetto k-esimo della Scena, che sarà associata alla variabile Uniform mat4 Projection
-		//all'interno del Vertex shader. Uso l'identificatio MatModel
+		//all'interno del Vertex shader. Uso l'identificativo MatModel
 		 
 		glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(Scena[k].ModelM));
 		glUniform1i(lsceltaVS, Scena[k].sceltaVS);
@@ -682,7 +634,7 @@ void drawScene(void)
 		}
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-		if (k<Scena.size()-1 && k!=2)
+		if (k<Scena.size()-1 && k!=2 && k!=3)
 		{
 			//printf("Scena size in THEN: %d\n", k);
 			glUniform1i(loc_texture,0);
@@ -698,6 +650,10 @@ void drawScene(void)
 		if (k == 2) {
 			glUniform1i(loc_texture, 0);
 			glBindTexture(GL_TEXTURE_2D, texturePiano);
+		}
+		if (k == 3) {
+			glUniform1i(loc_texture, 0);
+			glBindTexture(GL_TEXTURE_2D, textureLegno); //TODO rimettere a 0
 		}
 		
 		 

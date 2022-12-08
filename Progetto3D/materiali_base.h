@@ -8,5 +8,4 @@ glm::vec3 snow_white_ambient = { 0.2, 0.2, 0.2 }, snow_white_diffuse = { 0.95, 0
 glm::vec3 yellow_ambient = { 0.8,	0.8,	0.0 }, yellow_diffuse = { 1.0,1.0,0.6 }, yellow_specular{ 0.9,	0.9	,0.04 }; GLfloat yellow_shininess = 1.78125f;
 glm::vec3 rosa_ambient = { 0.05f,0.0f,0.0f }, rosa_diffuse = { 0.5f,0.4f,0.4f }, rosa_specular{ 0.7f,0.04f,0.04f }; GLfloat rosa_shininess = 1.78125f;
 glm::vec3 marrone_ambient = { 0.19125f, 0.0735f, 0.0225f }, marrone_diffuse = { 0.7038f, 0.27048f, 0.0828f }, marrone_specular{ 0.256777f, 0.137622f, 0.086014f }; GLfloat marrone_shininess = 12.8f;
-
-
+glm::vec3 copper_ambient = { 0.19125f, 0.0735f, 0.0225f }, copper_diffuse = { 0.7038f, 0.27048f, 0.0828f }, copper_specular = { 0.256777f, 0.137622f, 0.086014f }; GLfloat copper_shininess = 12.8f;

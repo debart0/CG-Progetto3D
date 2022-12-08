@@ -55,6 +55,7 @@ typedef enum {
 	YELLOW,
 	ROSA,
 	MARRONE,
+	BRONZO,
 	NO_MATERIAL
 } MaterialType;
 
