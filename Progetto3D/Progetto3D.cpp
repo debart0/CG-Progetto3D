@@ -11,6 +11,8 @@
 #include "gestione_telecamera.h"
 #include "Strutture.h"
 #include "enum.h"
+#include "Utils.h"
+
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
  
@@ -290,22 +292,9 @@ void crea_VAO_Vector(Mesh* mesh)
 void INIT_VAO(void)
 {
 
-	Mesh Pannello, Sfondo, Sfera, Cono, Cilindro, Toro, Sky, Piano, Albero;
-	string name = "muromattoni.jpg";
-	string path = Imagedir + name;
-	texture = loadTexture(path.c_str(), 0);
-	  name = "steve.jpg";
-	 path = Imagedir + name;
-	texture1 = loadTexture(path.c_str(), 0);
+	Mesh Pannello, Sfondo, Sfera, Cono, Cilindro, Toro, Sky, Piano, Tronco, Foglie;
 	
-	name = "grass_seamless.jpg";
-	path = Imagedir + name;
-	texturePiano = loadTexture(path.c_str(), 0);
-
-	name = "bark_brown.jpg";
-	path = Imagedir + name;
-	textureLegno = loadTexture(path.c_str(), 0);
-
+	caricaTexture();
 	cubemapTexture = loadCubemap(faces,0);
 	//Sky
 	crea_cubo(&Sky);
@@ -336,23 +325,35 @@ void INIT_VAO(void)
 	Scena.push_back(Piano);
 
 	//Albero test
+	//Posso fare che un tronco punti anche al suo cono con un puntatore, magari metto un campo destroyable e un campo relative
 	vec4 verde = vec4(0.09, 0.20, 0.05, 1.0);
 	vec4 marrone = vec4(0.28, 0.15, 0.09, 1.0);
-	crea_cilindro(&Albero, marrone, 8, 8, vec2(4.0, 1.0));
-	crea_VAO_Vector(&Albero);
-	Albero.nome = "Albero";
-	Albero.ModelM = mat4(1.0);
-	Albero.ModelM = translate(Albero.ModelM, vec3(0, 0, 20.0));
-	Albero.ModelM = scale(Albero.ModelM, vec3(2.0f, 5.0f, 2.0f));
-	Albero.ModelM = rotate(Albero.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
-	Albero.sceltaVS = 1;
-	Albero.sceltaFS = 1;
-	Albero.material = MaterialType::MARRONE;
-	printf("Vertici albero: %d\n", Albero.vertici.size());
-	for (int i = 0; i < Albero.vertici.size(); i++) {
-		printf("[%d] = %f, %f, %f\n", i, Albero.vertici[i].x, Albero.vertici[i].y, Albero.vertici[i].z);
-	}
-	Scena.push_back(Albero);
+	crea_cilindro(&Tronco, marrone, 8, 8, vec2(4.0, 1.0));
+	crea_VAO_Vector(&Tronco);
+	Tronco.nome = "Albero";
+	Tronco.ModelM = mat4(1.0);
+	Tronco.ModelM = translate(Tronco.ModelM, vec3(0.0, 0.0, 20.0));
+	Tronco.ModelM = scale(Tronco.ModelM, vec3(2.0f, 5.0f, 2.0f));
+	Tronco.ModelM = rotate(Tronco.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
+	Tronco.sceltaVS = 1;
+	Tronco.sceltaFS = 1;
+	Tronco.material = MaterialType::MARRONE;
+	/*printf("Vertici albero: %d\n", Tronco.vertici.size());
+	for (int i = 0; i < Tronco.vertici.size(); i++) {
+		printf("[%d] = %f, %f, %f\n", i, Tronco.vertici[i].x, Tronco.vertici[i].y, Tronco.vertici[i].z);
+	}*/
+	Scena.push_back(Tronco);
+	crea_cono(&Foglie, verde, 8, 8, vec2(3.0, 1.5));
+	crea_VAO_Vector(&Foglie);
+	Foglie.nome = "Foglie";
+	Foglie.ModelM = mat4(1.0);
+	Foglie.ModelM = translate(Foglie.ModelM, vec3(0.0, 8.0, 20.0));
+	Foglie.ModelM = scale(Foglie.ModelM, vec3(4.0f, 8.0f, 4.0f));
+	Foglie.ModelM = rotate(Foglie.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
+	Foglie.sceltaVS = 1;
+	Foglie.sceltaFS = 1;
+	Foglie.material = MaterialType::EMERALD;
+	Scena.push_back(Foglie);
 
 
 	//cono
@@ -408,8 +409,8 @@ void INIT_VAO(void)
 
 	bool obj;
 	int nmeshes;
-	name = "Cartoon_boy.obj";
-	path = Meshdir + name;
+	string name = "Cartoon_boy.obj";
+	string path = Meshdir + name;
 	obj = loadAssImp(path.c_str(), Model3D);   //OK ombrellone.obj, divano.obj, low_poly_house,man
 
 	nmeshes = Model3D.size();
@@ -633,27 +634,24 @@ void drawScene(void)
 			glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, BUFFER_OFFSET(ind * sizeof(GLuint)));
 		}
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-		if (k<Scena.size()-1 && k!=2 && k!=3)
-		{
-			//printf("Scena size in THEN: %d\n", k);
-			glUniform1i(loc_texture,0);
-			glBindTexture(GL_TEXTURE_2D, texture);
-	    }
-			
-		if(k==Scena.size()-1)
-		{
-			//printf("Scena size in ELSE: %d\n", k);
-			glUniform1i(loc_texture, 0);
-			glBindTexture(GL_TEXTURE_2D, texture1);
-		}
-		if (k == 2) {
-			glUniform1i(loc_texture, 0);
-			glBindTexture(GL_TEXTURE_2D, texturePiano);
-		}
-		if (k == 3) {
-			glUniform1i(loc_texture, 0);
-			glBindTexture(GL_TEXTURE_2D, textureLegno); //TODO rimettere a 0
+		//Fare questo switch con un altra proprietà dell'oggetto Scena[k] e compararlo con delle costanti definite
+		switch (k) {
+			case 2: 
+				glUniform1i(loc_texture, 0);
+				glBindTexture(GL_TEXTURE_2D, texturePiano);
+				break;
+			case 3: 
+				glUniform1i(loc_texture, 0);
+				glBindTexture(GL_TEXTURE_2D, textureLegno);
+				break;
+			case 4:
+				glUniform1i(loc_texture, 0);
+				glBindTexture(GL_TEXTURE_2D, textureFoglie);
+				break;
+			default: 
+				glUniform1i(loc_texture, 0);
+				glBindTexture(GL_TEXTURE_2D, texture);
+				break;
 		}
 		
 		 

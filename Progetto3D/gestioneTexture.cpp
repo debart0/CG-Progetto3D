@@ -3,6 +3,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+extern unsigned int idTex, texture, texture1, cubemapTexture, texturePiano, textureLegno, textureFoglie;
+extern string Imagedir;
 
 unsigned int loadTexture(char const* path, int flip)
 {
@@ -75,4 +77,30 @@ unsigned int loadCubemap(vector<std::string> faces, int flip)
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
 	return textureID;
+}
+
+
+void caricaTexture() {
+	string name;
+	string path;
+
+	name = "muromattoni.jpg";
+	path = Imagedir + name;
+	texture = loadTexture(path.c_str(), 0);
+
+	name = "steve.jpg";
+	path = Imagedir + name;
+	texture1 = loadTexture(path.c_str(), 0);
+
+	name = "grass_seamless.jpg";
+	path = Imagedir + name;
+	texturePiano = loadTexture(path.c_str(), 0);
+
+	name = "bark_brown.jpg";
+	path = Imagedir + name;
+	textureLegno = loadTexture(path.c_str(), 0);
+
+	name = "foglie.jpg";
+	path = Imagedir + name;
+	textureFoglie = loadTexture(path.c_str(), 0);
 }
