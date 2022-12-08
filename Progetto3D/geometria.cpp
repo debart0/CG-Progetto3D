@@ -356,6 +356,12 @@ void crea_cono(Mesh* mesh, vec4 colore, int Stacks, int Slices, vec2 fattori)
 		mesh->indici.push_back(i);
 		mesh->indici.push_back(i + 1);
 	}
+	mesh->vertici.push_back(vec3(0.0, 0.3, 0.0));
+	mesh->colori.push_back(vec4(1.0, 0.0, 0.0, 1.0));
+	mesh->ancora_obj = (vec4(0.0, 0.3, 0.0, 1.0));
+	int nv = mesh->vertici.size();
+	mesh->indici.push_back(nv - 1);
+
 
 
 
@@ -408,9 +414,11 @@ void crea_cilindro(Mesh* mesh, vec4 colore, int Stacks, int Slices, vec2 fattori
 		mesh->indici.push_back(i);
 		mesh->indici.push_back(i + 1);
 	}
-
-
-
+	mesh->vertici.push_back(vec3(0.0, 0.3, 0.0));
+	mesh->colori.push_back(vec4(1.0, 0.0, 0.0, 1.0));
+	mesh->ancora_obj = (vec4(0.0, 0.3, 0.0, 1.0));
+	int nv = mesh->vertici.size();
+	mesh->indici.push_back(nv - 1);
 }
 
 

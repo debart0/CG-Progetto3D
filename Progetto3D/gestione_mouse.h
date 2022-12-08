@@ -101,7 +101,6 @@ void mouse(int button, int state, int x, int y)
 			float xmouse = x;
 			float ymouse = y;
 			vec3 ray_wor = get_ray_from_mouse(xmouse, ymouse);
-
 			selected_obj = -1;
 			float closest_intersection = 0.0f;
 			for (int i = 0; i < Scena.size(); i++)
@@ -111,6 +110,7 @@ void mouse(int button, int state, int x, int y)
 				//posizionati nel mondo per individuare se c'è intersezione con l'oggetto
 				if (ray_sphere(ViewSetup.position, ray_wor, Scena[i].ancora_world, raggio_sfera, &t_dist))
 				{
+					printf("Collisione!\n");
 					if (selected_obj == -1 || t_dist < closest_intersection)
 					{
 						selected_obj = i;

@@ -53,7 +53,8 @@ static unsigned int loc_view_pos, MatModelR, MatViewR, MatrixProjR, loc_view_pos
 
 unsigned int idTex, texture, texture1, cubemapTexture, texturePiano, textureLegno, textureFoglie, programIdr;
 
-float raggio_sfera=2.5;
+//TODO mettere un raggio per ogni oggetto
+float raggio_sfera=4;
 
 string Operazione;
 vec3 asse = vec3(0.0, 1.0, 0.0);
@@ -330,7 +331,7 @@ void INIT_VAO(void)
 	vec4 marrone = vec4(0.28, 0.15, 0.09, 1.0);
 	crea_cilindro(&Tronco, marrone, 8, 8, vec2(4.0, 1.0));
 	crea_VAO_Vector(&Tronco);
-	Tronco.nome = "Albero";
+	Tronco.nome = "Tronco";
 	Tronco.ModelM = mat4(1.0);
 	Tronco.ModelM = translate(Tronco.ModelM, vec3(0.0, 0.0, 20.0));
 	Tronco.ModelM = scale(Tronco.ModelM, vec3(2.0f, 5.0f, 2.0f));
@@ -347,7 +348,7 @@ void INIT_VAO(void)
 	crea_VAO_Vector(&Foglie);
 	Foglie.nome = "Foglie";
 	Foglie.ModelM = mat4(1.0);
-	Foglie.ModelM = translate(Foglie.ModelM, vec3(0.0, 8.0, 20.0));
+	Foglie.ModelM = translate(Foglie.ModelM, vec3(5.0, 8.0, 20.0));
 	Foglie.ModelM = scale(Foglie.ModelM, vec3(4.0f, 8.0f, 4.0f));
 	Foglie.ModelM = rotate(Foglie.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
 	Foglie.sceltaVS = 1;
@@ -368,30 +369,6 @@ void INIT_VAO(void)
 	Cono.sceltaFS = 1;
 	Cono.material = MaterialType::RED_PLASTIC;
 	Scena.push_back(Cono);
-
-	//CILIDNRO
-	crea_cilindro(&Cilindro, vec4(1.0, 0.0, 0.0, 1.0), 30, 30, vec2(1.0, 1.0));
-	crea_VAO_Vector(&Cilindro);
-	Cilindro.ModelM = mat4(1.0);
-	Cilindro.ModelM = translate(Cilindro.ModelM, vec3(7.0, -4.0, 7.0));
-	Cilindro.ModelM = scale(Cilindro.ModelM, vec3(1.0, 4.5, 1.0));
-	Cilindro.nome = "Cilindro";
-	Cilindro.material = MaterialType::MARRONE;
-	Cilindro.sceltaVS = 1;
-	Cilindro.sceltaFS = 1;
-	Scena.push_back(Cilindro);
-
-	//TORO
-	crea_toro(&Toro, vec4(0.0, 1.0, 0.0, 1.0));
-	crea_VAO_Vector(&Toro);
-	Toro.ModelM = mat4(1.0);
-	Toro.ModelM = translate(Toro.ModelM, vec3(7.0, -1.0, 7.0));
-	Toro.ModelM = scale(Toro.ModelM, vec3(1.0, 0.5, 1.0));
-	Toro.nome = "Toro";
-	Toro.material = MaterialType::BRASS;
-	Toro.sceltaVS = 1;
-	Toro.sceltaFS = 1;
-	Scena.push_back(Toro);
 
 	//PANNELLO
 	crea_piano(&Pannello, vec4(0.2, 0.2, 0.9, 1.0));
@@ -415,7 +392,7 @@ void INIT_VAO(void)
 
 	nmeshes = Model3D.size();
 
-	for (int i = 0; i < nmeshes; i++)
+	/*for (int i = 0; i < nmeshes; i++)
 	{
 		crea_VAO_Vector_MeshObj(&Model3D[i]);
 		Model3D[i].ModelM = mat4(1.0);
@@ -478,7 +455,7 @@ void INIT_VAO(void)
 	}
 	ScenaObj.push_back(Model3D);
 
-	Model3D.clear();
+	Model3D.clear();*/
 }
 
  
