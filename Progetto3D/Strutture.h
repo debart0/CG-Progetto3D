@@ -84,6 +84,15 @@ typedef enum {
 	WAVE
 } ShadingType;
 
+typedef enum {
+	SENZA,
+	TRONCO,
+	ERBA,
+	FOGLIE,
+	MURO,
+	MATTONI,
+} TextureType;
+
 typedef struct {
 	vector<vec3> vertici;
 	vector<vec4> colori;
@@ -101,6 +110,7 @@ typedef struct {
 	GLuint VBO_coord_texture;
 	ShadingType shading;
 	MaterialType material;
+	TextureType texture;
 	string nome;
 	vec4 ancora_obj;
 	vec4 ancora_world;

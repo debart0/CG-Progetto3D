@@ -12,6 +12,7 @@ void main_menu_func(int option)
 	switch (option)
 	{
 	case MenuOption::WIRE_FRAME: glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		printf("Polygon mode\n");
 		break;
 	case MenuOption::FACE_FILL: glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		break;

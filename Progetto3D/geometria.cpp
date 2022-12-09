@@ -3,7 +3,7 @@
  
 
 
-void crea_cubo(Mesh* mesh)
+void crea_cubo(Mesh* mesh, vec2 fattori)
 {
 
 	mesh->vertici.push_back(vec3(-1.0, -1.0, 1.0));
@@ -55,17 +55,80 @@ void crea_cubo(Mesh* mesh)
  
 	mesh->indici.push_back(nv-1);
 	
-	mesh->texCoords.push_back(vec2(0.0, 10.0));
-	mesh->texCoords.push_back(vec2(10.0, 10.0));
-	mesh->texCoords.push_back(vec2(10.0, 0.0));
+	mesh->texCoords.push_back(vec2(0.0, fattori.y));
+	mesh->texCoords.push_back(vec2(fattori.x, fattori.y));
+	mesh->texCoords.push_back(vec2(fattori.x, 0.0));
 	mesh->texCoords.push_back(vec2(0.0, 0.0));
-	mesh->texCoords.push_back(vec2(0.0, 10.0));
-	mesh->texCoords.push_back(vec2(10.0, 10.0));
-	mesh->texCoords.push_back(vec2(10.0, 0.0));
+	mesh->texCoords.push_back(vec2(0.0, fattori.y));
+	mesh->texCoords.push_back(vec2(fattori.x, fattori.y));
+	mesh->texCoords.push_back(vec2(fattori.x, 0.0));
 	mesh->texCoords.push_back(vec2(0.0, 0.0));
 
 
 }
+
+void crea_cubo_texture(Mesh* mesh, vec2 fattori) {
+	mesh->vertici.push_back(vec3(-0.5f, 0.0f, 0.5f));
+	mesh->vertici.push_back(vec3(0.5f, 0.0f, 0.5f));
+	mesh->vertici.push_back(vec3(0.5f, 1.0f, 0.5f));
+	mesh->vertici.push_back(vec3(-0.5f, 1.0f, 0.5f));
+	mesh->vertici.push_back(vec3(-0.5f, 1.0f, -0.5f));
+	mesh->vertici.push_back(vec3(0.5f, 1.0f, -0.5f));
+	mesh->vertici.push_back(vec3(0.5f, 0.0f, -0.5f));
+	mesh->vertici.push_back(vec3(-0.5f, 0.0f, -0.5f));
+	mesh->vertici.push_back(vec3(0.5f, 0.0f, 0.5f));
+	mesh->vertici.push_back(vec3(0.5f, 0.0f, -0.5f));
+	mesh->vertici.push_back(vec3(0.5f, 1.0f, -0.5f));
+	mesh->vertici.push_back(vec3(0.5f, 1.0f, 0.5f));
+	mesh->vertici.push_back(vec3(-0.5f, 0.0f, -0.5f));
+	mesh->vertici.push_back(vec3(-0.5f, 0.0f, 0.5f));
+	mesh->vertici.push_back(vec3(-0.5f, 1.0f, 0.5f));
+	mesh->vertici.push_back(vec3(-0.5f, 1.0f, -0.5f));
+
+	for (int i = 0; i < mesh->vertici.size(); i++)
+		mesh->colori.push_back(vec4(1.0, 0.0, 0.0, 1.0));
+
+	mesh->indici.push_back(0); mesh->indici.push_back(1); mesh->indici.push_back(2); mesh->indici.push_back(3);
+	mesh->indici.push_back(4); mesh->indici.push_back(5); mesh->indici.push_back(6); mesh->indici.push_back(7);
+	mesh->indici.push_back(3); mesh->indici.push_back(2); mesh->indici.push_back(5); mesh->indici.push_back(4);
+	mesh->indici.push_back(7); mesh->indici.push_back(6); mesh->indici.push_back(1); mesh->indici.push_back(0);
+	mesh->indici.push_back(8); mesh->indici.push_back(9); mesh->indici.push_back(10); mesh->indici.push_back(11);
+	mesh->indici.push_back(12); mesh->indici.push_back(13); mesh->indici.push_back(14); mesh->indici.push_back(15);
+
+	mesh->texCoords.push_back(vec2(0.0, 0.0));
+	mesh->texCoords.push_back(vec2(1.0,0.0));
+	mesh->texCoords.push_back(vec2(1.0,1.0));
+	mesh->texCoords.push_back(vec2(0.0,1.0));
+	mesh->texCoords.push_back(vec2(0.0,0.0));
+	mesh->texCoords.push_back(vec2(1.0,0.0));
+	mesh->texCoords.push_back(vec2(1.0,1.0));
+	mesh->texCoords.push_back(vec2(0.0,1.0));
+	mesh->texCoords.push_back(vec2(0.0,0.0));
+	mesh->texCoords.push_back(vec2(1.0,0.0));
+	mesh->texCoords.push_back(vec2(1.0,1.0));
+	mesh->texCoords.push_back(vec2(0.0,1.0));
+	mesh->texCoords.push_back(vec2(0.0,0.0));
+	mesh->texCoords.push_back(vec2(1.0,0.0));
+	mesh->texCoords.push_back(vec2(1.0,1.0));
+	mesh->texCoords.push_back(vec2(0.0,1.0));
+
+	mesh->normali.push_back(vec3(0.0, 0.0, 1.0));
+	mesh->normali.push_back(vec3(0.0, 0.0, 1.0));
+	mesh->normali.push_back(vec3(0.0, 0.0, -1.0));
+	mesh->normali.push_back(vec3(0.0, 0.0, -1.0));
+	mesh->normali.push_back(vec3(0.0, 0.0, 1.0));
+	mesh->normali.push_back(vec3(0.0, 0.0, 1.0));
+	mesh->normali.push_back(vec3(0.0, 0.0, 1.0));
+	mesh->normali.push_back(vec3(0.0, 0.0, -1.0));
+	mesh->normali.push_back(vec3(0.0, 0.0, -1.0));
+	mesh->normali.push_back(vec3(0.0, 0.0, 1.0));
+	mesh->normali.push_back(vec3(0.0, 0.0, 1.0));
+	mesh->normali.push_back(vec3(0.0, 0.0, 1.0));
+	mesh->normali.push_back(vec3(0.0, 0.0, -1.0));
+	mesh->normali.push_back(vec3(0.0, 0.0, -1.0));
+	mesh->normali.push_back(vec3(0.0, 0.0, 1.0));
+}
+
 void crea_piramide(Mesh* mesh)
 {
 	mesh->vertici.push_back(vec3(-1.0, 0.0, 1.0));
@@ -102,7 +165,7 @@ void crea_piramide(Mesh* mesh)
 	
 
 }
-void crea_piano(Mesh* mesh, vec4 color)
+void crea_piano(Mesh* mesh, vec4 color, vec2 fattori)
 {
 
 	mesh->vertici.push_back(vec3(-0.5, 0.0, 0.5));
@@ -122,9 +185,9 @@ void crea_piano(Mesh* mesh, vec4 color)
 	mesh->normali.push_back(vec3(0.0, 1.0, 0.0));
 	mesh->normali.push_back(vec3(0.0, 1.0, 0.0));
 
-	mesh->texCoords.push_back(vec2(0.0,10.0));
-	mesh->texCoords.push_back(vec2(10.0,10.0));
-	mesh->texCoords.push_back(vec2(10.0, 0.0));
+	mesh->texCoords.push_back(vec2(0.0, fattori.y));
+	mesh->texCoords.push_back(vec2(fattori.x, fattori.y));
+	mesh->texCoords.push_back(vec2(fattori.x, 0.0));
 	mesh->texCoords.push_back(vec2(0.0, 0.0));
 
 

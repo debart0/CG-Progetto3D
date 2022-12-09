@@ -51,7 +51,7 @@ static unsigned int loc_view_pos, MatModelR, MatViewR, MatrixProjR, loc_view_pos
 
  
 
-unsigned int idTex, texture, texture1, cubemapTexture, texturePiano, textureLegno, textureFoglie, programIdr;
+unsigned int idTex, texture, texture1, cubemapTexture, cubemapTextureRockwall, texturePiano, textureLegno, textureFoglie, textureAssi, programIdr;
 
 //TODO mettere un raggio per ogni oggetto
 float raggio_sfera=4;
@@ -64,7 +64,7 @@ int selected_obj = 0;
 float Theta = -90.0f;
 float Phi = 0.0f;
 
-vector<std::string> faces
+vector<std::string> skyBoxFaces
 {
 	/*"right.jpg",
 		"left.jpg",
@@ -79,6 +79,17 @@ vector<std::string> faces
 	SkyboxDir + "posz.jpg",
 	SkyboxDir + "negz.jpg"
 };
+
+vector<std::string> rockwallFaces
+{
+	Imagedir + "rock_wall_diff_1k.jpg",
+	Imagedir + "rock_wall_diff_1k.jpg",
+	Imagedir + "rock_wall_diff_1k.jpg",
+	Imagedir + "rock_wall_diff_1k.jpg",
+	Imagedir + "rock_wall_diff_1k.jpg",
+	Imagedir + "rock_wall_diff_1k.jpg"
+};
+
 
 // loads a cubemap texture from 6 individual texture faces
 // order:
@@ -293,12 +304,11 @@ void crea_VAO_Vector(Mesh* mesh)
 void INIT_VAO(void)
 {
 
-	Mesh Pannello, Sfondo, Sfera, Cono, Cilindro, Toro, Sky, Piano, Tronco, Foglie;
-	
+	Mesh Strada, Sfondo, Sfera, Cono, Cilindro, Toro, Sky, Piano, Tronco, Foglie, Muretto;
+	//vector<Mesh> Muretto;
 	caricaTexture();
-	cubemapTexture = loadCubemap(faces,0);
 	//Sky
-	crea_cubo(&Sky);
+	crea_cubo(&Sky, vec2(10.0, 10.0));
 	crea_VAO_Vector(&Sky);
 	Scena.push_back(Sky);
 	
@@ -310,26 +320,28 @@ void INIT_VAO(void)
 	Sfera.ModelM = scale(Sfera.ModelM, vec3(1.0f, 1.0f, 1.0f));
 	Sfera.sceltaVS = 1;
 	Sfera.sceltaFS = 1;
-	Sfera .material = MaterialType::EMERALD;
+	Sfera.material = MaterialType::EMERALD;
+	Sfera.texture = TextureType::SENZA;
 	Scena.push_back(Sfera);
 
-	//Piano 
-	crea_piano(&Piano, vec4(1.0, 0.0, 0.0, 1.0));
+	//Piano che fa da prato
+	/*crea_piano(&Piano, vec4(1.0, 0.0, 0.0, 1.0), vec2(10.0, 10.0));
 	crea_VAO_Vector(&Piano);
 	Piano.nome = "Terreno";
 	Piano.ModelM = mat4(1.0);
 	Piano.ModelM = translate(Piano.ModelM, vec3(0.0, -5.0, 0.0));
-	Piano.ModelM = scale(Piano.ModelM, vec3(200.0f, 1.0f, 200.0f));
+	Piano.ModelM = scale(Piano.ModelM, vec3(100.0f, 1.0f, 100.0f));
 	Piano.sceltaVS = 1;
 	Piano.sceltaFS = 1;
 	Piano.material = MaterialType::EMERALD;
+	Piano.texture = TextureType::ERBA;
 	Scena.push_back(Piano);
 
 	//Albero test
 	//Posso fare che un tronco punti anche al suo cono con un puntatore, magari metto un campo destroyable e un campo relative
 	vec4 verde = vec4(0.09, 0.20, 0.05, 1.0);
 	vec4 marrone = vec4(0.28, 0.15, 0.09, 1.0);
-	crea_cilindro(&Tronco, marrone, 8, 8, vec2(4.0, 1.0));
+	crea_cilindro(&Tronco, vec4(1.0, 0.0, 0.0, 1.0), 8, 8, vec2(4.0, 1.0));
 	crea_VAO_Vector(&Tronco);
 	Tronco.nome = "Tronco";
 	Tronco.ModelM = mat4(1.0);
@@ -339,12 +351,14 @@ void INIT_VAO(void)
 	Tronco.sceltaVS = 1;
 	Tronco.sceltaFS = 1;
 	Tronco.material = MaterialType::MARRONE;
+	Tronco.texture = TextureType::TRONCO;*/
+
 	/*printf("Vertici albero: %d\n", Tronco.vertici.size());
 	for (int i = 0; i < Tronco.vertici.size(); i++) {
 		printf("[%d] = %f, %f, %f\n", i, Tronco.vertici[i].x, Tronco.vertici[i].y, Tronco.vertici[i].z);
 	}*/
-	Scena.push_back(Tronco);
-	crea_cono(&Foglie, verde, 8, 8, vec2(3.0, 1.5));
+	/*Scena.push_back(Tronco);
+	crea_cono(&Foglie, vec4(1.0, 0.0, 0.0, 1.0), 8, 8, vec2(3.0, 1.5));
 	crea_VAO_Vector(&Foglie);
 	Foglie.nome = "Foglie";
 	Foglie.ModelM = mat4(1.0);
@@ -354,6 +368,7 @@ void INIT_VAO(void)
 	Foglie.sceltaVS = 1;
 	Foglie.sceltaFS = 1;
 	Foglie.material = MaterialType::EMERALD;
+	Foglie.texture = TextureType::FOGLIE;
 	Scena.push_back(Foglie);
 
 
@@ -368,20 +383,36 @@ void INIT_VAO(void)
  	Cono.sceltaVS = 1;
 	Cono.sceltaFS = 1;
 	Cono.material = MaterialType::RED_PLASTIC;
+	Cono.texture = TextureType::MATTONI;
 	Scena.push_back(Cono);
 
-	//PANNELLO
-	crea_piano(&Pannello, vec4(0.2, 0.2, 0.9, 1.0));
-	crea_VAO_Vector(&Pannello);
-	Pannello.nome = "Pannello";
-	Pannello.ModelM = mat4(1.0);
-	Pannello.ModelM = translate(Pannello.ModelM, vec3(-7.0, 8.0, -2.0));
-	Pannello.ModelM = scale(Pannello.ModelM, vec3(5.0f, 5.0f, 5.0f));
-	Pannello.ModelM = rotate(Pannello.ModelM, radians(90.0f), vec3(1.0, 0.0, 0.0));
-	Pannello.sceltaVS = 1;
-	Pannello.sceltaFS = 1;
-	Pannello.material = MaterialType::EMERALD;
-	Scena.push_back(Pannello);
+	//STRADINA
+	crea_piano(&Strada, vec4(0.2, 0.2, 0.9, 1.0), vec2(2.0, 10.0));
+	crea_VAO_Vector(&Strada);
+	Strada.nome = "STRADA";
+	Strada.ModelM = mat4(1.0);
+	Strada.ModelM = translate(Strada.ModelM, vec3(0.0, -4.9, 0.0));
+	Strada.ModelM = scale(Strada.ModelM, vec3(5.0f, 5.0f, 100.0f));
+	//Strada.ModelM = rotate(Strada.ModelM, radians(90.0f), vec3(1.0, 0.0, 0.0));
+	Strada.sceltaVS = 1;
+	Strada.sceltaFS = 1;
+	Strada.material = MaterialType::MARRONE;
+	Strada.texture = TextureType::MATTONI;
+	Scena.push_back(Strada);*/
+
+	//MURETTO
+	crea_cubo(&Muretto, vec2(2.0, 1.0));
+	crea_VAO_Vector(&Muretto);
+	Muretto.nome = "Muretto";
+	Muretto.ModelM = mat4(1.0);
+	Muretto.ModelM = translate(Muretto.ModelM, vec3(0.0, 0.0, 0.0));
+	Muretto.ModelM = scale(Muretto.ModelM, vec3(15.0f, 15.0f, 15.0f));
+	//Muretto.ModelM = rotate(Muretto.ModelM, radians(90.0f), vec3(1.0, 0.0, 0.0));
+	Muretto.sceltaVS = 1;
+	Muretto.sceltaFS = 1;
+	Muretto.material = MaterialType::MARRONE;
+	Muretto.texture = TextureType::MURO;
+	Scena.push_back(Muretto);
 
 
 	bool obj;
@@ -612,22 +643,35 @@ void drawScene(void)
 		}
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		//Fare questo switch con un altra proprietà dell'oggetto Scena[k] e compararlo con delle costanti definite
-		switch (k) {
-			case 2: 
+		switch (Scena[k].texture) {
+			case TextureType::ERBA: 
 				glUniform1i(loc_texture, 0);
 				glBindTexture(GL_TEXTURE_2D, texturePiano);
 				break;
-			case 3: 
+			case TextureType::TRONCO:
 				glUniform1i(loc_texture, 0);
 				glBindTexture(GL_TEXTURE_2D, textureLegno);
 				break;
-			case 4:
+			case TextureType::FOGLIE:
 				glUniform1i(loc_texture, 0);
 				glBindTexture(GL_TEXTURE_2D, textureFoglie);
 				break;
+			case TextureType::MURO:
+				glUniform1i(loc_texture, 0);
+				/*glUseProgram(programId1);
+				glUniform1i(glGetUniformLocation(programId1, "skybox"), 0);
+				glUniformMatrix4fv(MatrixProjS, 1, GL_FALSE, value_ptr(Projection));
+				glUniformMatrix4fv(MatViewS, 1, GL_FALSE, value_ptr(View));
+				glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTextureRockwall);
+				glUseProgram(programId);*/
+				glBindTexture(GL_TEXTURE_2D, textureAssi);
+
+				
+
+				break;
 			default: 
 				glUniform1i(loc_texture, 0);
-				glBindTexture(GL_TEXTURE_2D, texture);
+				glBindTexture(GL_TEXTURE_2D, 0);
 				break;
 		}
 		
