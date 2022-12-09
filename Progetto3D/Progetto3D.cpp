@@ -59,7 +59,7 @@ float raggio_sfera=4;
 string Operazione;
 vec3 asse = vec3(0.0, 1.0, 0.0);
 int selected_obj = 0;
- 
+int pval = 140;
 
 float Theta = -90.0f;
 float Phi = 0.0f;

@@ -95,6 +95,7 @@ typedef enum {
 
 typedef struct {
 	vector<vec3> vertici;
+	vector<vec3> CP;
 	vector<vec4> colori;
 	vector <GLuint>  indici;
 	vector<vec3> normali;
