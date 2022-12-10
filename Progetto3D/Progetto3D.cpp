@@ -412,6 +412,8 @@ void INIT_VAO(void)
 	Muretto.AABB = Muretto.BBOriginale;
 	Muretto.AABB.TL = Muretto.ModelM * Muretto.AABB.TL;
 	Muretto.AABB.BR = Muretto.ModelM * Muretto.AABB.BR;
+	Muretto.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Muretto.AABB.TL;
+	Muretto.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Muretto.AABB.BR;
 	Muretto.sceltaVS = 1;
 	Muretto.sceltaFS = 1;
 	Muretto.material = MaterialType::MARRONE;
