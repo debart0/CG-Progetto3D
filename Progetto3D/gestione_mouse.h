@@ -1,5 +1,6 @@
 #pragma once
 #include "Lib.h"
+#include "Utils.h"
 extern  float raggio_sfera;
 extern int selected_obj;
 extern int width, height;
@@ -10,6 +11,7 @@ extern  bool firstMouse;
 extern mat4 View, Projection;
 extern float Theta;
 extern float  Phi;
+extern vector<Mesh> Scena;
 
 vec3 get_ray_from_mouse(float mouse_x, float mouse_y) {
 
@@ -222,8 +224,13 @@ void mouseActiveMotion(int x, int y)
 	//Trasformiamo il quaternione in matrice di rotazione
 	mat4 rotation_matrix = toMat4(rotation);
 	//Aggiorniamo direzione e posizione della telecamera
-	ViewSetup.direction = ViewSetup.position - ViewSetup.target;
-	ViewSetup.position = ViewSetup.target + rotation_matrix * ViewSetup.direction;
+	vec4 tmpDirection = ViewSetup.position - ViewSetup.target;
+	vec4 tmpPosition = ViewSetup.target + rotation_matrix * tmpDirection;
+	if (!checkCollisionCamera(Scena[2], tmpPosition)) {
+		ViewSetup.direction = tmpDirection;
+		ViewSetup.position = tmpPosition;
+	}
+	
 
 	//Memorizzo l' ultima posizione del mouse
 
