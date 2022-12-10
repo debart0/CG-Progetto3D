@@ -47,6 +47,11 @@ typedef struct {
 	GLuint material_shininess;
 } LightShaderUniform;
 
+typedef struct {
+	vec4 TL;
+	vec4 BR;
+}BoundingBox;
+
 typedef enum {
 	RED_PLASTIC,
 	EMERALD,
@@ -115,6 +120,8 @@ typedef struct {
 	string nome;
 	vec4 ancora_obj;
 	vec4 ancora_world;
+	BoundingBox BBOriginale;	//La bounding box con le coordinate di modellazione
+	BoundingBox AABB;	//La bounding box post-trasformazioni
 } Mesh;
 
 typedef struct {

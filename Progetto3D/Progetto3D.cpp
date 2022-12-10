@@ -403,11 +403,15 @@ void INIT_VAO(void)
 	//MURETTO
 	crea_cubo(&Muretto, vec2(2.0, 1.0));
 	crea_VAO_Vector(&Muretto);
-	Muretto.nome = "Muretto";
+	Muretto.nome = "Muretto";	
+	Muretto.BBOriginale = calcolaBoundingBox(&Muretto);
 	Muretto.ModelM = mat4(1.0);
 	Muretto.ModelM = translate(Muretto.ModelM, vec3(0.0, 0.0, 0.0));
 	Muretto.ModelM = scale(Muretto.ModelM, vec3(15.0f, 15.0f, 15.0f));
 	//Muretto.ModelM = rotate(Muretto.ModelM, radians(90.0f), vec3(1.0, 0.0, 0.0));
+	Muretto.AABB = Muretto.BBOriginale;
+	Muretto.AABB.TL = Muretto.ModelM * Muretto.AABB.TL;
+	Muretto.AABB.BR = Muretto.ModelM * Muretto.AABB.BR;
 	Muretto.sceltaVS = 1;
 	Muretto.sceltaFS = 1;
 	Muretto.material = MaterialType::MARRONE;

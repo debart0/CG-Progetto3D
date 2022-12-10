@@ -68,7 +68,7 @@ void InterpolazioneHermite(float* t, Mesh* Fig, vec4 color_top, vec4 color_bot)
 }
 
 
-vector<vec4> calcolaBoundingBox(Mesh* fig) {
+BoundingBox calcolaBoundingBox(Mesh* fig) {
 	vec3 min = fig->vertici.at(0);
 	vec3 max = fig->vertici.at(0);
 	vec3 topLeftCorner, bottomRightCorner;
@@ -94,5 +94,28 @@ vector<vec4> calcolaBoundingBox(Mesh* fig) {
 	boundingBox.push_back(vec4(topLeftCorner, 1.0));
 	boundingBox.push_back(vec4(bottomRightCorner, 1.0));
 
-	return boundingBox;
+	BoundingBox box;
+	box.TL = vec4(topLeftCorner, 1.0);
+	box.BR = vec4(bottomRightCorner, 1.0);
+	return box;
+}
+
+bool checkCollisionCamera(Mesh mesh, vec4 cameraPosition) {
+	//bool collisionX = mesh.BR_model.x >= mesh.TL_model.x && fig1.TL_model.x <= fig2.BR_model.x;
+	bool collisionX = mesh.AABB.BR.x >= cameraPosition.x &&
+		mesh.AABB.TL.x <= cameraPosition.x;
+	//bool collisionY = fig1.BR_model.y <= fig2.TL_model.y && fig1.TL_model.y >= fig2.BR_model.y;
+	bool collisionY = mesh.AABB.BR.y <= cameraPosition.y &&
+		mesh.AABB.TL.y >= cameraPosition.y;
+	bool collisionZ = mesh.AABB.BR.z <= cameraPosition.z &&
+		mesh.AABB.TL.z >= cameraPosition.z;
+
+	//Si ha collisione se c'è collisione sia nella direzione x che nella direzione y
+	if (collisionX && collisionY && collisionZ) {
+		printf("\n----------------------CHECK COLLISION------------------------\n");
+		printf("MESH  : %f, %f, %f--- %f, %f, %f\n", mesh.AABB.TL.x, mesh.AABB.TL.y, mesh.AABB.TL.z, mesh.AABB.BR.x, mesh.AABB.BR.y, mesh.AABB.BR.z);
+		printf("CAMERA  : %f, %f, %f\n", cameraPosition.x, cameraPosition.y, cameraPosition.z);
+	}
+	return collisionX && collisionY && collisionZ;
+	return true;
 }

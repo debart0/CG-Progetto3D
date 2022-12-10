@@ -2,6 +2,7 @@
 #include "Lib.h"
 #include "Strutture.h"
 #include "enum.h"
+#include "Utils.h"
 extern float cameraSpeed;
 extern bool visualizzaAncora;
 extern vec3 asse;
@@ -59,7 +60,7 @@ void moveCameraRight()
 	ViewSetup.direction = ViewSetup.target - ViewSetup.position;
 	vec3 direzione_scorrimento = glm::cross(vec3(ViewSetup.direction), glm::vec3(ViewSetup.upVector)) * cameraSpeed;
 	ViewSetup.position += vec4(direzione_scorrimento, 0);
-	//ViewSetup.target += vec4(direzione_scorrimento, 0);
+	ViewSetup.target += vec4(direzione_scorrimento, 0);
 }
 
 
@@ -106,7 +107,9 @@ void keyboardPressedEvent(unsigned char key, int x, int y)
 
 
 	case 'w':
-		moveCameraForward();
+		if (!checkCollisionCamera(Scena[2], ViewSetup.position)) {
+			moveCameraForward();
+		}
 		break;
 
 	case 's':
