@@ -26,6 +26,11 @@ void moveCameraForward()
 {
 	ViewSetup.direction = ViewSetup.target - ViewSetup.position;
 	ViewSetup.position += ViewSetup.direction * cameraSpeed;
+	//printf("Target: %f - %f - %f\n", ViewSetup.target.x, ViewSetup.target.y, ViewSetup.target.z);
+	//printf("Direction: %f - %f - %f\n", ViewSetup.direction.x, ViewSetup.direction.y, ViewSetup.direction.z);
+	//printf("Position: %f - %f - %f\n\n", ViewSetup.position.x, ViewSetup.position.y, ViewSetup.position.z);
+	ViewSetup.target += ViewSetup.direction * cameraSpeed;	//Sposto anche il target, per evitare che la telecamera "rallenti" avvicinandovisi
+
 
 }
 
@@ -33,6 +38,7 @@ void moveCameraBack()
 {
 	ViewSetup.direction = ViewSetup.target - ViewSetup.position;
 	ViewSetup.position -= ViewSetup.direction * cameraSpeed;
+	ViewSetup.target -= ViewSetup.direction * cameraSpeed;	//Sposto anche il target, per evitare che la telecamera "rallenti" avvicinandovisi
 
 }
 
@@ -53,7 +59,7 @@ void moveCameraRight()
 	ViewSetup.direction = ViewSetup.target - ViewSetup.position;
 	vec3 direzione_scorrimento = glm::cross(vec3(ViewSetup.direction), glm::vec3(ViewSetup.upVector)) * cameraSpeed;
 	ViewSetup.position += vec4(direzione_scorrimento, 0);
-	ViewSetup.target += vec4(direzione_scorrimento, 0);
+	//ViewSetup.target += vec4(direzione_scorrimento, 0);
 }
 
 
@@ -62,10 +68,13 @@ void moveCameraUp()
 {
 
 	ViewSetup.direction = ViewSetup.target - ViewSetup.position;  //Direzione lungo cui si sposta la telecamera in coordinate del mondo
+	//ViewSetup.direction = vec4(0.0, 1.0, 0.0, 1.0);
+	printf("dir: %f - %f - %f\n", ViewSetup.position.x, ViewSetup.position.y, ViewSetup.position.z);
 	vec3 direzione_scorrimento = normalize(cross(vec3(ViewSetup.direction), vec3(ViewSetup.upVector)));
 	vec3 upDirection = cross(vec3(ViewSetup.direction), direzione_scorrimento) * cameraSpeed;
 	ViewSetup.position -= vec4(upDirection, 0.0);
 	ViewSetup.target -= vec4(upDirection, 0.0);
+	//ViewSetup.position += vec4(0.0, cameraSpeed*5, 0.0, 0.0);
 }
 
 void moveCameraDown()
@@ -76,6 +85,8 @@ void moveCameraDown()
 	vec3 upDirection = cross(vec3(ViewSetup.direction), direzione_scorrimento) * cameraSpeed;
 	ViewSetup.position += vec4(upDirection, 0.0);
 	ViewSetup.target += vec4(upDirection, 0.0);
+	//ViewSetup.position -= vec4(0.0, cameraSpeed*5, 0.0, 0.0);
+
 }
 
 //Gestione eventi tastiera per il movimento della telecamera
@@ -102,7 +113,7 @@ void keyboardPressedEvent(unsigned char key, int x, int y)
 		moveCameraBack();
 		break;
 
-	case 'U':
+	case 32:
 		moveCameraUp();
 		break;
 
