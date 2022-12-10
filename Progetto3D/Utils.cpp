@@ -2,6 +2,7 @@
 #include "Strutture.h"
 
 extern int pval;
+
 /// /////////////////////////////////// Disegna geometria //////////////////////////////////////
 //Per Curve di hermite
 #define PHI0(t)  (2.0*t*t*t-3.0*t*t+1)
@@ -100,22 +101,25 @@ BoundingBox calcolaBoundingBox(Mesh* fig) {
 	return box;
 }
 
-bool checkCollisionCamera(Mesh mesh, vec4 cameraPosition) {
-	//bool collisionX = mesh.BR_model.x >= mesh.TL_model.x && fig1.TL_model.x <= fig2.BR_model.x;
-	bool collisionX = mesh.AABB.BR.x >= cameraPosition.x &&
-		mesh.AABB.TL.x <= cameraPosition.x;
-	//bool collisionY = fig1.BR_model.y <= fig2.TL_model.y && fig1.TL_model.y >= fig2.BR_model.y;
-	bool collisionY = mesh.AABB.BR.y <= cameraPosition.y &&
-		mesh.AABB.TL.y >= cameraPosition.y;
-	bool collisionZ = mesh.AABB.BR.z <= cameraPosition.z &&
-		mesh.AABB.TL.z >= cameraPosition.z;
-
-	//Si ha collisione se c'è collisione sia nella direzione x che nella direzione y
-	if (collisionX && collisionY && collisionZ) {
+bool checkCollisionCamera(vector<Mesh> Scena, vec4 cameraPosition) {
+	Mesh mesh;
+	bool collisionX, collisionY, collisionZ;
+	for (int i = 2; i < Scena.size(); i++) {
+		mesh = Scena[i];
+		collisionX = mesh.AABB.BR.x >= cameraPosition.x &&
+			mesh.AABB.TL.x <= cameraPosition.x;
+		collisionY = mesh.AABB.BR.y <= cameraPosition.y &&
+			mesh.AABB.TL.y >= cameraPosition.y;
+		collisionZ = mesh.AABB.BR.z <= cameraPosition.z &&
+			mesh.AABB.TL.z >= cameraPosition.z;
+		if (collisionX && collisionY && collisionZ) {
 		printf("\n----------------------CHECK COLLISION------------------------\n");
 		printf("MESH  : %f, %f, %f--- %f, %f, %f\n", mesh.AABB.TL.x, mesh.AABB.TL.y, mesh.AABB.TL.z, mesh.AABB.BR.x, mesh.AABB.BR.y, mesh.AABB.BR.z);
 		printf("CAMERA  : %f, %f, %f\n", cameraPosition.x, cameraPosition.y, cameraPosition.z);
+		return true;
+		}
 	}
+	
 	return collisionX && collisionY && collisionZ;
-	return true;
+	//return false;
 }

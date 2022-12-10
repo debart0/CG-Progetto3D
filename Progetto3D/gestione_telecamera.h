@@ -31,7 +31,7 @@ void moveCameraForward()
 	vec4 tmpDirection = ViewSetup.target - ViewSetup.position;
 	vec4 tmpPosition = ViewSetup.position;
 	tmpPosition += tmpDirection * cameraSpeed;
-	if (!checkCollisionCamera(Scena[2], tmpPosition)) {
+	if (!checkCollisionCamera(Scena, tmpPosition)) {
 		ViewSetup.direction = tmpDirection;
 		ViewSetup.position = tmpPosition;
 		//ViewSetup.position += ViewSetup.direction * cameraSpeed;	//Vecchio modo per calcolarla
@@ -48,7 +48,7 @@ void moveCameraBack()
 	vec4 tmpDirection = ViewSetup.target - ViewSetup.position;
 	vec4 tmpPosition = ViewSetup.position;
 	tmpPosition -= tmpDirection * cameraSpeed;
-	if (!checkCollisionCamera(Scena[2], tmpPosition)) {
+	if (!checkCollisionCamera(Scena, tmpPosition)) {
 		ViewSetup.direction = tmpDirection;
 		ViewSetup.position = tmpPosition;
 		ViewSetup.target -= ViewSetup.direction * cameraSpeed;	//Sposto anche il target, per evitare che la telecamera "rallenti" avvicinandovisi
@@ -63,7 +63,7 @@ void moveCameraLeft()
 	vec3 direzione_scorrimento = glm::cross(vec3(tmpDirection), glm::vec3(ViewSetup.upVector)) * cameraSpeed;
 	vec4 tmpPosition = ViewSetup.position;
 	tmpPosition -= vec4((direzione_scorrimento), 0);
-	if (!checkCollisionCamera(Scena[2], tmpPosition)) {
+	if (!checkCollisionCamera(Scena, tmpPosition)) {
 		ViewSetup.direction = tmpDirection;
 		ViewSetup.position = tmpPosition;
 		ViewSetup.target -= vec4((direzione_scorrimento), 0);
@@ -80,7 +80,7 @@ void moveCameraRight()
 	vec3 direzione_scorrimento = glm::cross(vec3(tmpDirection), glm::vec3(ViewSetup.upVector)) * cameraSpeed;
 	vec4 tmpPosition = ViewSetup.position;
 	tmpPosition += vec4((direzione_scorrimento), 0);
-	if (!checkCollisionCamera(Scena[2], tmpPosition)) {
+	if (!checkCollisionCamera(Scena, tmpPosition)) {
 		ViewSetup.direction = tmpDirection;
 		ViewSetup.position = tmpPosition;
 		ViewSetup.target += vec4(direzione_scorrimento, 0);
@@ -96,7 +96,7 @@ void moveCameraUp()
 	vec3 upDirection = cross(vec3(tmpDirection), direzione_scorrimento);
 	vec4 tmpPosition = ViewSetup.position;
 	tmpPosition -= vec4(upDirection, 0.0);
-	if (!checkCollisionCamera(Scena[2], tmpPosition)) {
+	if (!checkCollisionCamera(Scena, tmpPosition)) {
 		ViewSetup.direction = tmpDirection;
 		ViewSetup.position = tmpPosition;
 		ViewSetup.target -= vec4(upDirection, 0.0);
@@ -112,7 +112,7 @@ void moveCameraDown()
 	vec3 upDirection = cross(vec3(tmpDirection), direzione_scorrimento);
 	vec4 tmpPosition = ViewSetup.position;
 	tmpPosition += vec4(upDirection, 0.0);
-	if (!checkCollisionCamera(Scena[2], tmpPosition)) {
+	if (!checkCollisionCamera(Scena, tmpPosition)) {
 		ViewSetup.direction = tmpDirection;
 		ViewSetup.position = tmpPosition;
 		ViewSetup.target += vec4(upDirection, 0.0);

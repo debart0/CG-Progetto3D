@@ -226,7 +226,7 @@ void mouseActiveMotion(int x, int y)
 	//Aggiorniamo direzione e posizione della telecamera
 	vec4 tmpDirection = ViewSetup.position - ViewSetup.target;
 	vec4 tmpPosition = ViewSetup.target + rotation_matrix * tmpDirection;
-	if (!checkCollisionCamera(Scena[2], tmpPosition)) {
+	if (!checkCollisionCamera(Scena, tmpPosition)) {
 		ViewSetup.direction = tmpDirection;
 		ViewSetup.position = tmpPosition;
 	}
