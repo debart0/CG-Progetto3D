@@ -401,7 +401,8 @@ void INIT_VAO(void)
 	Scena.push_back(Strada);*/
 
 	//MURETTO
-	crea_cubo(&Muretto, vec2(2.0, 1.0));
+	//crea_cubo(&Muretto, vec2(2.0, 1.0));
+	crea_cubo_ridondante(&Muretto, vec2(2.0, 1.0));
 	crea_VAO_Vector(&Muretto);
 	Muretto.nome = "Muretto";	
 	Muretto.BBOriginale = calcolaBoundingBox(&Muretto);
@@ -671,6 +672,7 @@ void drawScene(void)
 				glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTextureRockwall);
 				glUseProgram(programId);*/
 				glBindTexture(GL_TEXTURE_2D, textureAssi);
+				//glDrawArrays(GL_TRIANGLES, 0, Scena[k].vertici.size()-1);
 
 				
 

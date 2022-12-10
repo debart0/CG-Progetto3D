@@ -66,8 +66,8 @@ void crea_cubo(Mesh* mesh, vec2 fattori)
 
 
 }
-
-void crea_cubo_texture(Mesh* mesh, vec2 fattori) {
+//NON USARE
+void deprecated_cubo(Mesh* mesh, vec2 fattori) {
 	mesh->vertici.push_back(vec3(-0.5f, 0.0f, 0.5f));
 	mesh->vertici.push_back(vec3(0.5f, 0.0f, 0.5f));
 	mesh->vertici.push_back(vec3(0.5f, 1.0f, 0.5f));
@@ -129,6 +129,94 @@ void crea_cubo_texture(Mesh* mesh, vec2 fattori) {
 	mesh->normali.push_back(vec3(0.0, 0.0, 1.0));
 }
 
+void crea_cubo_ridondante(Mesh* mesh, vec2 fattori) {
+	//front
+	mesh->vertici.push_back(vec3(-1.0, -1.0, 1.0));	//0
+	mesh->vertici.push_back(vec3(1.0, -1.0, 1.0));	//1
+	mesh->vertici.push_back(vec3(1.0, 1.0, 1.0));	//2
+	mesh->vertici.push_back(vec3(-1.0, 1.0, 1.0));	//3
+	//back
+	mesh->vertici.push_back(vec3(-1.0, -1.0, -1.0));//4
+	mesh->vertici.push_back(vec3(1.0, -1.0, -1.0));	//5
+	mesh->vertici.push_back(vec3(1.0, 1.0, -1.0));	//6
+	mesh->vertici.push_back(vec3(-1.0, 1.0, -1.0));	//7
+	//top
+	mesh->vertici.push_back(vec3(-1.0, 1.0, 1.0));	//8
+	mesh->vertici.push_back(vec3(1.0, 1.0, 1.0));	//9
+	mesh->vertici.push_back(vec3(1.0, 1.0, -1.0));	//10
+	mesh->vertici.push_back(vec3(-1.0, 1.0, -1.0));	//11
+	//bottom
+	mesh->vertici.push_back(vec3(-1.0, -1.0, 1.0));	//12
+	mesh->vertici.push_back(vec3(1.0, -1.0, 1.0));	//13
+	mesh->vertici.push_back(vec3(1.0, -1.0, -1.0));	//14
+	mesh->vertici.push_back(vec3(-1.0, -1.0, -1.0));//15
+	//left
+	mesh->vertici.push_back(vec3(-1.0, -1.0, -1.0));//16
+	mesh->vertici.push_back(vec3(-1.0, -1.0, 1.0));	//17
+	mesh->vertici.push_back(vec3(-1.0, 1.0, 1.0));	//18
+	mesh->vertici.push_back(vec3(-1.0, 1.0, -1.0));	//19
+	//right
+	mesh->vertici.push_back(vec3(1.0, -1.0, 1.0));	//20
+	mesh->vertici.push_back(vec3(1.0, -1.0, -1.0));	//21
+	mesh->vertici.push_back(vec3(1.0, 1.0, -1.0));	//22
+	mesh->vertici.push_back(vec3(1.0, 1.0, 1.0));	//23
+
+	for (int i = 0; i < mesh->vertici.size(); i++)
+		mesh->colori.push_back(vec4(1.0,0.0,0.0,1.0));
+
+	mesh->vertici.push_back(vec3(0.0, 0.0, 0.0));
+	mesh->colori.push_back(vec4(0.0, 1.0, 0.0, 1.0));
+	mesh->ancora_obj = (vec4(0.0, 0.0, 0.0, 1.0));
+
+	mesh->indici.push_back(0); mesh->indici.push_back(1); mesh->indici.push_back(2);//FRONT
+	mesh->indici.push_back(2); mesh->indici.push_back(3); mesh->indici.push_back(0);
+
+	mesh->indici.push_back(20); mesh->indici.push_back(21); mesh->indici.push_back(22);//RIGHT
+	mesh->indici.push_back(22); mesh->indici.push_back(23); mesh->indici.push_back(20);
+
+	mesh->indici.push_back(7); mesh->indici.push_back(6); mesh->indici.push_back(5);//BACK
+	mesh->indici.push_back(5); mesh->indici.push_back(4); mesh->indici.push_back(7);
+
+	mesh->indici.push_back(16); mesh->indici.push_back(17); mesh->indici.push_back(18);//LEFT
+	mesh->indici.push_back(18); mesh->indici.push_back(19); mesh->indici.push_back(16);
+
+	mesh->indici.push_back(15); mesh->indici.push_back(14); mesh->indici.push_back(13);//BOT
+	mesh->indici.push_back(13); mesh->indici.push_back(12); mesh->indici.push_back(15);
+
+	mesh->indici.push_back(8); mesh->indici.push_back(9); mesh->indici.push_back(10);//TOP
+	mesh->indici.push_back(10); mesh->indici.push_back(11); mesh->indici.push_back(8);
+
+	for (int i = 0; i < 4; i++) {
+		mesh->normali.push_back(normalize(vec3(0, 0, 1)));	//FRONT
+	}	
+	for (int i = 0; i < 4; i++) {
+		mesh->normali.push_back(normalize(vec3(0, 0, -1)));	//BACK
+	}	
+	for (int i = 0; i < 4; i++) {
+		mesh->normali.push_back(normalize(vec3(0, 1, 0)));	//TOP
+	}	
+	for (int i = 0; i < 4; i++) {
+		mesh->normali.push_back(normalize(vec3(0, -1, 0)));	//BOTTOM
+	}
+	for (int i = 0; i < 4; i++) {
+		mesh->normali.push_back(normalize(vec3(-1, 0, 0)));	//LEFT
+	}	
+	for (int i = 0; i < 4; i++) {
+		mesh->normali.push_back(normalize(vec3(1, 0, 0)));	//RIGHT
+	}
+
+
+	int nv = mesh->vertici.size();
+
+	mesh->indici.push_back(nv - 1);
+
+	for (int i = 0; i < 6; i++) {
+		mesh->texCoords.push_back(vec2(0.0, fattori.y));
+		mesh->texCoords.push_back(vec2(fattori.x, fattori.y));
+		mesh->texCoords.push_back(vec2(fattori.x, 0.0));
+		mesh->texCoords.push_back(vec2(0.0, 0.0));
+	}
+}
 void crea_piramide(Mesh* mesh)
 {
 	mesh->vertici.push_back(vec3(-1.0, 0.0, 1.0));

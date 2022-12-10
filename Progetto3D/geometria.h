@@ -1,7 +1,7 @@
 #include "Lib.h"
 #include "Strutture.h"
 void crea_cubo(Mesh* mesh, vec2 fattori);
-void crea_cubo_texture(Mesh* mesh, vec2 fattori);
+void crea_cubo_ridondante(Mesh* mesh, vec2 fattori);
 void crea_piano(Mesh* mesh,  vec4 colore, vec2 fattori);
 void crea_piano_suddiviso(Mesh* mesh, vec4 colore);
 void crea_piramide(Mesh* piramide);
