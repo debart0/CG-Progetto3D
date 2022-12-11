@@ -10,8 +10,6 @@ extern string Operazione;
 extern string stringa_asse;
 extern vector<Mesh> Scena;
 
-//TODO fare collisioni con TUTTI i modelli
-
 void modifyModelMatrix(glm::vec3 translation_vector, glm::vec3 rotation_vector, GLfloat angle, GLfloat scale_factor)
 {
 	//ricordare che mat4(1) costruisce una matrice identità di ordine 4
@@ -96,6 +94,8 @@ void moveCameraUp()
 	vec3 upDirection = cross(vec3(tmpDirection), direzione_scorrimento);
 	vec4 tmpPosition = ViewSetup.position;
 	tmpPosition -= vec4(upDirection, 0.0);
+	printf("moveCameraUp: direzione_scorrimento %f %f %f\n", direzione_scorrimento.x, direzione_scorrimento.y, direzione_scorrimento.z);
+	printf("moveCameraUp: upDirection %f %f %f\n", upDirection.x, upDirection.y, upDirection.z);
 	if (!checkCollisionCamera(Scena, tmpPosition)) {
 		ViewSetup.direction = tmpDirection;
 		ViewSetup.position = tmpPosition;

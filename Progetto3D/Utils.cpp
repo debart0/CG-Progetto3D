@@ -2,8 +2,7 @@
 #include "Strutture.h"
 
 extern int pval;
-
-/// /////////////////////////////////// Disegna geometria //////////////////////////////////////
+////////////////////////////////////// Disegna geometria //////////////////////////////////////
 //Per Curve di hermite
 #define PHI0(t)  (2.0*t*t*t-3.0*t*t+1)
 #define PHI1(t)  (t*t*t-2.0*t*t+t)
@@ -81,7 +80,19 @@ BoundingBox calcolaBoundingBox(Mesh* fig) {
 		if (max.y < vertice.y) max.y = vertice.y;
 		if (max.z < vertice.z) max.z = vertice.z;
 	}
-	//Angoli principali
+	//Controllo se alcune coordinate sono identiche (nel caso di un piano, ad esempio)
+	if (max.x == min.x) {
+		max.x += 2.5;
+		min.x -= 2.5;
+	}
+	if (max.y == min.y) {
+		max.y += 2.5;
+		min.y -= 2.5;
+	}
+	if (max.z == min.z) {
+		max.z += 2.5;
+		min.z -= 2.5;
+	}
 	topLeftCorner.x = min.x;
 	topLeftCorner.y = max.y;
 	topLeftCorner.z = max.z;
@@ -89,6 +100,8 @@ BoundingBox calcolaBoundingBox(Mesh* fig) {
 	bottomRightCorner.x = max.x;
 	bottomRightCorner.y = min.y;
 	bottomRightCorner.z = min.z;
+	
+	
 
 	//pair<vec4, vec4> pair = make_pair(vec4(topLeftCorner, 1.0), vec4(bottomRightCorner, 1.0));
 	vector<vec4> boundingBox;
@@ -101,11 +114,14 @@ BoundingBox calcolaBoundingBox(Mesh* fig) {
 	return box;
 }
 
+//TODO fare che parta dalla posizione di scena 1 invece che 2  (togliere quella sfera)
 bool checkCollisionCamera(vector<Mesh> Scena, vec4 cameraPosition) {
 	Mesh mesh;
 	bool collisionX, collisionY, collisionZ;
-	for (int i = 2; i < Scena.size(); i++) {
+	//printf("Coordinate di telecamera %f %f %f\n", cameraPosition.x, cameraPosition.y, cameraPosition.z);
+	for (int i = 1; i < Scena.size(); i++) {
 		mesh = Scena[i];
+		//printf("Controllo hitbox di %s\n", mesh.nome.c_str());
 		collisionX = mesh.AABB.BR.x >= cameraPosition.x &&
 			mesh.AABB.TL.x <= cameraPosition.x;
 		collisionY = mesh.AABB.BR.y <= cameraPosition.y &&
@@ -113,13 +129,18 @@ bool checkCollisionCamera(vector<Mesh> Scena, vec4 cameraPosition) {
 		collisionZ = mesh.AABB.BR.z <= cameraPosition.z &&
 			mesh.AABB.TL.z >= cameraPosition.z;
 		if (collisionX && collisionY && collisionZ) {
-		printf("\n----------------------CHECK COLLISION------------------------\n");
-		printf("MESH  : %f, %f, %f--- %f, %f, %f\n", mesh.AABB.TL.x, mesh.AABB.TL.y, mesh.AABB.TL.z, mesh.AABB.BR.x, mesh.AABB.BR.y, mesh.AABB.BR.z);
+		printf("\n----------------------COLLISIONE------------------------\n");
+		printf("%s  : %f, %f, %f--- %f, %f, %f\n", mesh.nome.c_str(), mesh.AABB.TL.x, mesh.AABB.TL.y, mesh.AABB.TL.z, mesh.AABB.BR.x, mesh.AABB.BR.y, mesh.AABB.BR.z);
 		printf("CAMERA  : %f, %f, %f\n", cameraPosition.x, cameraPosition.y, cameraPosition.z);
-		return true;
+		//return true;
+		break;
 		}
 	}
 	
 	return collisionX && collisionY && collisionZ;
 	//return false;
+}
+
+void logger(string TAG, string text) {
+	printf("%s;\t%s\n", TAG.c_str(), text.c_str());
 }

@@ -96,6 +96,7 @@ typedef enum {
 	FOGLIE,
 	MURO,
 	MATTONI,
+	LEGNO
 } TextureType;
 
 typedef struct {

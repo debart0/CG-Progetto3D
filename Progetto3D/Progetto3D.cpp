@@ -51,7 +51,7 @@ static unsigned int loc_view_pos, MatModelR, MatViewR, MatrixProjR, loc_view_pos
 
  
 
-unsigned int idTex, texture, texture1, cubemapTexture, cubemapTextureRockwall, texturePiano, textureLegno, textureFoglie, textureAssi, programIdr;
+unsigned int idTex, texture, texture1, cubemapTexture, cubemapTextureRockwall, texturePiano, textureTronco, textureFoglie, textureLegno, programIdr;
 
 //TODO mettere un raggio per ogni oggetto
 float raggio_sfera=4;
@@ -313,7 +313,7 @@ void INIT_VAO(void)
 	Scena.push_back(Sky);
 	
 	//Sfera
-	crea_sfera(&Sfera, vec4(1.0, 0.0, 0.0, 1.0));
+	/*crea_sfera(&Sfera, vec4(1.0, 0.0, 0.0, 1.0));
 	crea_VAO_Vector(&Sfera);
 	Sfera.ModelM = mat4(1.0);
 	Sfera.ModelM = translate(Sfera.ModelM, vec3(-3.5, 2.8, 12.0));
@@ -322,21 +322,30 @@ void INIT_VAO(void)
 	Sfera.sceltaFS = 1;
 	Sfera.material = MaterialType::EMERALD;
 	Sfera.texture = TextureType::SENZA;
-	Scena.push_back(Sfera);
+	Scena.push_back(Sfera);*/
 
 	//Piano che fa da prato
-	/*crea_piano(&Piano, vec4(1.0, 0.0, 0.0, 1.0), vec2(10.0, 10.0));
+	crea_piano(&Piano, vec4(1.0, 0.0, 0.0, 1.0), vec2(10.0, 10.0));
 	crea_VAO_Vector(&Piano);
 	Piano.nome = "Terreno";
+	Piano.BBOriginale = calcolaBoundingBox(&Piano);
 	Piano.ModelM = mat4(1.0);
-	Piano.ModelM = translate(Piano.ModelM, vec3(0.0, -5.0, 0.0));
+	Piano.ModelM = translate(Piano.ModelM, vec3(0.0, 0.0, 0.0));
 	Piano.ModelM = scale(Piano.ModelM, vec3(100.0f, 1.0f, 100.0f));
+	//Piano.ModelM = rotate(Piano.ModelM, radians(-90.0f), vec3(0.0, 1.0, 0.0));
 	Piano.sceltaVS = 1;
 	Piano.sceltaFS = 1;
+	Piano.AABB = Piano.BBOriginale;
+	Piano.AABB.TL = Piano.ModelM * Piano.AABB.TL;
+	Piano.AABB.BR = Piano.ModelM * Piano.AABB.BR;
+	Piano.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Piano.AABB.TL;
+	Piano.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Piano.AABB.BR;
+	printf("Hitbox di piano: : %f, %f, %f--- %f, %f, %f\n", Piano.AABB.TL.x, Piano.AABB.TL.y, Piano.AABB.TL.z, Piano.AABB.BR.x, Piano.AABB.BR.y, Piano.AABB.BR.z);
+
 	Piano.material = MaterialType::EMERALD;
 	Piano.texture = TextureType::ERBA;
 	Scena.push_back(Piano);
-
+	/*
 	//Albero test
 	//Posso fare che un tronco punti anche al suo cono con un puntatore, magari metto un campo destroyable e un campo relative
 	vec4 verde = vec4(0.09, 0.20, 0.05, 1.0);
@@ -418,7 +427,7 @@ void INIT_VAO(void)
 	Muretto.sceltaVS = 1;
 	Muretto.sceltaFS = 1;
 	Muretto.material = MaterialType::MARRONE;
-	Muretto.texture = TextureType::MURO;
+	Muretto.texture = TextureType::LEGNO;
 	Scena.push_back(Muretto);
 
 
@@ -593,7 +602,7 @@ void drawScene(void)
 	glPointSize(10.0);
 
 	//Uso il program shader per gestire la riflessione della sfera (oggetto in posizione 1 di Scena)
-	glUseProgram(programIdr);
+	/*glUseProgram(programIdr);
 
 	glUniformMatrix4fv(MatrixProjR, 1, GL_FALSE, value_ptr(Projection));
 	glUniformMatrix4fv(MatModelR, 1, GL_FALSE, value_ptr(Scena[1].ModelM));
@@ -601,7 +610,7 @@ void drawScene(void)
 	glUniform3f(loc_view_posR, ViewSetup.position.x, ViewSetup.position.y, ViewSetup.position.z);
 	glBindVertexArray(Scena[1].VAO);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-	glDrawElements(GL_TRIANGLES, (Scena[1].indici.size() - 1) * sizeof(GLuint), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, (Scena[1].indici.size() - 1) * sizeof(GLuint), GL_UNSIGNED_INT, 0);*/
 	//Cambio program per renderizzare tutto il resto della scena
 	
 	glUseProgram(programId);
@@ -619,7 +628,7 @@ void drawScene(void)
 	//Passo allo shader il puntatore alla posizione della camera
 	glUniform3f(loc_view_pos, ViewSetup.position.x, ViewSetup.position.y, ViewSetup.position.z);
 
-	for (int k =2; k < Scena.size(); k++)
+	for (int k =1; k < Scena.size(); k++)
 	{
 		//Trasformazione delle coordinate dell'ancora dal sistema di riferimento dell'oggetto in sistema
 		//di riferimento del mondo premoltiplicando per la matrice di Modellazione.
@@ -657,13 +666,13 @@ void drawScene(void)
 				break;
 			case TextureType::TRONCO:
 				glUniform1i(loc_texture, 0);
-				glBindTexture(GL_TEXTURE_2D, textureLegno);
+				glBindTexture(GL_TEXTURE_2D, textureTronco);
 				break;
 			case TextureType::FOGLIE:
 				glUniform1i(loc_texture, 0);
 				glBindTexture(GL_TEXTURE_2D, textureFoglie);
 				break;
-			case TextureType::MURO:
+			case TextureType::LEGNO:
 				glUniform1i(loc_texture, 0);
 				/*glUseProgram(programId1);
 				glUniform1i(glGetUniformLocation(programId1, "skybox"), 0);
@@ -671,7 +680,7 @@ void drawScene(void)
 				glUniformMatrix4fv(MatViewS, 1, GL_FALSE, value_ptr(View));
 				glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTextureRockwall);
 				glUseProgram(programId);*/
-				glBindTexture(GL_TEXTURE_2D, textureAssi);
+				glBindTexture(GL_TEXTURE_2D, textureLegno);
 				//glDrawArrays(GL_TRIANGLES, 0, Scena[k].vertici.size()-1);
 
 				
