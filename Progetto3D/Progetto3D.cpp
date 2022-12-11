@@ -40,6 +40,7 @@ int h_up = height;
  
 //Inizializzazione dei modelli 
 static vector<MeshObj> Model3D;
+vector<BoundingBox> BoundingBoxOBJVector;
 vector<vector<MeshObj>> ScenaObj;
  string stringa_asse;
 float cameraSpeed = 0.1;
@@ -303,7 +304,7 @@ void crea_VAO_Vector(Mesh* mesh)
 
 void INIT_VAO(void)
 {
-
+	string TAG = "INIT_VAO";
 	Mesh Strada, Sfondo, Sfera, Cono, Cilindro, Toro, Sky, Piano, Tronco, Foglie, Muretto;
 	//vector<Mesh> Muretto;
 	caricaTexture();
@@ -330,7 +331,7 @@ void INIT_VAO(void)
 	Piano.nome = "Terreno";
 	Piano.BBOriginale = calcolaBoundingBox(&Piano);
 	Piano.ModelM = mat4(1.0);
-	Piano.ModelM = translate(Piano.ModelM, vec3(0.0, 0.0, 0.0));
+	Piano.ModelM = translate(Piano.ModelM, vec3(0.0, -10.0, 0.0));
 	Piano.ModelM = scale(Piano.ModelM, vec3(100.0f, 1.0f, 100.0f));
 	//Piano.ModelM = rotate(Piano.ModelM, radians(-90.0f), vec3(0.0, 1.0, 0.0));
 	Piano.sceltaVS = 1;
@@ -411,13 +412,13 @@ void INIT_VAO(void)
 
 	//MURETTO
 	//crea_cubo(&Muretto, vec2(2.0, 1.0));
-	crea_cubo_ridondante(&Muretto, vec2(2.0, 1.0));
+	/*crea_cubo_ridondante(&Muretto, vec2(2.0, 1.0));
 	crea_VAO_Vector(&Muretto);
 	Muretto.nome = "Muretto";	
 	Muretto.BBOriginale = calcolaBoundingBox(&Muretto);
 	Muretto.ModelM = mat4(1.0);
 	Muretto.ModelM = translate(Muretto.ModelM, vec3(0.0, 0.0, 0.0));
-	Muretto.ModelM = scale(Muretto.ModelM, vec3(15.0f, 15.0f, 15.0f));
+	Muretto.ModelM = scale(Muretto.ModelM, vec3(5.0, 5.0, 5.0));
 	//Muretto.ModelM = rotate(Muretto.ModelM, radians(90.0f), vec3(1.0, 0.0, 0.0));
 	Muretto.AABB = Muretto.BBOriginale;
 	Muretto.AABB.TL = Muretto.ModelM * Muretto.AABB.TL;
@@ -428,81 +429,76 @@ void INIT_VAO(void)
 	Muretto.sceltaFS = 1;
 	Muretto.material = MaterialType::MARRONE;
 	Muretto.texture = TextureType::LEGNO;
-	Scena.push_back(Muretto);
+	Scena.push_back(Muretto);*/
 
 
 	bool obj;
 	int nmeshes;
-	string name = "Cartoon_boy.obj";
-	string path = Meshdir + name;
+	string name;
+	string path;
+	BoundingBox bbobj;
+
+	name = "raptor_01.obj";
+	path = Meshdir + name;
 	obj = loadAssImp(path.c_str(), Model3D);   //OK ombrellone.obj, divano.obj, low_poly_house,man
 
 	nmeshes = Model3D.size();
-
-	/*for (int i = 0; i < nmeshes; i++)
-	{
-		crea_VAO_Vector_MeshObj(&Model3D[i]);
-		Model3D[i].ModelM = mat4(1.0);
-		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(0.0, 0.5, 7.0));
-		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(2.0, 2.0, 2.0));
-		Model3D[i].nome = "Bambino";
-
-		Model3D[i].sceltaVS = 3;
-		Model3D[i].sceltaFS = 6;
-
-	}
-	ScenaObj.push_back(Model3D);
-
-	Model3D.clear();
-	 name = "raptor_01.obj";
-	 path = Meshdir + name;
-	obj = loadAssImp(path.c_str(), Model3D);   //OK ombrellone.obj, divano.obj, low_poly_house,man
-
-	nmeshes = Model3D.size();
-
+	printf("Model3D size: %d\n", nmeshes);
 	for (int i = 0; i < nmeshes; i++)
 	{
-
-
 		crea_VAO_Vector_MeshObj(&Model3D[i]);
 		Model3D[i].ModelM = mat4(1.0);
-		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(-7.0, 0.8, 12.0));
+		//Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(-7.0, 0.8, 12.0));
+		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(0.0, 0.0, 0.0));
+
 		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(2.5, 2.5, 2.5));
 		Model3D[i].nome = "Raptor";
 
 		Model3D[i].sceltaVS = 1;
 		Model3D[i].sceltaFS = 5;   //No texture
-
-
 	}
+	bbobj = calcolaBoundingBoxOBJ(Model3D);
+	//Piano.AABB = Piano.BBOriginale;
+	//Piano.AABB.TL = Piano.ModelM * Piano.AABB.TL;
+	//Piano.AABB.BR = Piano.ModelM * Piano.AABB.BR;
+	//bbobj.TL += vec4(0.5, 0.5, 0.5, 0.0) * bbobj.TL;
+	//bbobj.BR += vec4(0.5, 0.5, 0.5, 0.0) * bbobj.BR;
+	printf("Hitbox di Raptor: : %f, %f, %f--- %f, %f, %f\n", bbobj.TL.x, bbobj.TL.y, bbobj.TL.z, bbobj.BR.x, bbobj.BR.y, bbobj.BR.z);
+	BoundingBoxOBJVector.push_back(bbobj);
 	ScenaObj.push_back(Model3D);
 
 	Model3D.clear();
-
+	
 	name = "Well_low_polyOBJ.obj";
 	path = Meshdir + name;
 	obj = loadAssImp(path.c_str(), Model3D);   //OK ombrellone.obj, divano.obj, low_poly_house,man
 
 	nmeshes = Model3D.size();
+	printf("Model3D size: %d\n", nmeshes);
 
 	for (int i = 0; i < nmeshes; i++)
 	{
-
-
 		crea_VAO_Vector_MeshObj(&Model3D[i]);
 		Model3D[i].ModelM = mat4(1.0);
 		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(5.0, -5.0, 5.0));
 		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(0.6, 0.6, 0.6));
-		Model3D[i].nome = "Well";
+		Model3D[i].nome = "Pozzo";
 
 		Model3D[i].sceltaVS = 1;
 		Model3D[i].sceltaFS = 6;
-
-
 	}
+	bbobj = calcolaBoundingBoxOBJ(Model3D);
+	//Piano.AABB = Piano.BBOriginale;
+	//Piano.AABB.TL = Piano.ModelM * Piano.AABB.TL;
+	//Piano.AABB.BR = Piano.ModelM * Piano.AABB.BR;
+	//bbobj.TL += vec4(0.5, 0.5, 0.5, 0.0) * bbobj.TL;
+	//bbobj.BR += vec4(0.5, 0.5, 0.5, 0.0) * bbobj.BR;
+	printf("Hitbox di Pozzo: : %f, %f, %f--- %f, %f, %f\n", bbobj.TL.x, bbobj.TL.y, bbobj.TL.z, bbobj.BR.x, bbobj.BR.y, bbobj.BR.z);
+	BoundingBoxOBJVector.push_back(bbobj);
+
 	ScenaObj.push_back(Model3D);
 
-	Model3D.clear();*/
+	Model3D.clear();
 }
 
  

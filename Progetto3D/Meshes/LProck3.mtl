@@ -1,0 +1,12 @@
+# Blender MTL File: 'LProck3.blend'
+# Material Count: 1
+
+newmtl Material.002
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.096591 0.098968 0.079151
+Ks 0.012697 0.012697 0.012697
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
