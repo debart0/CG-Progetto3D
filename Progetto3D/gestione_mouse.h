@@ -111,15 +111,18 @@ void mouse(int button, int state, int x, int y)
 				float t_dist = 0.0f;
 				//Interseco il raggio che esce dalla camera nella direzione del mouse con la sfera centrata nell'ancora di tutti gli oggetti 
 				//posizionati nel mondo per individuare se c'è intersezione con l'oggetto
-				if (ray_sphere(ViewSetup.position, ray_wor, Scena[i].ancora_world, raggio_sfera, &t_dist))
-				{
-					printf("Toccato!\n");
-					if (selected_obj == -1 || t_dist < closest_intersection)
+				if (Scena[i].alive) {
+					if (ray_sphere(ViewSetup.position, ray_wor, Scena[i].ancora_world, raggio_sfera, &t_dist))
 					{
-						selected_obj = i;
-						closest_intersection = t_dist;
+						printf("Toccato!\n");
+						if (selected_obj == -1 || t_dist < closest_intersection)
+						{
+							selected_obj = i;
+							closest_intersection = t_dist;
+						}
 					}
 				}
+				
 			}
 			if (selected_obj > -1)
 				printf("Oggetto selezionato %d -> %s \n", selected_obj, Scena[selected_obj].nome.c_str());
@@ -135,15 +138,18 @@ void mouse(int button, int state, int x, int y)
 				float t_dist = 0.0f;
 				//Interseco il raggio che esce dalla camera nella direzione del mouse con la sfera centrata nell'ancora di tutti gli oggetti 
 				//posizionati nel mondo per individuare se c'è intersezione con l'oggetto
-				if (ray_sphere(ViewSetup.position, ray_wor, Scena[i].ancora_world, raggio_sfera, &t_dist))
-				{
-					printf("Toccato!\n");
-					if (selected_obj == -1 || t_dist < closest_intersection)
+				if (Scena[i].alive) {
+					if (ray_sphere(ViewSetup.position, ray_wor, Scena[i].ancora_world, raggio_sfera, &t_dist))
 					{
-						selected_obj = i;
-						closest_intersection = t_dist;
+						printf("Toccato!\n");
+						if (selected_obj == -1 || t_dist < closest_intersection)
+						{
+							selected_obj = i;
+							closest_intersection = t_dist;
+						}
 					}
 				}
+
 			}
 			if (selected_obj > -1) {
 				printf("Oggetto danneggiato %d -> %s \n", selected_obj, Scena[selected_obj].nome.c_str());
