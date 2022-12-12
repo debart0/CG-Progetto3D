@@ -317,25 +317,13 @@ void INIT_VAO(void)
 {
 	string TAG = "INIT_VAO";
 	Mesh Strada, Sfondo, Sfera, Cono, Cilindro, Toro, Sky, Piano, Tronco, Foglie, Muretto, Sfera1, Sfera2;
+	Mesh Gamba1, Gamba2, Gamba3, Gamba4, Gamba5;
 	//vector<Mesh> Muretto;
 	caricaTexture();
 	//Sky
 	crea_cubo(&Sky, vec2(10.0, 10.0));
 	crea_VAO_Vector(&Sky);
 	Scena.push_back(Sky);
-
-	
-	//Sfera
-	/*crea_sfera(&Sfera, vec4(1.0, 0.0, 0.0, 1.0));
-	crea_VAO_Vector(&Sfera);
-	Sfera.ModelM = mat4(1.0);
-	Sfera.ModelM = translate(Sfera.ModelM, vec3(-3.5, 2.8, 12.0));
-	Sfera.ModelM = scale(Sfera.ModelM, vec3(1.0f, 1.0f, 1.0f));
-	Sfera.sceltaVS = 1;
-	Sfera.sceltaFS = 1;
-	Sfera.material = MaterialType::EMERALD;
-	Sfera.texture = TextureType::SENZA;
-	Scena.push_back(Sfera);*/
 
 	//Piano che fa da prato
 	crea_piano(&Piano, vec4(1.0, 0.0, 0.0, 1.0), vec2(10.0, 10.0));
@@ -344,7 +332,7 @@ void INIT_VAO(void)
 	Piano.BBOriginale = calcolaBoundingBox(&Piano);
 	Piano.ModelM = mat4(1.0);
 	Piano.ModelM = translate(Piano.ModelM, vec3(0.0, -10.0, 0.0));
-	Piano.ModelM = scale(Piano.ModelM, vec3(100.0f, 1.0f, 100.0f));
+	Piano.ModelM = scale(Piano.ModelM, vec3(60.0f, 1.0f, 60.0f));
 	//Piano.ModelM = rotate(Piano.ModelM, radians(-90.0f), vec3(0.0, 1.0, 0.0));
 	Piano.sceltaVS = 1;
 	Piano.sceltaFS = 1;
@@ -369,8 +357,10 @@ void INIT_VAO(void)
 	Tronco.BBOriginale = calcolaBoundingBox(&Tronco);
 
 	Tronco.ModelM = mat4(1.0);
-	Tronco.ModelM = translate(Tronco.ModelM, vec3(0.0, 0.0, 20.0));
+	Tronco.ModelM = translate(Tronco.ModelM, vec3(5.0, 0.0, 20.0));
 	Tronco.ModelM = scale(Tronco.ModelM, vec3(2.0f, 5.0f, 2.0f));
+	Tronco.ModelM = rotate(Tronco.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
+
 	Tronco.sceltaVS = 1;
 	Tronco.sceltaFS = 1;
 	Tronco.AABB = Tronco.BBOriginale;
@@ -378,6 +368,7 @@ void INIT_VAO(void)
 	Tronco.AABB.BR = Tronco.ModelM * Tronco.AABB.BR;
 	Tronco.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Tronco.AABB.TL;
 	Tronco.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Tronco.AABB.BR;
+	Tronco.AABB = rotazioneBoundingBox(Tronco.AABB);
 
 	Tronco.material = MaterialType::MARRONE;
 	Tronco.texture = TextureType::TRONCO;
@@ -391,7 +382,6 @@ void INIT_VAO(void)
 	crea_VAO_Vector(&Foglie);
 	Foglie.nome = "Foglie";
 	Foglie.BBOriginale = calcolaBoundingBox(&Foglie);
-
 	Foglie.ModelM = mat4(1.0);
 	Foglie.ModelM = translate(Foglie.ModelM, vec3(5.0, 8.0, 20.0));
 	Foglie.ModelM = scale(Foglie.ModelM, vec3(4.0f, 8.0f, 4.0f));
@@ -401,11 +391,9 @@ void INIT_VAO(void)
 	Foglie.AABB = Foglie.BBOriginale;
 	Foglie.AABB.TL = Foglie.ModelM * Foglie.AABB.TL;
 	Foglie.AABB.BR = Foglie.ModelM * Foglie.AABB.BR;
-	//Foglie.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Foglie.AABB.TL;
-	//Foglie.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Foglie.AABB.BR;
-	printf("Hitbox di Foglie: : %f, %f, %f--- %f, %f, %f\n", Foglie.AABB.TL.x, Foglie.AABB.TL.y, Foglie.AABB.TL.z, Foglie.AABB.BR.x, Foglie.AABB.BR.y, Foglie.AABB.BR.z);
+	Foglie.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Foglie.AABB.TL;
+	Foglie.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Foglie.AABB.BR;
 	Foglie.AABB = rotazioneBoundingBox(Foglie.AABB);
-	printf("Hitbox di Foglie: : %f, %f, %f--- %f, %f, %f\n", Foglie.AABB.TL.x, Foglie.AABB.TL.y, Foglie.AABB.TL.z, Foglie.AABB.BR.x, Foglie.AABB.BR.y, Foglie.AABB.BR.z);
 	Foglie.material = MaterialType::EMERALD;
 	Foglie.texture = TextureType::FOGLIE;	
 	Foglie.killable = true;
@@ -426,8 +414,8 @@ void INIT_VAO(void)
 	crea_VAO_Vector(&Strada);
 	Strada.nome = "STRADA";
 	Strada.ModelM = mat4(1.0);
-	Strada.ModelM = translate(Strada.ModelM, vec3(0.0, -4.9, 0.0));
-	Strada.ModelM = scale(Strada.ModelM, vec3(5.0f, 5.0f, 100.0f));
+	Strada.ModelM = translate(Strada.ModelM, vec3(0.0, -9.9, 0.0));
+	Strada.ModelM = scale(Strada.ModelM, vec3(5.0f, 5.0f, 60.0f));
 	//Strada.ModelM = rotate(Strada.ModelM, radians(90.0f), vec3(1.0, 0.0, 0.0));
 	Strada.sceltaVS = 1;
 	Strada.sceltaFS = 1;
@@ -443,25 +431,128 @@ void INIT_VAO(void)
 
 	//MURETTO
 	//crea_cubo(&Muretto, vec2(2.0, 1.0));
-	/*crea_cubo_ridondante(&Muretto, vec2(2.0, 1.0));
+	crea_cubo_ridondante(&Muretto, vec2(2.0, 1.0));
 	crea_VAO_Vector(&Muretto);
 	Muretto.nome = "Muretto";	
 	Muretto.BBOriginale = calcolaBoundingBox(&Muretto);
 	Muretto.ModelM = mat4(1.0);
-	Muretto.ModelM = translate(Muretto.ModelM, vec3(0.0, 0.0, 0.0));
-	Muretto.ModelM = scale(Muretto.ModelM, vec3(5.0, 5.0, 5.0));
-	//Muretto.ModelM = rotate(Muretto.ModelM, radians(90.0f), vec3(1.0, 0.0, 0.0));
+	Muretto.ModelM = translate(Muretto.ModelM, vec3(-28, -7, 0.0));
+	Muretto.ModelM = scale(Muretto.ModelM, vec3(1.0,1.0, 30));
 	Muretto.AABB = Muretto.BBOriginale;
 	Muretto.AABB.TL = Muretto.ModelM * Muretto.AABB.TL;
 	Muretto.AABB.BR = Muretto.ModelM * Muretto.AABB.BR;
-	Muretto.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Muretto.AABB.TL;
-	Muretto.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Muretto.AABB.BR;
+	Muretto.AABB.TL += vec4(1.0, 1.0, 0.2, 0.0) * Muretto.AABB.TL;
+	Muretto.AABB.BR += vec4(1.0, 1.0, 0.2, 0.0) * Muretto.AABB.BR;
+	Muretto.AABB = rotazioneBoundingBox(Muretto.AABB);
 	Muretto.sceltaVS = 1;
 	Muretto.sceltaFS = 1;
 	Muretto.material = MaterialType::MARRONE;
 	Muretto.texture = TextureType::LEGNO;
-	Scena.push_back(Muretto);*/
+	Muretto.killable = false;
+	Muretto.alive = true;
+	printf("Hitbox di Muretto: : %f, %f, %f--- %f, %f, %f\n", Muretto.AABB.TL.x, Muretto.AABB.TL.y, Muretto.AABB.TL.z, Muretto.AABB.BR.x, Muretto.AABB.BR.y, Muretto.AABB.BR.z);
+	Scena.push_back(Muretto);
 
+	//Gambe
+	crea_cubo_ridondante(&Gamba1, vec2(2.0, 1.0));
+	crea_VAO_Vector(&Gamba1);
+	Gamba1.nome = "Gamba 1";
+	Gamba1.BBOriginale = calcolaBoundingBox(&Gamba1);
+	Gamba1.ModelM = mat4(1.0);
+	Gamba1.ModelM = translate(Gamba1.ModelM, vec3(-28, -9, 0.0));
+	Gamba1.ModelM = scale(Gamba1.ModelM, vec3(0.5, 1.0, 0.5));
+	Gamba1.AABB = Gamba1.BBOriginale;
+	Gamba1.AABB.TL = Gamba1.ModelM * Gamba1.AABB.TL;
+	Gamba1.AABB.BR = Gamba1.ModelM * Gamba1.AABB.BR;
+	Gamba1.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba1.AABB.TL;
+	Gamba1.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba1.AABB.BR;
+	Gamba1.sceltaVS = 1;
+	Gamba1.sceltaFS = 1;
+	Gamba1.material = MaterialType::MARRONE;
+	Gamba1.texture = TextureType::LEGNO;
+	Gamba1.killable = false;
+	Gamba1.alive = true;
+	Scena.push_back(Gamba1);
+
+	crea_cubo_ridondante(&Gamba2, vec2(2.0, 1.0));
+	crea_VAO_Vector(&Gamba2);
+	Gamba2.nome = "Gamba 1";
+	Gamba2.BBOriginale = calcolaBoundingBox(&Gamba2);
+	Gamba2.ModelM = mat4(1.0);
+	Gamba2.ModelM = translate(Gamba2.ModelM, vec3(-28, -9, 12.5));
+	Gamba2.ModelM = scale(Gamba2.ModelM, vec3(0.5, 1.0, 0.5));
+	Gamba2.AABB = Gamba2.BBOriginale;
+	Gamba2.AABB.TL = Gamba2.ModelM * Gamba2.AABB.TL;
+	Gamba2.AABB.BR = Gamba2.ModelM * Gamba2.AABB.BR;
+	Gamba2.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba2.AABB.TL;
+	Gamba2.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba2.AABB.BR;
+	Gamba2.sceltaVS = 1;
+	Gamba2.sceltaFS = 1;
+	Gamba2.material = MaterialType::MARRONE;
+	Gamba2.texture = TextureType::LEGNO;
+	Gamba2.killable = false;
+	Gamba2.alive = true;
+	Scena.push_back(Gamba2);
+
+	crea_cubo_ridondante(&Gamba3, vec2(2.0, 1.0));
+	crea_VAO_Vector(&Gamba3);
+	Gamba3.nome = "Gamba 1";
+	Gamba3.BBOriginale = calcolaBoundingBox(&Gamba3);
+	Gamba3.ModelM = mat4(1.0);
+	Gamba3.ModelM = translate(Gamba3.ModelM, vec3(-28, -9, 25.0));
+	Gamba3.ModelM = scale(Gamba3.ModelM, vec3(0.5, 1.0, 0.5));
+	Gamba3.AABB = Gamba3.BBOriginale;
+	Gamba3.AABB.TL = Gamba3.ModelM * Gamba3.AABB.TL;
+	Gamba3.AABB.BR = Gamba3.ModelM * Gamba3.AABB.BR;
+	Gamba3.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba3.AABB.TL;
+	Gamba3.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba3.AABB.BR;
+	Gamba3.sceltaVS = 1;
+	Gamba3.sceltaFS = 1;
+	Gamba3.material = MaterialType::MARRONE;
+	Gamba3.texture = TextureType::LEGNO;
+	Gamba3.killable = false;
+	Gamba3.alive = true;
+	Scena.push_back(Gamba3);
+
+	crea_cubo_ridondante(&Gamba4, vec2(2.0, 1.0));
+	crea_VAO_Vector(&Gamba4);
+	Gamba4.nome = "Gamba 1";
+	Gamba4.BBOriginale = calcolaBoundingBox(&Gamba4);
+	Gamba4.ModelM = mat4(1.0);
+	Gamba4.ModelM = translate(Gamba4.ModelM, vec3(-28, -9, -12.5));
+	Gamba4.ModelM = scale(Gamba4.ModelM, vec3(0.5, 1.0, 0.5));
+	Gamba4.AABB = Gamba4.BBOriginale;
+	Gamba4.AABB.TL = Gamba4.ModelM * Gamba4.AABB.TL;
+	Gamba4.AABB.BR = Gamba4.ModelM * Gamba4.AABB.BR;
+	Gamba4.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba4.AABB.TL;
+	Gamba4.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba4.AABB.BR;
+	Gamba4.sceltaVS = 1;
+	Gamba4.sceltaFS = 1;
+	Gamba4.material = MaterialType::MARRONE;
+	Gamba4.texture = TextureType::LEGNO;
+	Gamba4.killable = false;
+	Gamba4.alive = true;
+	Scena.push_back(Gamba4);
+
+	crea_cubo_ridondante(&Gamba5, vec2(2.0, 1.0));
+	crea_VAO_Vector(&Gamba5);
+	Gamba5.nome = "Gamba 1";
+	Gamba5.BBOriginale = calcolaBoundingBox(&Gamba5);
+	Gamba5.ModelM = mat4(1.0);
+	Gamba5.ModelM = translate(Gamba5.ModelM, vec3(-28, -9, -25.0));
+	Gamba5.ModelM = scale(Gamba5.ModelM, vec3(0.5, 1.0, 0.5));
+	Gamba5.AABB = Gamba5.BBOriginale;
+	Gamba5.AABB.TL = Gamba5.ModelM * Gamba5.AABB.TL;
+	Gamba5.AABB.BR = Gamba5.ModelM * Gamba5.AABB.BR;
+	Gamba5.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba5.AABB.TL;
+	Gamba5.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba5.AABB.BR;
+	Gamba5.sceltaVS = 1;
+	Gamba5.sceltaFS = 1;
+	Gamba5.material = MaterialType::MARRONE;
+	Gamba5.texture = TextureType::LEGNO;
+	Gamba5.killable = false;
+	Gamba5.alive = true;
+	Scena.push_back(Gamba5);
 
 	bool obj;
 	int nmeshes;
@@ -511,23 +602,22 @@ void INIT_VAO(void)
 	{
 		crea_VAO_Vector_MeshObj(&Model3D[i]);
 		Model3D[i].ModelM = mat4(1.0);
-		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(0.0, -0.0, 0.0));
+		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(-15.0, -10, 15.0));
 		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(1, 1, 1));
+		Model3D[i].ModelM = rotate(Model3D[i].ModelM, radians(-21.0f), vec3(0.0, 1.0, 0.0));
 		Model3D[i].nome = "Pozzo";
 
 		Model3D[i].sceltaVS = 1;
 		Model3D[i].sceltaFS = 6;
 	}
 	bbobj = calcolaBoundingBoxOBJ(Model3D);
-	//Piano.AABB = Piano.BBOriginale;
-	//Piano.AABB.TL = Piano.ModelM * Piano.AABB.TL;
-	//Piano.AABB.BR = Piano.ModelM * Piano.AABB.BR;
-	//bbobj.TL += vec4(0.5, 0.5, 0.5, 0.0) * bbobj.TL;
-	//bbobj.BR += vec4(0.5, 0.5, 0.5, 0.0) * bbobj.BR;
+	bbobj.TL = Model3D[0].ModelM * bbobj.TL;
+	bbobj.BR = Model3D[0].ModelM * bbobj.BR;
+	bbobj = rotazioneBoundingBox(bbobj);
 	//printf("Hitbox di Pozzo: : %f, %f, %f--- %f, %f, %f\n", bbobj.TL.x, bbobj.TL.y, bbobj.TL.z, bbobj.BR.x, bbobj.BR.y, bbobj.BR.z);
 	BoundingBoxOBJVector.push_back(bbobj);
 
-	//ScenaObj.push_back(Model3D);
+	ScenaObj.push_back(Model3D);
 
 	Model3D.clear();
 

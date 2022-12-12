@@ -121,8 +121,9 @@ BoundingBox rotazioneBoundingBox(BoundingBox aabb) {
 	for (vec3 vertice : tmp) {
 		if (min.x > vertice.x) min.x = vertice.x;
 		if (min.y > vertice.y) min.y = vertice.y;
+		if (min.z > vertice.z) min.z = vertice.z;
+
 		if (max.x < vertice.x) max.x = vertice.x;
-		if (max.y < vertice.y) max.y = vertice.y;
 		if (max.y < vertice.y) max.y = vertice.y;
 		if (max.z < vertice.z) max.z = vertice.z;
 	}
@@ -135,13 +136,16 @@ BoundingBox rotazioneBoundingBox(BoundingBox aabb) {
 	return newAABB;
 }
 
+
 BoundingBox calcolaBoundingBoxOBJ(vector<MeshObj> meshObjVector) {
 	string LOG_TAG = "calcolaBoundingBoxOBJ";
 	vec3 min = meshObjVector.at(0).vertici.at(0);
 	vec3 max = meshObjVector.at(0).vertici.at(0);
-
+	int i = 0;
 	vec3 topLeftCorner, bottomRightCorner;
 	for (MeshObj fig : meshObjVector) {
+		i++;
+		printf("Modello num %d\n", i);
 		for (vec3 vertice : fig.vertici) {
 			if (min.x > vertice.x) min.x = vertice.x;
 			if (min.y > vertice.y) min.y = vertice.y;
@@ -150,6 +154,7 @@ BoundingBox calcolaBoundingBoxOBJ(vector<MeshObj> meshObjVector) {
 			if (max.y < vertice.y) max.y = vertice.y;
 			if (max.z < vertice.z) max.z = vertice.z;
 		}
+	}
 		//Controllo se alcune coordinate sono identiche (nel caso di un piano, ad esempio)
 		if (abs(max.x - min.x)<5) {
 			logger(LOG_TAG, "X troppo piccole\n");
@@ -173,9 +178,6 @@ BoundingBox calcolaBoundingBoxOBJ(vector<MeshObj> meshObjVector) {
 		bottomRightCorner.x = max.x;
 		bottomRightCorner.y = min.y;
 		bottomRightCorner.z = min.z;
-
-	}
-
 
 
 	//pair<vec4, vec4> pair = make_pair(vec4(topLeftCorner, 1.0), vec4(bottomRightCorner, 1.0));

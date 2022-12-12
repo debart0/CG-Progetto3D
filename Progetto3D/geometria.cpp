@@ -166,7 +166,7 @@ void crea_cubo_ridondante(Mesh* mesh, vec2 fattori) {
 
 	mesh->vertici.push_back(vec3(0.0, 0.0, 0.0));
 	mesh->colori.push_back(vec4(0.0, 1.0, 0.0, 1.0));
-	mesh->ancora_obj = (vec4(0.0, 0.0, 0.0, 1.0));
+	mesh->ancora_obj = (vec4(0.0, 0.3, 0.0, 1.0));
 
 	mesh->indici.push_back(0); mesh->indici.push_back(1); mesh->indici.push_back(2);//FRONT
 	mesh->indici.push_back(2); mesh->indici.push_back(3); mesh->indici.push_back(0);
