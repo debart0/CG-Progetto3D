@@ -52,7 +52,7 @@ static unsigned int loc_view_pos, MatModelR, MatViewR, MatrixProjR, loc_view_pos
 
  
 
-unsigned int idTex, texture, texture1, cubemapTexture, texturePiano, textureTronco, textureFoglie, textureLegno, programIdr;
+unsigned int idTex, texture, texture1, cubemapTexture, texturePiano, textureTronco, textureFoglie, textureLegno, textureRockyTrail, programIdr;
 
 //TODO mettere un raggio per ogni oggetto
 float raggio_sfera=4;
@@ -317,14 +317,13 @@ void INIT_VAO(void)
 {
 	string TAG = "INIT_VAO";
 	Mesh Strada, Sfondo, Sfera, Cono, Cilindro, Toro, Sky, Piano, Tronco, Foglie, Muretto, Sfera1, Sfera2;
-	int counter = -1;
 	//vector<Mesh> Muretto;
 	caricaTexture();
 	//Sky
 	crea_cubo(&Sky, vec2(10.0, 10.0));
 	crea_VAO_Vector(&Sky);
 	Scena.push_back(Sky);
-	counter++;
+
 	
 	//Sfera
 	/*crea_sfera(&Sfera, vec4(1.0, 0.0, 0.0, 1.0));
@@ -357,8 +356,8 @@ void INIT_VAO(void)
 	Piano.material = MaterialType::EMERALD;
 	Piano.texture = TextureType::ERBA;
 	Piano.alive = true;
+	Piano.killable = false;
 	Scena.push_back(Piano);
-	counter++;
 
 	//Albero test
 	//Posso fare che un tronco punti anche al suo cono con un puntatore, magari metto un campo destroyable e un campo relative
@@ -367,15 +366,22 @@ void INIT_VAO(void)
 	crea_cilindro(&Tronco, vec4(1.0, 0.0, 0.0, 1.0), 8, 8, vec2(4.0, 1.0));
 	crea_VAO_Vector(&Tronco);
 	Tronco.nome = "Tronco";
+	Tronco.BBOriginale = calcolaBoundingBox(&Tronco);
+
 	Tronco.ModelM = mat4(1.0);
 	Tronco.ModelM = translate(Tronco.ModelM, vec3(0.0, 0.0, 20.0));
 	Tronco.ModelM = scale(Tronco.ModelM, vec3(2.0f, 5.0f, 2.0f));
-	Tronco.ModelM = rotate(Tronco.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
 	Tronco.sceltaVS = 1;
 	Tronco.sceltaFS = 1;
+	Tronco.AABB = Tronco.BBOriginale;
+	Tronco.AABB.TL = Tronco.ModelM * Tronco.AABB.TL;
+	Tronco.AABB.BR = Tronco.ModelM * Tronco.AABB.BR;
+	Tronco.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Tronco.AABB.TL;
+	Tronco.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Tronco.AABB.BR;
+
 	Tronco.material = MaterialType::MARRONE;
 	Tronco.texture = TextureType::TRONCO;
-
+	Tronco.killable = true;
 	/*printf("Vertici albero: %d\n", Tronco.vertici.size());
 	for (int i = 0; i < Tronco.vertici.size(); i++) {
 		printf("[%d] = %f, %f, %f\n", i, Tronco.vertici[i].x, Tronco.vertici[i].y, Tronco.vertici[i].z);
@@ -384,30 +390,39 @@ void INIT_VAO(void)
 	crea_cono(&Foglie, vec4(1.0, 0.0, 0.0, 1.0), 8, 8, vec2(3.0, 1.5));
 	crea_VAO_Vector(&Foglie);
 	Foglie.nome = "Foglie";
+	Foglie.BBOriginale = calcolaBoundingBox(&Foglie);
+
 	Foglie.ModelM = mat4(1.0);
 	Foglie.ModelM = translate(Foglie.ModelM, vec3(5.0, 8.0, 20.0));
 	Foglie.ModelM = scale(Foglie.ModelM, vec3(4.0f, 8.0f, 4.0f));
 	Foglie.ModelM = rotate(Foglie.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
 	Foglie.sceltaVS = 1;
 	Foglie.sceltaFS = 1;
+	Foglie.AABB = Foglie.BBOriginale;
+	Foglie.AABB.TL = Foglie.ModelM * Foglie.AABB.TL;
+	Foglie.AABB.BR = Foglie.ModelM * Foglie.AABB.BR;
+	//Foglie.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Foglie.AABB.TL;
+	//Foglie.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Foglie.AABB.BR;
+	printf("Hitbox di Foglie: : %f, %f, %f--- %f, %f, %f\n", Foglie.AABB.TL.x, Foglie.AABB.TL.y, Foglie.AABB.TL.z, Foglie.AABB.BR.x, Foglie.AABB.BR.y, Foglie.AABB.BR.z);
+	Foglie.AABB = rotazioneBoundingBox(Foglie.AABB);
+	printf("Hitbox di Foglie: : %f, %f, %f--- %f, %f, %f\n", Foglie.AABB.TL.x, Foglie.AABB.TL.y, Foglie.AABB.TL.z, Foglie.AABB.BR.x, Foglie.AABB.BR.y, Foglie.AABB.BR.z);
 	Foglie.material = MaterialType::EMERALD;
 	Foglie.texture = TextureType::FOGLIE;	
+	Foglie.killable = true;
 	Tronco.hp = 3;
 	Tronco.alive = true;
 	Tronco.linkedMesh = &Foglie;
 	Foglie.hp = 3;
 	Foglie.alive = true;
 	Foglie.linkedMesh = &Tronco;
-	Scena.push_back(Tronco);
 
-	counter++;
+	Scena.push_back(Tronco);
 	Scena.push_back(Foglie);
-	counter++;
 	//Scena[counter].linkedMesh = &Scena[counter - 1];
 	//Scena[counter-1].linkedMesh = &Scena[counter];
 
 	//STRADINA
-	crea_piano(&Strada, vec4(0.2, 0.2, 0.9, 1.0), vec2(2.0, 10.0));
+	crea_piano(&Strada, vec4(0.2, 0.2, 0.9, 1.0), vec2(5.0, 50.0));
 	crea_VAO_Vector(&Strada);
 	Strada.nome = "STRADA";
 	Strada.ModelM = mat4(1.0);
@@ -416,8 +431,9 @@ void INIT_VAO(void)
 	//Strada.ModelM = rotate(Strada.ModelM, radians(90.0f), vec3(1.0, 0.0, 0.0));
 	Strada.sceltaVS = 1;
 	Strada.sceltaFS = 1;
-	Strada.material = MaterialType::MARRONE;
-	Strada.texture = TextureType::MATTONI;
+	Strada.material = MaterialType::NO_MATERIAL;
+	Strada.texture = TextureType::SENTIERO;
+	Strada.killable = false;
 	Strada.alive = true;
 	Scena.push_back(Strada);
 	printf("\nDopo aver pushato strada\n");
@@ -538,9 +554,9 @@ void INIT_VAO(void)
 	Sfera2.material = MaterialType::EMERALD;
 	Sfera2.texture = TextureType::SENZA;
 	Scena.push_back(Sfera2);*/
-	printf("\nIn fondo al init vao\n");
+	/*printf("\nIn fondo al init vao\n");
 	printf("%s linked: %s\n", Scena[2].nome.c_str(), Scena[2].linkedMesh->nome.c_str());
-	printf("%s linked: %s\n", Scena[3].nome.c_str(), Scena[3].linkedMesh->nome.c_str());
+	printf("%s linked: %s\n", Scena[3].nome.c_str(), Scena[3].linkedMesh->nome.c_str());*/
 }
 
 
@@ -717,6 +733,11 @@ void drawScene(void)
 				case TextureType::MATTONI:
 					glUniform1i(loc_texture, 0);
 					glBindTexture(GL_TEXTURE_2D, texture);
+					break;
+				case TextureType::SENTIERO:
+					glUniform1i(loc_texture, 0);
+					glBindTexture(GL_TEXTURE_2D, textureRockyTrail);
+					break;
 				default: 
 					glUniform1i(loc_texture, 0);
 					glBindTexture(GL_TEXTURE_2D, 0);

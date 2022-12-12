@@ -96,6 +96,7 @@ typedef enum {
 	FOGLIE,
 	MURO,
 	MATTONI,
+	SENTIERO,
 	LEGNO
 } TextureType;
 typedef struct Mesh Mesh;
@@ -125,6 +126,7 @@ struct Mesh{
 	BoundingBox AABB;	//La bounding box post-trasformazioni
 	int hp;
 	bool alive;
+	bool killable;
 	Mesh *linkedMesh;
 };
 

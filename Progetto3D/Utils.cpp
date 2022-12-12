@@ -114,6 +114,27 @@ BoundingBox calcolaBoundingBox(Mesh* fig) {
 	return box;
 }
 
+BoundingBox rotazioneBoundingBox(BoundingBox aabb) {
+	vector<vec3> tmp{ aabb.TL, aabb.BR };
+	vec3 min = aabb.TL;
+	vec3 max = aabb.TL;
+	for (vec3 vertice : tmp) {
+		if (min.x > vertice.x) min.x = vertice.x;
+		if (min.y > vertice.y) min.y = vertice.y;
+		if (max.x < vertice.x) max.x = vertice.x;
+		if (max.y < vertice.y) max.y = vertice.y;
+		if (max.y < vertice.y) max.y = vertice.y;
+		if (max.z < vertice.z) max.z = vertice.z;
+	}
+	vec3 newTL, newBR;
+	newTL = vec3(min.x, max.y, max.z);
+	newBR = vec3(max.x, min.y, min.z);
+	BoundingBox newAABB;
+	newAABB.TL = vec4(newTL, 0.0);
+	newAABB.BR = vec4(newBR, 0.0);
+	return newAABB;
+}
+
 BoundingBox calcolaBoundingBoxOBJ(vector<MeshObj> meshObjVector) {
 	string LOG_TAG = "calcolaBoundingBoxOBJ";
 	vec3 min = meshObjVector.at(0).vertici.at(0);
@@ -172,7 +193,7 @@ BoundingBox calcolaBoundingBoxOBJ(vector<MeshObj> meshObjVector) {
 bool checkCollisionCamera(vector<Mesh> Scena, vec4 cameraPosition) {
 	Mesh mesh;
 	bool collisionX, collisionY, collisionZ;
-	//printf("Coordinate di telecamera %f %f %f\n", cameraPosition.x, cameraPosition.y, cameraPosition.z);
+	printf("Coordinate di telecamera %f %f %f\n", cameraPosition.x, cameraPosition.y, cameraPosition.z);
 	for (int i = 1; i < Scena.size(); i++) {
 		mesh = Scena[i];
 		//printf("Controllo hitbox di %s\n", mesh.nome.c_str());

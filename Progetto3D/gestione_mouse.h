@@ -141,7 +141,6 @@ void mouse(int button, int state, int x, int y)
 				if (Scena[i].alive) {
 					if (ray_sphere(ViewSetup.position, ray_wor, Scena[i].ancora_world, raggio_sfera, &t_dist))
 					{
-						printf("Toccato!\n");
 						if (selected_obj == -1 || t_dist < closest_intersection)
 						{
 							selected_obj = i;
@@ -152,16 +151,19 @@ void mouse(int button, int state, int x, int y)
 
 			}
 			if (selected_obj > -1) {
-				printf("Oggetto danneggiato %d -> %s \n", selected_obj, Scena[selected_obj].nome.c_str());
-				Scena[selected_obj].hp--;
-				if (Scena[selected_obj].hp <= 0)
-					Scena[selected_obj].alive = false;
-				if (Scena[selected_obj].linkedMesh != NULL) {
-					printf("All'oggetto e' linkato %s, elimino anche quello\n", Scena[selected_obj].linkedMesh->nome.c_str());
-					Scena[selected_obj].linkedMesh->hp--;
-					if(Scena[selected_obj].linkedMesh->hp <= 0)
-						Scena[selected_obj].linkedMesh->alive = false;
+				if (Scena[selected_obj].killable) {
+					printf("Oggetto danneggiato %d -> %s \n", selected_obj, Scena[selected_obj].nome.c_str());
+					Scena[selected_obj].hp--;
+					if (Scena[selected_obj].hp <= 0)
+						Scena[selected_obj].alive = false;
+					if (Scena[selected_obj].linkedMesh != NULL) {
+						printf("All'oggetto e' linkato %s, elimino anche quello\n", Scena[selected_obj].linkedMesh->nome.c_str());
+						Scena[selected_obj].linkedMesh->hp--;
+						if(Scena[selected_obj].linkedMesh->hp <= 0)
+							Scena[selected_obj].linkedMesh->alive = false;
+					}
 				}
+				
 			}
 		}
 		break;
