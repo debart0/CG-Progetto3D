@@ -316,8 +316,9 @@ void collegaMesh() {
 void INIT_VAO(void)
 {
 	string TAG = "INIT_VAO";
-	Mesh Strada, Sfondo, Sfera, Cono, Cilindro, Toro, Sky, Piano, Tronco, Foglie, Muretto, Sfera1, Sfera2;
-	Mesh Gamba1, Gamba2, Gamba3, Gamba4, Gamba5;
+	Mesh Strada, Sfondo, Sfera, Cono, Cilindro, Toro, Sky, Piano, Tronco, Foglie, Sfera1, Sfera2;
+	Mesh Muretto, Gamba1, Gamba2, Gamba3, Gamba4, Gamba5;
+	Mesh Muretto2, Muretto3, Gamba6, Gamba7, Gamba8, Gamba9, Gamba10;
 	//vector<Mesh> Muretto;
 	caricaTexture();
 	//Sky
@@ -431,13 +432,13 @@ void INIT_VAO(void)
 
 	//MURETTO
 	//crea_cubo(&Muretto, vec2(2.0, 1.0));
-	crea_cubo_ridondante(&Muretto, vec2(2.0, 1.0));
+	crea_cubo_ridondante(&Muretto, vec2(5.0, 1.0));
 	crea_VAO_Vector(&Muretto);
 	Muretto.nome = "Muretto";	
 	Muretto.BBOriginale = calcolaBoundingBox(&Muretto);
 	Muretto.ModelM = mat4(1.0);
 	Muretto.ModelM = translate(Muretto.ModelM, vec3(-28, -7, 0.0));
-	Muretto.ModelM = scale(Muretto.ModelM, vec3(1.0,1.0, 30));
+	Muretto.ModelM = scale(Muretto.ModelM, vec3(1.0,1.0, 28.5));
 	Muretto.AABB = Muretto.BBOriginale;
 	Muretto.AABB.TL = Muretto.ModelM * Muretto.AABB.TL;
 	Muretto.AABB.BR = Muretto.ModelM * Muretto.AABB.BR;
@@ -476,7 +477,7 @@ void INIT_VAO(void)
 
 	crea_cubo_ridondante(&Gamba2, vec2(2.0, 1.0));
 	crea_VAO_Vector(&Gamba2);
-	Gamba2.nome = "Gamba 1";
+	Gamba2.nome = "Gamba 2";
 	Gamba2.BBOriginale = calcolaBoundingBox(&Gamba2);
 	Gamba2.ModelM = mat4(1.0);
 	Gamba2.ModelM = translate(Gamba2.ModelM, vec3(-28, -9, 12.5));
@@ -496,7 +497,7 @@ void INIT_VAO(void)
 
 	crea_cubo_ridondante(&Gamba3, vec2(2.0, 1.0));
 	crea_VAO_Vector(&Gamba3);
-	Gamba3.nome = "Gamba 1";
+	Gamba3.nome = "Gamba 3";
 	Gamba3.BBOriginale = calcolaBoundingBox(&Gamba3);
 	Gamba3.ModelM = mat4(1.0);
 	Gamba3.ModelM = translate(Gamba3.ModelM, vec3(-28, -9, 25.0));
@@ -516,7 +517,7 @@ void INIT_VAO(void)
 
 	crea_cubo_ridondante(&Gamba4, vec2(2.0, 1.0));
 	crea_VAO_Vector(&Gamba4);
-	Gamba4.nome = "Gamba 1";
+	Gamba4.nome = "Gamba 4";
 	Gamba4.BBOriginale = calcolaBoundingBox(&Gamba4);
 	Gamba4.ModelM = mat4(1.0);
 	Gamba4.ModelM = translate(Gamba4.ModelM, vec3(-28, -9, -12.5));
@@ -536,7 +537,7 @@ void INIT_VAO(void)
 
 	crea_cubo_ridondante(&Gamba5, vec2(2.0, 1.0));
 	crea_VAO_Vector(&Gamba5);
-	Gamba5.nome = "Gamba 1";
+	Gamba5.nome = "Gamba 5";
 	Gamba5.BBOriginale = calcolaBoundingBox(&Gamba5);
 	Gamba5.ModelM = mat4(1.0);
 	Gamba5.ModelM = translate(Gamba5.ModelM, vec3(-28, -9, -25.0));
@@ -553,6 +554,157 @@ void INIT_VAO(void)
 	Gamba5.killable = false;
 	Gamba5.alive = true;
 	Scena.push_back(Gamba5);
+
+	//MURETTO 2
+	crea_cubo_ridondante(&Muretto2, vec2(5.0, 1.0));
+	crea_VAO_Vector(&Muretto2);
+	Muretto2.nome = "Muretto 2";
+	Muretto2.BBOriginale = calcolaBoundingBox(&Muretto2);
+	Muretto2.ModelM = mat4(1.0);
+	Muretto2.ModelM = translate(Muretto2.ModelM, vec3(-16.0, -7, -28.0));
+	Muretto2.ModelM = scale(Muretto2.ModelM, vec3(12.0, 1.0, 1.0));
+
+	Muretto2.AABB = Muretto2.BBOriginale;
+	Muretto2.AABB.TL = Muretto2.ModelM * Muretto2.AABB.TL;
+	Muretto2.AABB.BR = Muretto2.ModelM * Muretto2.AABB.BR;
+	Muretto2.AABB.TL += vec4(1.0, 1.0, 0.2, 0.0) * Muretto2.AABB.TL;
+	Muretto2.AABB.BR += vec4(1.0, 1.0, 0.2, 0.0) * Muretto2.AABB.BR;
+	Muretto2.AABB = rotazioneBoundingBox(Muretto2.AABB);
+	Muretto2.sceltaVS = 1;
+	Muretto2.sceltaFS = 1;
+	Muretto2.material = MaterialType::MARRONE;
+	Muretto2.texture = TextureType::LEGNO;
+	Muretto2.killable = false;
+	Muretto2.alive = true;
+	printf("Hitbox di Muretto2: : %f, %f, %f--- %f, %f, %f\n", Muretto2.AABB.TL.x, Muretto2.AABB.TL.y, Muretto2.AABB.TL.z, Muretto2.AABB.BR.x, Muretto2.AABB.BR.y, Muretto2.AABB.BR.z);
+	Scena.push_back(Muretto2);
+	
+	//MURETTO 3
+	crea_cubo_ridondante(&Muretto3, vec2(5.0, 1.0));
+	crea_VAO_Vector(&Muretto3);
+	Muretto3.nome = "Muretto 3";
+	Muretto3.BBOriginale = calcolaBoundingBox(&Muretto3);
+	Muretto3.ModelM = mat4(1.0);
+	Muretto3.ModelM = translate(Muretto3.ModelM, vec3(16.0, -7, -28.0));
+	Muretto3.ModelM = scale(Muretto3.ModelM, vec3(12.0, 1.0, 1.0));
+
+	Muretto3.AABB = Muretto3.BBOriginale;
+	Muretto3.AABB.TL = Muretto3.ModelM * Muretto3.AABB.TL;
+	Muretto3.AABB.BR = Muretto3.ModelM * Muretto3.AABB.BR;
+	Muretto3.AABB.TL += vec4(1.0, 1.0, 0.2, 0.0) * Muretto3.AABB.TL;
+	Muretto3.AABB.BR += vec4(1.0, 1.0, 0.2, 0.0) * Muretto3.AABB.BR;
+	Muretto3.AABB = rotazioneBoundingBox(Muretto3.AABB);
+	Muretto3.sceltaVS = 1;
+	Muretto3.sceltaFS = 1;
+	Muretto3.material = MaterialType::MARRONE;
+	Muretto3.texture = TextureType::LEGNO;
+	Muretto3.killable = false;
+	Muretto3.alive = true;
+	printf("Hitbox di Muretto3: : %f, %f, %f--- %f, %f, %f\n", Muretto3.AABB.TL.x, Muretto3.AABB.TL.y, Muretto3.AABB.TL.z, Muretto3.AABB.BR.x, Muretto3.AABB.BR.y, Muretto3.AABB.BR.z);
+	Scena.push_back(Muretto3);
+
+
+	//Gambe per il secondo muretto
+	crea_cubo_ridondante(&Gamba6, vec2(2.0, 1.0));
+	crea_VAO_Vector(&Gamba6);
+	Gamba6.nome = "Gamba 6";
+	Gamba6.BBOriginale = calcolaBoundingBox(&Gamba6);
+	Gamba6.ModelM = mat4(1.0);
+	Gamba6.ModelM = translate(Gamba6.ModelM, vec3(0.0, -9, -28.0));
+	Gamba6.ModelM = scale(Gamba6.ModelM, vec3(0.5, 1.0, 0.5));
+	Gamba6.AABB = Gamba6.BBOriginale;
+	Gamba6.AABB.TL = Gamba6.ModelM * Gamba6.AABB.TL;
+	Gamba6.AABB.BR = Gamba6.ModelM * Gamba6.AABB.BR;
+	Gamba6.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba6.AABB.TL;
+	Gamba6.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba6.AABB.BR;
+	Gamba6.sceltaVS = 1;
+	Gamba6.sceltaFS = 1;
+	Gamba6.material = MaterialType::MARRONE;
+	Gamba6.texture = TextureType::LEGNO;
+	Gamba6.killable = false;
+	Gamba6.alive = true;
+	Scena.push_back(Gamba6);
+
+	crea_cubo_ridondante(&Gamba7, vec2(2.0, 1.0));
+	crea_VAO_Vector(&Gamba7);
+	Gamba7.nome = "Gamba 7";
+	Gamba7.BBOriginale = calcolaBoundingBox(&Gamba7);
+	Gamba7.ModelM = mat4(1.0);
+	Gamba7.ModelM = translate(Gamba7.ModelM, vec3(12.5, -9, -28.5));
+	Gamba7.ModelM = scale(Gamba7.ModelM, vec3(0.5, 1.0, 0.5));
+	Gamba7.AABB = Gamba7.BBOriginale;
+	Gamba7.AABB.TL = Gamba7.ModelM * Gamba7.AABB.TL;
+	Gamba7.AABB.BR = Gamba7.ModelM * Gamba7.AABB.BR;
+	Gamba7.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba7.AABB.TL;
+	Gamba7.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba7.AABB.BR;
+	Gamba7.sceltaVS = 1;
+	Gamba7.sceltaFS = 1;
+	Gamba7.material = MaterialType::MARRONE;
+	Gamba7.texture = TextureType::LEGNO;
+	Gamba7.killable = false;
+	Gamba7.alive = true;
+	Scena.push_back(Gamba7);
+
+	crea_cubo_ridondante(&Gamba8, vec2(2.0, 1.0));
+	crea_VAO_Vector(&Gamba8);
+	Gamba8.nome = "Gamba 8";
+	Gamba8.BBOriginale = calcolaBoundingBox(&Gamba8);
+	Gamba8.ModelM = mat4(1.0);
+	Gamba8.ModelM = translate(Gamba8.ModelM, vec3(-25.0, -9, -28.0));
+	Gamba8.ModelM = scale(Gamba8.ModelM, vec3(0.5, 1.0, 0.5));
+	Gamba8.AABB = Gamba8.BBOriginale;
+	Gamba8.AABB.TL = Gamba8.ModelM * Gamba8.AABB.TL;
+	Gamba8.AABB.BR = Gamba8.ModelM * Gamba8.AABB.BR;
+	Gamba8.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba8.AABB.TL;
+	Gamba8.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba8.AABB.BR;
+	Gamba8.sceltaVS = 1;
+	Gamba8.sceltaFS = 1;
+	Gamba8.material = MaterialType::MARRONE;
+	Gamba8.texture = TextureType::LEGNO;
+	Gamba8.killable = false;
+	Gamba8.alive = true;
+	Scena.push_back(Gamba8);
+
+	crea_cubo_ridondante(&Gamba9, vec2(2.0, 1.0));
+	crea_VAO_Vector(&Gamba9);
+	Gamba9.nome = "Gamba 9";
+	Gamba9.BBOriginale = calcolaBoundingBox(&Gamba9);
+	Gamba9.ModelM = mat4(1.0);
+	Gamba9.ModelM = translate(Gamba9.ModelM, vec3(-12.5, -9, -28.0));
+	Gamba9.ModelM = scale(Gamba9.ModelM, vec3(0.5, 1.0, 0.5));
+	Gamba9.AABB = Gamba9.BBOriginale;
+	Gamba9.AABB.TL = Gamba9.ModelM * Gamba9.AABB.TL;
+	Gamba9.AABB.BR = Gamba9.ModelM * Gamba9.AABB.BR;
+	Gamba9.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba9.AABB.TL;
+	Gamba9.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba9.AABB.BR;
+	Gamba9.sceltaVS = 1;
+	Gamba9.sceltaFS = 1;
+	Gamba9.material = MaterialType::MARRONE;
+	Gamba9.texture = TextureType::LEGNO;
+	Gamba9.killable = false;
+	Gamba9.alive = true;
+	Scena.push_back(Gamba9);
+
+	crea_cubo_ridondante(&Gamba10, vec2(2.0, 1.0));
+	crea_VAO_Vector(&Gamba10);
+	Gamba10.nome = "Gamba 10";
+	Gamba10.BBOriginale = calcolaBoundingBox(&Gamba10);
+	Gamba10.ModelM = mat4(1.0);
+	Gamba10.ModelM = translate(Gamba10.ModelM, vec3(25.0, -9, -28.0));
+	Gamba10.ModelM = scale(Gamba10.ModelM, vec3(0.5, 1.0, 0.5));
+	Gamba10.AABB = Gamba10.BBOriginale;
+	Gamba10.AABB.TL = Gamba10.ModelM * Gamba10.AABB.TL;
+	Gamba10.AABB.BR = Gamba10.ModelM * Gamba10.AABB.BR;
+	Gamba10.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba10.AABB.TL;
+	Gamba10.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba10.AABB.BR;
+	Gamba10.sceltaVS = 1;
+	Gamba10.sceltaFS = 1;
+	Gamba10.material = MaterialType::MARRONE;
+	Gamba10.texture = TextureType::LEGNO;
+	Gamba10.killable = false;
+	Gamba10.alive = true;
+	Scena.push_back(Gamba10);
+
 
 	bool obj;
 	int nmeshes;
