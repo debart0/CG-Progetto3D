@@ -3,7 +3,6 @@
 
 extern int pval;
 extern vector<BoundingBox> BoundingBoxOBJVector;
-
 ////////////////////////////////////// Disegna geometria //////////////////////////////////////
 //Per Curve di hermite
 #define PHI0(t)  (2.0*t*t*t-3.0*t*t+1)

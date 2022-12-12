@@ -98,8 +98,8 @@ typedef enum {
 	MATTONI,
 	LEGNO
 } TextureType;
-
-typedef struct {
+typedef struct Mesh Mesh;
+struct Mesh{
 	vector<vec3> vertici;
 	vector<vec3> CP;
 	vector<vec4> colori;
@@ -123,7 +123,10 @@ typedef struct {
 	vec4 ancora_world;
 	BoundingBox BBOriginale;	//La bounding box con le coordinate di modellazione
 	BoundingBox AABB;	//La bounding box post-trasformazioni
-} Mesh;
+	int hp;
+	bool alive;
+	Mesh *linkedMesh;
+};
 
 typedef struct {
 	vector<vec3> vertici;

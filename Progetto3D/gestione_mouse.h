@@ -83,6 +83,7 @@ bool ray_sphere(vec3 ray_origin_wor, vec3 ray_direction_wor, vec3 sphere_centre_
 	return false;
 }
 
+
 void mouse(int button, int state, int x, int y)
 {
 
@@ -112,7 +113,7 @@ void mouse(int button, int state, int x, int y)
 				//posizionati nel mondo per individuare se c'è intersezione con l'oggetto
 				if (ray_sphere(ViewSetup.position, ray_wor, Scena[i].ancora_world, raggio_sfera, &t_dist))
 				{
-					printf("Collisione!\n");
+					printf("Toccato!\n");
 					if (selected_obj == -1 || t_dist < closest_intersection)
 					{
 						selected_obj = i;
@@ -122,6 +123,40 @@ void mouse(int button, int state, int x, int y)
 			}
 			if (selected_obj > -1)
 				printf("Oggetto selezionato %d -> %s \n", selected_obj, Scena[selected_obj].nome.c_str());
+		}
+		else if (state == GLUT_DOWN) {
+			float xmouse = x;
+			float ymouse = y;
+			vec3 ray_wor = get_ray_from_mouse(xmouse, ymouse);
+			selected_obj = -1;
+			float closest_intersection = 0.0f;
+			for (int i = 0; i < Scena.size(); i++)
+			{
+				float t_dist = 0.0f;
+				//Interseco il raggio che esce dalla camera nella direzione del mouse con la sfera centrata nell'ancora di tutti gli oggetti 
+				//posizionati nel mondo per individuare se c'è intersezione con l'oggetto
+				if (ray_sphere(ViewSetup.position, ray_wor, Scena[i].ancora_world, raggio_sfera, &t_dist))
+				{
+					printf("Toccato!\n");
+					if (selected_obj == -1 || t_dist < closest_intersection)
+					{
+						selected_obj = i;
+						closest_intersection = t_dist;
+					}
+				}
+			}
+			if (selected_obj > -1) {
+				printf("Oggetto danneggiato %d -> %s \n", selected_obj, Scena[selected_obj].nome.c_str());
+				Scena[selected_obj].hp--;
+				if (Scena[selected_obj].hp <= 0)
+					Scena[selected_obj].alive = false;
+				if (Scena[selected_obj].linkedMesh != NULL) {
+					printf("All'oggetto e' linkato %s, elimino anche quello\n", Scena[selected_obj].linkedMesh->nome.c_str());
+					Scena[selected_obj].linkedMesh->hp--;
+					if(Scena[selected_obj].linkedMesh->hp <= 0)
+						Scena[selected_obj].linkedMesh->alive = false;
+				}
+			}
 		}
 		break;
 	default:

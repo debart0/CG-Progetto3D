@@ -549,7 +549,6 @@ void crea_cilindro(Mesh* mesh, vec4 colore, int Stacks, int Slices, vec2 fattori
 			s = U * fattori.x;
 			t = V * fattori.y;
 			mesh->texCoords.push_back(vec2(s, t));
-			printf("s %f t %f\n", s, t);
 		}
 	}
 

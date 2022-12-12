@@ -52,7 +52,7 @@ static unsigned int loc_view_pos, MatModelR, MatViewR, MatrixProjR, loc_view_pos
 
  
 
-unsigned int idTex, texture, texture1, cubemapTexture, cubemapTextureRockwall, texturePiano, textureTronco, textureFoglie, textureLegno, programIdr;
+unsigned int idTex, texture, texture1, cubemapTexture, texturePiano, textureTronco, textureFoglie, textureLegno, programIdr;
 
 //TODO mettere un raggio per ogni oggetto
 float raggio_sfera=4;
@@ -302,16 +302,29 @@ void crea_VAO_Vector(Mesh* mesh)
 }
 
 
+void collegaMesh() {
+	Scena[2].linkedMesh = &Scena[3];
+	Scena[3].linkedMesh = &Scena[2];
+
+	Scena[1].linkedMesh = &Scena[4];
+	Scena[4].linkedMesh = &Scena[1];
+	printf("\nCollegamesh\n");
+	printf("%s linked: %s\n", Scena[2].nome.c_str(), Scena[2].linkedMesh->nome.c_str());
+	printf("%s linked: %s\n", Scena[3].nome.c_str(), Scena[3].linkedMesh->nome.c_str());
+}
+
 void INIT_VAO(void)
 {
 	string TAG = "INIT_VAO";
-	Mesh Strada, Sfondo, Sfera, Cono, Cilindro, Toro, Sky, Piano, Tronco, Foglie, Muretto;
+	Mesh Strada, Sfondo, Sfera, Cono, Cilindro, Toro, Sky, Piano, Tronco, Foglie, Muretto, Sfera1, Sfera2;
+	int counter = -1;
 	//vector<Mesh> Muretto;
 	caricaTexture();
 	//Sky
 	crea_cubo(&Sky, vec2(10.0, 10.0));
 	crea_VAO_Vector(&Sky);
 	Scena.push_back(Sky);
+	counter++;
 	
 	//Sfera
 	/*crea_sfera(&Sfera, vec4(1.0, 0.0, 0.0, 1.0));
@@ -341,12 +354,12 @@ void INIT_VAO(void)
 	Piano.AABB.BR = Piano.ModelM * Piano.AABB.BR;
 	Piano.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Piano.AABB.TL;
 	Piano.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Piano.AABB.BR;
-	printf("Hitbox di piano: : %f, %f, %f--- %f, %f, %f\n", Piano.AABB.TL.x, Piano.AABB.TL.y, Piano.AABB.TL.z, Piano.AABB.BR.x, Piano.AABB.BR.y, Piano.AABB.BR.z);
-
 	Piano.material = MaterialType::EMERALD;
 	Piano.texture = TextureType::ERBA;
+	Piano.alive = true;
 	Scena.push_back(Piano);
-	/*
+	counter++;
+
 	//Albero test
 	//Posso fare che un tronco punti anche al suo cono con un puntatore, magari metto un campo destroyable e un campo relative
 	vec4 verde = vec4(0.09, 0.20, 0.05, 1.0);
@@ -361,13 +374,13 @@ void INIT_VAO(void)
 	Tronco.sceltaVS = 1;
 	Tronco.sceltaFS = 1;
 	Tronco.material = MaterialType::MARRONE;
-	Tronco.texture = TextureType::TRONCO;*/
+	Tronco.texture = TextureType::TRONCO;
 
 	/*printf("Vertici albero: %d\n", Tronco.vertici.size());
 	for (int i = 0; i < Tronco.vertici.size(); i++) {
 		printf("[%d] = %f, %f, %f\n", i, Tronco.vertici[i].x, Tronco.vertici[i].y, Tronco.vertici[i].z);
 	}*/
-	/*Scena.push_back(Tronco);
+
 	crea_cono(&Foglie, vec4(1.0, 0.0, 0.0, 1.0), 8, 8, vec2(3.0, 1.5));
 	crea_VAO_Vector(&Foglie);
 	Foglie.nome = "Foglie";
@@ -378,23 +391,20 @@ void INIT_VAO(void)
 	Foglie.sceltaVS = 1;
 	Foglie.sceltaFS = 1;
 	Foglie.material = MaterialType::EMERALD;
-	Foglie.texture = TextureType::FOGLIE;
+	Foglie.texture = TextureType::FOGLIE;	
+	Tronco.hp = 3;
+	Tronco.alive = true;
+	Tronco.linkedMesh = &Foglie;
+	Foglie.hp = 3;
+	Foglie.alive = true;
+	Foglie.linkedMesh = &Tronco;
+	Scena.push_back(Tronco);
+
+	counter++;
 	Scena.push_back(Foglie);
-
-
-	//cono
-	crea_cono(&Cono, vec4(1.0, 0.0, 0.0, 1.0), 30, 30, vec2(1.0, 1.0));
-	crea_VAO_Vector(&Cono);
-	Cono.nome = "Cono";
-	Cono.ModelM = mat4(1.0);
-	Cono.ModelM = translate(Cono.ModelM, vec3(-12.5, 1.2, 12.0));
-	Cono.ModelM = scale(Cono.ModelM, vec3(1.2f, 1.5f, 1.2f));
-	Cono.ModelM = rotate(Cono.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
- 	Cono.sceltaVS = 1;
-	Cono.sceltaFS = 1;
-	Cono.material = MaterialType::RED_PLASTIC;
-	Cono.texture = TextureType::MATTONI;
-	Scena.push_back(Cono);
+	counter++;
+	//Scena[counter].linkedMesh = &Scena[counter - 1];
+	//Scena[counter-1].linkedMesh = &Scena[counter];
 
 	//STRADINA
 	crea_piano(&Strada, vec4(0.2, 0.2, 0.9, 1.0), vec2(2.0, 10.0));
@@ -408,7 +418,12 @@ void INIT_VAO(void)
 	Strada.sceltaFS = 1;
 	Strada.material = MaterialType::MARRONE;
 	Strada.texture = TextureType::MATTONI;
-	Scena.push_back(Strada);*/
+	Strada.alive = true;
+	Scena.push_back(Strada);
+	printf("\nDopo aver pushato strada\n");
+	collegaMesh();
+	printf("%s linked: %s\n", Scena[2].nome.c_str(), Scena[2].linkedMesh->nome.c_str());
+	printf("%s linked: %s\n", Scena[3].nome.c_str(), Scena[3].linkedMesh->nome.c_str());
 
 	//MURETTO
 	//crea_cubo(&Muretto, vec2(2.0, 1.0));
@@ -437,7 +452,7 @@ void INIT_VAO(void)
 	string name;
 	string path;
 	BoundingBox bbobj;
-
+	/*
 	name = "raptor_01.obj";
 	path = Meshdir + name;
 	obj = loadAssImp(path.c_str(), Model3D);   //OK ombrellone.obj, divano.obj, low_poly_house,man
@@ -467,21 +482,21 @@ void INIT_VAO(void)
 	BoundingBoxOBJVector.push_back(bbobj);
 	ScenaObj.push_back(Model3D);
 
-	Model3D.clear();
+	Model3D.clear();*/
 	
-	name = "Well_low_polyOBJ.obj";
+	name = "waterWell.obj";
 	path = Meshdir + name;
-	obj = loadAssImp(path.c_str(), Model3D);   //OK ombrellone.obj, divano.obj, low_poly_house,man
+	obj = loadAssImp(path.c_str(), Model3D);
 
 	nmeshes = Model3D.size();
-	printf("Model3D size: %d\n", nmeshes);
+	//printf("Model3D size: %d\n", nmeshes);
 
 	for (int i = 0; i < nmeshes; i++)
 	{
 		crea_VAO_Vector_MeshObj(&Model3D[i]);
 		Model3D[i].ModelM = mat4(1.0);
-		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(5.0, -5.0, 5.0));
-		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(0.6, 0.6, 0.6));
+		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(0.0, -0.0, 0.0));
+		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(1, 1, 1));
 		Model3D[i].nome = "Pozzo";
 
 		Model3D[i].sceltaVS = 1;
@@ -493,15 +508,41 @@ void INIT_VAO(void)
 	//Piano.AABB.BR = Piano.ModelM * Piano.AABB.BR;
 	//bbobj.TL += vec4(0.5, 0.5, 0.5, 0.0) * bbobj.TL;
 	//bbobj.BR += vec4(0.5, 0.5, 0.5, 0.0) * bbobj.BR;
-	printf("Hitbox di Pozzo: : %f, %f, %f--- %f, %f, %f\n", bbobj.TL.x, bbobj.TL.y, bbobj.TL.z, bbobj.BR.x, bbobj.BR.y, bbobj.BR.z);
+	//printf("Hitbox di Pozzo: : %f, %f, %f--- %f, %f, %f\n", bbobj.TL.x, bbobj.TL.y, bbobj.TL.z, bbobj.BR.x, bbobj.BR.y, bbobj.BR.z);
 	BoundingBoxOBJVector.push_back(bbobj);
 
-	ScenaObj.push_back(Model3D);
+	//ScenaObj.push_back(Model3D);
 
 	Model3D.clear();
+
+
+	//Queste due sfere sono "di debug" per vedere gli angoli della bounding box di un modello caricato via OBJ
+	/*crea_sfera(&Sfera1, vec4(1.0, 0.0, 0.0, 1.0));
+	crea_VAO_Vector(&Sfera1);
+	Sfera1.ModelM = mat4(1.0);
+	Sfera1.ModelM = translate(Sfera1.ModelM, vec3(bbobj.TL.x, bbobj.TL.y, bbobj.TL.z));
+	Sfera1.ModelM = scale(Sfera1.ModelM, vec3(1.0f, 1.0f, 1.0f));
+	Sfera1.sceltaVS = 1;
+	Sfera1.sceltaFS = 1;
+	Sfera1.material = MaterialType::EMERALD;
+	Sfera1.texture = TextureType::SENZA;
+	Scena.push_back(Sfera1);
+
+	crea_sfera(&Sfera2, vec4(1.0, 0.0, 0.0, 1.0));
+	crea_VAO_Vector(&Sfera2);
+	Sfera2.ModelM = mat4(1.0);
+	Sfera2.ModelM = translate(Sfera2.ModelM, vec3(bbobj.BR.x, bbobj.BR.y, bbobj.BR.z));
+	Sfera.ModelM = scale(Sfera2.ModelM, vec3(1.0f, 1.0f, 1.0f));
+	Sfera2.sceltaVS = 1;
+	Sfera2.sceltaFS = 1;
+	Sfera2.material = MaterialType::EMERALD;
+	Sfera2.texture = TextureType::SENZA;
+	Scena.push_back(Sfera2);*/
+	printf("\nIn fondo al init vao\n");
+	printf("%s linked: %s\n", Scena[2].nome.c_str(), Scena[2].linkedMesh->nome.c_str());
+	printf("%s linked: %s\n", Scena[3].nome.c_str(), Scena[3].linkedMesh->nome.c_str());
 }
 
- 
 
 
 
@@ -626,74 +667,66 @@ void drawScene(void)
 
 	for (int k =1; k < Scena.size(); k++)
 	{
-		//Trasformazione delle coordinate dell'ancora dal sistema di riferimento dell'oggetto in sistema
-		//di riferimento del mondo premoltiplicando per la matrice di Modellazione.
+		if (Scena[k].alive) {
+			//Trasformazione delle coordinate dell'ancora dal sistema di riferimento dell'oggetto in sistema
+			//di riferimento del mondo premoltiplicando per la matrice di Modellazione.
 
-		Scena[k].ancora_world = Scena[k].ancora_obj;
-		Scena[k].ancora_world = Scena[k].ModelM * Scena[k].ancora_world;
-		//Passo al Vertex Shader il puntatore alla matrice Model dell'oggetto k-esimo della Scena, che sarà associata alla variabile Uniform mat4 Projection
-		//all'interno del Vertex shader. Uso l'identificativo MatModel
+			Scena[k].ancora_world = Scena[k].ancora_obj;
+			Scena[k].ancora_world = Scena[k].ModelM * Scena[k].ancora_world;
+			//Passo al Vertex Shader il puntatore alla matrice Model dell'oggetto k-esimo della Scena, che sarà associata alla variabile Uniform mat4 Projection
+			//all'interno del Vertex shader. Uso l'identificativo MatModel
 		 
-		glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(Scena[k].ModelM));
-		glUniform1i(lsceltaVS, Scena[k].sceltaVS);
-		glUniform1i(lsceltaFS, Scena[k].sceltaFS);
-		//Passo allo shader il puntatore ai materiali
-		glUniform3fv(light_unif.material_ambient, 1, glm::value_ptr(materials[Scena[k].material].ambient));
-		glUniform3fv(light_unif.material_diffuse, 1, glm::value_ptr(materials[Scena[k].material].diffuse));
-		glUniform3fv(light_unif.material_specular, 1, glm::value_ptr(materials[Scena[k].material].specular));
-		glUniform1f(light_unif.material_shininess, materials[Scena[k].material].shininess);
+			glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(Scena[k].ModelM));
+			glUniform1i(lsceltaVS, Scena[k].sceltaVS);
+			glUniform1i(lsceltaFS, Scena[k].sceltaFS);
+			//Passo allo shader il puntatore ai materiali
+			glUniform3fv(light_unif.material_ambient, 1, glm::value_ptr(materials[Scena[k].material].ambient));
+			glUniform3fv(light_unif.material_diffuse, 1, glm::value_ptr(materials[Scena[k].material].diffuse));
+			glUniform3fv(light_unif.material_specular, 1, glm::value_ptr(materials[Scena[k].material].specular));
+			glUniform1f(light_unif.material_shininess, materials[Scena[k].material].shininess);
 	 
-		glBindVertexArray(Scena[k].VAO);
+			glBindVertexArray(Scena[k].VAO);
 		
-	 	if (visualizzaAncora==TRUE)
-		{
-			//Visualizzo l'ancora dell'oggetto
-			int ind = Scena[k].indici.size() - 1;
+	 		if (visualizzaAncora==TRUE)
+			{
+				//Visualizzo l'ancora dell'oggetto
+				int ind = Scena[k].indici.size() - 1;
 
 		
-			glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, BUFFER_OFFSET(ind * sizeof(GLuint)));
+				glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, BUFFER_OFFSET(ind * sizeof(GLuint)));
+			}
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			//Fare questo switch con un altra proprietà dell'oggetto Scena[k] e compararlo con delle costanti definite
+			switch (Scena[k].texture) {
+				case TextureType::ERBA: 
+					glUniform1i(loc_texture, 0);
+					glBindTexture(GL_TEXTURE_2D, texturePiano);
+					break;
+				case TextureType::TRONCO:
+					glUniform1i(loc_texture, 0);
+					glBindTexture(GL_TEXTURE_2D, textureTronco);
+					break;
+				case TextureType::FOGLIE:
+					glUniform1i(loc_texture, 0);
+					glBindTexture(GL_TEXTURE_2D, textureFoglie);
+					break;
+				case TextureType::LEGNO:
+					glUniform1i(loc_texture, 0);
+					glBindTexture(GL_TEXTURE_2D, textureLegno);
+					break;
+				case TextureType::MATTONI:
+					glUniform1i(loc_texture, 0);
+					glBindTexture(GL_TEXTURE_2D, texture);
+				default: 
+					glUniform1i(loc_texture, 0);
+					glBindTexture(GL_TEXTURE_2D, 0);
+					break;
+			}
+			glDrawElements(GL_TRIANGLES, (Scena[k].indici.size() - 1) * sizeof(GLuint), GL_UNSIGNED_INT, 0);
+	 
+			glBindVertexArray(0);
+	 
 		}
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		//Fare questo switch con un altra proprietà dell'oggetto Scena[k] e compararlo con delle costanti definite
-		switch (Scena[k].texture) {
-			case TextureType::ERBA: 
-				glUniform1i(loc_texture, 0);
-				glBindTexture(GL_TEXTURE_2D, texturePiano);
-				break;
-			case TextureType::TRONCO:
-				glUniform1i(loc_texture, 0);
-				glBindTexture(GL_TEXTURE_2D, textureTronco);
-				break;
-			case TextureType::FOGLIE:
-				glUniform1i(loc_texture, 0);
-				glBindTexture(GL_TEXTURE_2D, textureFoglie);
-				break;
-			case TextureType::LEGNO:
-				glUniform1i(loc_texture, 0);
-				/*glUseProgram(programId1);
-				glUniform1i(glGetUniformLocation(programId1, "skybox"), 0);
-				glUniformMatrix4fv(MatrixProjS, 1, GL_FALSE, value_ptr(Projection));
-				glUniformMatrix4fv(MatViewS, 1, GL_FALSE, value_ptr(View));
-				glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTextureRockwall);
-				glUseProgram(programId);*/
-				glBindTexture(GL_TEXTURE_2D, textureLegno);
-				//glDrawArrays(GL_TRIANGLES, 0, Scena[k].vertici.size()-1);
-
-				
-
-				break;
-			default: 
-				glUniform1i(loc_texture, 0);
-				glBindTexture(GL_TEXTURE_2D, 0);
-				break;
-		}
-		
-		 
-		glDrawElements(GL_TRIANGLES, (Scena[k].indici.size() - 1) * sizeof(GLuint), GL_UNSIGNED_INT, 0);
-
-	 
-		glBindVertexArray(0);
-	 
 	}
 	//Visualizzo gli oggetti di tipo Mesh Obj caricati dall'esterno: 
 	//la j-esima Mesh è costituita da ScenaObj[j].size() mesh. 
@@ -744,7 +777,6 @@ void update(int a)
 
 }
 
-
 int main(int argc, char* argv[])
 {
 	glutInit(&argc, argv);
@@ -757,7 +789,7 @@ int main(int argc, char* argv[])
 	//Inizializzo finestra per il rendering della scena 3d con tutti i suoi eventi le sue inizializzazioni e le sue impostazioni
 
 	glutInitWindowSize(width, height);
-	glutInitWindowPosition(100, 100);
+	glutInitWindowPosition(10, 10);
 	glutCreateWindow("Progetto OpenGL3D");
 	glutDisplayFunc(drawScene);
 	glutReshapeFunc(resize);
