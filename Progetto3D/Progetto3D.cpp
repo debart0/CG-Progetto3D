@@ -107,7 +107,8 @@ mat4 Projection, Model, View;
 point_light light;
 static vector<Material> materials;
 static vector<Shader> shaders;
-
+vec4 verde = vec4(0.09, 0.20, 0.05, 1.0);
+vec4 marrone = vec4(0.28, 0.15, 0.09, 1.0);
 
 
 LightShaderUniform light_unif = {};
@@ -303,20 +304,20 @@ void crea_VAO_Vector(Mesh* mesh)
 
 
 void collegaMesh() {
-	Scena[2].linkedMesh = &Scena[3];
-	Scena[3].linkedMesh = &Scena[2];
-
-	Scena[1].linkedMesh = &Scena[4];
-	Scena[4].linkedMesh = &Scena[1];
 	printf("\nCollegamesh\n");
-	printf("%s linked: %s\n", Scena[2].nome.c_str(), Scena[2].linkedMesh->nome.c_str());
+	printf("Dimensione Scena %d\n", Scena.size());
+	Scena[3].linkedMesh = &Scena[4];
+	Scena[4].linkedMesh = &Scena[3];
+
 	printf("%s linked: %s\n", Scena[3].nome.c_str(), Scena[3].linkedMesh->nome.c_str());
+	printf("%s linked: %s\n", Scena[4].nome.c_str(), Scena[4].linkedMesh->nome.c_str());
 }
 
 void INIT_VAO(void)
 {
 	string TAG = "INIT_VAO";
-	Mesh Strada, Sfondo, Sfera, Cono, Cilindro, Toro, Sky, Piano, Tronco, Foglie, Sfera1, Sfera2;
+	Mesh Strada, Sfondo, Sfera, Cono, Cilindro, Toro, Sky, Piano, Sfera1, Sfera2;
+	Mesh Tronco, Foglie, Tronco2, Foglie2, Tronco3, Foglie3;
 	Mesh Muretto, Gamba1, Gamba2, Gamba3, Gamba4, Gamba5;
 	Mesh Muretto2, Muretto3, Gamba6, Gamba7, Gamba8, Gamba9, Gamba10;
 	//vector<Mesh> Muretto;
@@ -347,10 +348,24 @@ void INIT_VAO(void)
 	Piano.killable = false;
 	Scena.push_back(Piano);
 
+	//STRADINA
+	crea_piano(&Strada, vec4(0.2, 0.2, 0.9, 1.0), vec2(5.0, 50.0));
+	crea_VAO_Vector(&Strada);
+	Strada.nome = "STRADA";
+	Strada.ModelM = mat4(1.0);
+	Strada.ModelM = translate(Strada.ModelM, vec3(0.0, -9.9, 0.0));
+	Strada.ModelM = scale(Strada.ModelM, vec3(5.0f, 5.0f, 60.0f));
+	//Strada.ModelM = rotate(Strada.ModelM, radians(90.0f), vec3(1.0, 0.0, 0.0));
+	Strada.sceltaVS = 1;
+	Strada.sceltaFS = 1;
+	Strada.material = MaterialType::NO_MATERIAL;
+	Strada.texture = TextureType::SENTIERO;
+	Strada.killable = false;
+	Strada.alive = true;
+	Scena.push_back(Strada);
+
 	//Albero test
 	//Posso fare che un tronco punti anche al suo cono con un puntatore, magari metto un campo destroyable e un campo relative
-	vec4 verde = vec4(0.09, 0.20, 0.05, 1.0);
-	vec4 marrone = vec4(0.28, 0.15, 0.09, 1.0);
 	crea_cilindro(&Tronco, vec4(1.0, 0.0, 0.0, 1.0), 8, 8, vec2(4.0, 1.0));
 	crea_VAO_Vector(&Tronco);
 	Tronco.nome = "Tronco";
@@ -404,34 +419,13 @@ void INIT_VAO(void)
 	Foglie.hp = 3;
 	Foglie.alive = true;
 	Foglie.linkedMesh = &Tronco;
-	printf("Hitbox di Tronco Originali: : %f, %f, %f--- %f, %f, %f\n", Tronco.BBOriginale.TL.x, Tronco.BBOriginale.TL.y, Tronco.BBOriginale.TL.z, Tronco.BBOriginale.BR.x, Tronco.BBOriginale.BR.y, Tronco.BBOriginale.BR.z);
-	printf("Hitbox di Tronco: : %f, %f, %f--- %f, %f, %f\n", Tronco.AABB.TL.x, Tronco.AABB.TL.y, Tronco.AABB.TL.z, Tronco.AABB.BR.x, Tronco.AABB.BR.y, Tronco.AABB.BR.z);
+	/*printf("Hitbox di Tronco Originali: : %f, %f, %f--- %f, %f, %f\n", Tronco.BBOriginale.TL.x, Tronco.BBOriginale.TL.y, Tronco.BBOriginale.TL.z, Tronco.BBOriginale.BR.x, Tronco.BBOriginale.BR.y, Tronco.BBOriginale.BR.z);
+	printf("Hitbox di Tronco: : %f, %f, %f--- %f, %f, %f\n", Tronco.AABB.TL.x, Tronco.AABB.TL.y, Tronco.AABB.TL.z, Tronco.AABB.BR.x, Tronco.AABB.BR.y, Tronco.AABB.BR.z);*/
 
 	Scena.push_back(Tronco);
 	Scena.push_back(Foglie);
 	//Scena[counter].linkedMesh = &Scena[counter - 1];
 	//Scena[counter-1].linkedMesh = &Scena[counter];
-
-	//STRADINA
-	crea_piano(&Strada, vec4(0.2, 0.2, 0.9, 1.0), vec2(5.0, 50.0));
-	crea_VAO_Vector(&Strada);
-	Strada.nome = "STRADA";
-	Strada.ModelM = mat4(1.0);
-	Strada.ModelM = translate(Strada.ModelM, vec3(0.0, -9.9, 0.0));
-	Strada.ModelM = scale(Strada.ModelM, vec3(5.0f, 5.0f, 60.0f));
-	//Strada.ModelM = rotate(Strada.ModelM, radians(90.0f), vec3(1.0, 0.0, 0.0));
-	Strada.sceltaVS = 1;
-	Strada.sceltaFS = 1;
-	Strada.material = MaterialType::NO_MATERIAL;
-	Strada.texture = TextureType::SENTIERO;
-	Strada.killable = false;
-	Strada.alive = true;
-	Scena.push_back(Strada);
-	printf("\nDopo aver pushato strada\n");
-	collegaMesh();
-	printf("%s linked: %s\n", Scena[2].nome.c_str(), Scena[2].linkedMesh->nome.c_str());
-	printf("%s linked: %s\n", Scena[3].nome.c_str(), Scena[3].linkedMesh->nome.c_str());
-
 	//MURETTO
 	//crea_cubo(&Muretto, vec2(2.0, 1.0));
 	crea_cubo_ridondante(&Muretto, vec2(5.0, 1.0));
@@ -451,9 +445,9 @@ void INIT_VAO(void)
 	Muretto.texture = TextureType::LEGNO;
 	Muretto.killable = false;
 	Muretto.alive = true;
-	printf("Hitbox di Muretto Originali: : %f, %f, %f--- %f, %f, %f\n", Muretto.BBOriginale.TL.x, Muretto.BBOriginale.TL.y, Muretto.BBOriginale.TL.z, Muretto.BBOriginale.BR.x, Muretto.BBOriginale.BR.y, Muretto.BBOriginale.BR.z);
+	/*printf("Hitbox di Muretto Originali: : %f, %f, %f--- %f, %f, %f\n", Muretto.BBOriginale.TL.x, Muretto.BBOriginale.TL.y, Muretto.BBOriginale.TL.z, Muretto.BBOriginale.BR.x, Muretto.BBOriginale.BR.y, Muretto.BBOriginale.BR.z);
 	printf("Hitbox di Muretto: : %f, %f, %f--- %f, %f, %f\n", Muretto.AABB.TL.x, Muretto.AABB.TL.y, Muretto.AABB.TL.z, Muretto.AABB.BR.x, Muretto.AABB.BR.y, Muretto.AABB.BR.z);
-	Scena.push_back(Muretto);
+	Scena.push_back(Muretto);*/
 
 	//Gambe
 	crea_cubo_ridondante(&Gamba1, vec2(2.0, 1.0));
@@ -693,6 +687,7 @@ void INIT_VAO(void)
 	Gamba10.killable = false;
 	Gamba10.alive = true;
 	Scena.push_back(Gamba10);
+	collegaMesh();
 
 
 	bool obj;
