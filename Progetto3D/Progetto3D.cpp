@@ -373,7 +373,7 @@ void INIT_VAO(void)
 	Scena.push_back(Strada);
 
 	//Albero 1
-	crea_cilindro(&Tronco, vec4(1.0, 0.0, 0.0, 1.0), 8, 8, vec2(4.0, 1.0));
+	crea_cilindro(&Tronco, marrone, 8, 8, vec2(4.0, 1.0));
 	crea_VAO_Vector(&Tronco);
 	Tronco.nome = "Tronco";
 	Tronco.BBOriginale = calcolaBoundingBox(&Tronco);
@@ -384,7 +384,7 @@ void INIT_VAO(void)
 	Tronco.ModelM = rotate(Tronco.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
 
 	Tronco.sceltaVS = 1;
-	Tronco.sceltaFS = 3;
+	Tronco.sceltaFS = 1;
 	Tronco.AABB = Tronco.BBOriginale;
 	Tronco.AABB.TL = Tronco.ModelM * Tronco.AABB.TL;
 	Tronco.AABB.BR = Tronco.ModelM * Tronco.AABB.BR;
@@ -400,7 +400,7 @@ void INIT_VAO(void)
 		printf("[%d] = %f, %f, %f\n", i, Tronco.vertici[i].x, Tronco.vertici[i].y, Tronco.vertici[i].z);
 	}*/
 
-	crea_cono(&Foglie, vec4(1.0, 0.0, 0.0, 1.0), 8, 8, vec2(3.0, 1.5));
+	crea_cono(&Foglie, verde, 8, 8, vec2(3.0, 1.5));
 	crea_VAO_Vector(&Foglie);
 	Foglie.nome = "Foglie";
 	Foglie.BBOriginale = calcolaBoundingBox(&Foglie);
@@ -1035,7 +1035,7 @@ void drawScene(void)
 		
 				glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, BUFFER_OFFSET(ind * sizeof(GLuint)));
 			}
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			//Fare questo switch con un altra proprietà dell'oggetto Scena[k] e compararlo con delle costanti definite
 			switch (Scena[k].texture) {
 				case TextureType::ERBA: 
@@ -1099,7 +1099,7 @@ void drawScene(void)
 
 			glBindVertexArray(ScenaObj[j][k].VAO);
 
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 			glDrawElements(GL_TRIANGLES, (ScenaObj[j][k].indici.size()) * sizeof(GLuint), GL_UNSIGNED_INT, 0);
 

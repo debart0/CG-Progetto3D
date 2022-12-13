@@ -120,7 +120,6 @@ void main()
 
               V= normalize(viewPos - eyePosition.xyz);
               L = normalize((eyeLightPos- eyePosition).xyz);
-
               H=normalize(L+V); //Costruisce il vettore H a met� tra direzione di luce e di vista
             //ambientale
             vec3 ambient = strenght*light.power * material.ambient;
@@ -165,11 +164,26 @@ void main()
              L = normalize((eyeLightPos- eyePosition).xyz);
              R = reflect(-L,N);  //Costruisce la direzione riflessa di L rispesso alla normale
 
+            // ourColor = vec4(ambient + diffuse + specular, 1.0);
              frag_coord_st=coord_st;
 
     }
     if(sceltaVS==4){
-      
+      //Modello di illuminazione di Blinn-Phong con shading di Phong
+      gl_Position = Projection*View*Model*vec4(aPos, 1.0);
+      vec4 eyePosition= View*Model*vec4(aPos,1.0);
+      vec4 eyeLightPos= View * vec4(light.position, 1.0);
+      mat3 G= mat3(transpose(inverse(View*Model)));
+      N= normalize(G*vertexNormal);
+      //Calcoliamo la direzione della luce L, la direzione riflessione R e di vista
+      V= normalize(viewPos - eyePosition.xyz);
+      L = normalize((eyeLightPos- eyePosition).xyz);
+      H=normalize(L+V); //Costruisce il vettore H a met� tra direzione di luce e di vista
+      // ourColor = vec4(ambient + diffuse + specular, 1.0);
+      V = N;
+      R = H;
+
+      frag_coord_st=coord_st;
     }
     if (sceltaVS==5)
     {
