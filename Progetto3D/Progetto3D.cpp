@@ -561,7 +561,7 @@ void INIT_VAO(void)
 	Muretto2.nome = "Muretto 2";
 	Muretto2.BBOriginale = calcolaBoundingBox(&Muretto2);
 	Muretto2.ModelM = mat4(1.0);
-	Muretto2.ModelM = translate(Muretto2.ModelM, vec3(-16.0, -7, -28.0));
+	Muretto2.ModelM = translate(Muretto2.ModelM, vec3(-17.0, -7, -28.0));
 	Muretto2.ModelM = scale(Muretto2.ModelM, vec3(12.0, 1.0, 1.0));
 
 	Muretto2.AABB = Muretto2.BBOriginale;
@@ -585,7 +585,7 @@ void INIT_VAO(void)
 	Muretto3.nome = "Muretto 3";
 	Muretto3.BBOriginale = calcolaBoundingBox(&Muretto3);
 	Muretto3.ModelM = mat4(1.0);
-	Muretto3.ModelM = translate(Muretto3.ModelM, vec3(16.0, -7, -28.0));
+	Muretto3.ModelM = translate(Muretto3.ModelM, vec3(17.0, -7, -28.0));
 	Muretto3.ModelM = scale(Muretto3.ModelM, vec3(12.0, 1.0, 1.0));
 
 	Muretto3.AABB = Muretto3.BBOriginale;
@@ -623,14 +623,14 @@ void INIT_VAO(void)
 	Gamba6.texture = TextureType::LEGNO;
 	Gamba6.killable = false;
 	Gamba6.alive = true;
-	Scena.push_back(Gamba6);
+	//Scena.push_back(Gamba6);	//La gamba 6 sta in mezzo al vialetto quindi non la uso
 
 	crea_cubo_ridondante(&Gamba7, vec2(2.0, 1.0));
 	crea_VAO_Vector(&Gamba7);
 	Gamba7.nome = "Gamba 7";
 	Gamba7.BBOriginale = calcolaBoundingBox(&Gamba7);
 	Gamba7.ModelM = mat4(1.0);
-	Gamba7.ModelM = translate(Gamba7.ModelM, vec3(12.5, -9, -28.5));
+	Gamba7.ModelM = translate(Gamba7.ModelM, vec3(11.0, -9, -28.5));
 	Gamba7.ModelM = scale(Gamba7.ModelM, vec3(0.5, 1.0, 0.5));
 	Gamba7.AABB = Gamba7.BBOriginale;
 	Gamba7.AABB.TL = Gamba7.ModelM * Gamba7.AABB.TL;
@@ -650,7 +650,7 @@ void INIT_VAO(void)
 	Gamba8.nome = "Gamba 8";
 	Gamba8.BBOriginale = calcolaBoundingBox(&Gamba8);
 	Gamba8.ModelM = mat4(1.0);
-	Gamba8.ModelM = translate(Gamba8.ModelM, vec3(-25.0, -9, -28.0));
+	Gamba8.ModelM = translate(Gamba8.ModelM, vec3(-22.0, -9, -28.0));
 	Gamba8.ModelM = scale(Gamba8.ModelM, vec3(0.5, 1.0, 0.5));
 	Gamba8.AABB = Gamba8.BBOriginale;
 	Gamba8.AABB.TL = Gamba8.ModelM * Gamba8.AABB.TL;
@@ -670,7 +670,7 @@ void INIT_VAO(void)
 	Gamba9.nome = "Gamba 9";
 	Gamba9.BBOriginale = calcolaBoundingBox(&Gamba9);
 	Gamba9.ModelM = mat4(1.0);
-	Gamba9.ModelM = translate(Gamba9.ModelM, vec3(-12.5, -9, -28.0));
+	Gamba9.ModelM = translate(Gamba9.ModelM, vec3(-11, -9, -28.0));
 	Gamba9.ModelM = scale(Gamba9.ModelM, vec3(0.5, 1.0, 0.5));
 	Gamba9.AABB = Gamba9.BBOriginale;
 	Gamba9.AABB.TL = Gamba9.ModelM * Gamba9.AABB.TL;
@@ -690,7 +690,7 @@ void INIT_VAO(void)
 	Gamba10.nome = "Gamba 10";
 	Gamba10.BBOriginale = calcolaBoundingBox(&Gamba10);
 	Gamba10.ModelM = mat4(1.0);
-	Gamba10.ModelM = translate(Gamba10.ModelM, vec3(25.0, -9, -28.0));
+	Gamba10.ModelM = translate(Gamba10.ModelM, vec3(22.0, -9, -28.0));
 	Gamba10.ModelM = scale(Gamba10.ModelM, vec3(0.5, 1.0, 0.5));
 	Gamba10.AABB = Gamba10.BBOriginale;
 	Gamba10.AABB.TL = Gamba10.ModelM * Gamba10.AABB.TL;
