@@ -203,16 +203,18 @@ void INIT_Illuminazione()
 	materials[MaterialType::NO_MATERIAL].shininess = 1.f;
 
 	//Setup degli shader
-	shaders.resize(5);
+	shaders.resize(6);
 	shaders[ShaderOption::NONE].value = 0;
 	shaders[ShaderOption::NONE].name = "NONE";
-	shaders[ShaderOption::GOURAD_SHADING].value = 1;
-	shaders[ShaderOption::GOURAD_SHADING].name = "GOURAD SHADING";
-	shaders[ShaderOption::PHONG_SHADING].value = 2;
-	shaders[ShaderOption::PHONG_SHADING].name = "PHONG SHADING";
-	shaders[ShaderOption::BLINN_PHONG_SHADING].value = 3;
-	shaders[ShaderOption::BLINN_PHONG_SHADING].name = "BLINN PHONG SHADING";
-	shaders[ShaderOption::TOON_SHADING].value = 4;
+	shaders[ShaderOption::PHONG_INTERPL_SHADING].value = 1;
+	shaders[ShaderOption::PHONG_INTERPL_SHADING].name = "PHONG + INTERPL";
+	shaders[ShaderOption::BLINN_PHONG_INTERPL_SHADING].value = 2;
+	shaders[ShaderOption::BLINN_PHONG_INTERPL_SHADING].name = "BLINN-PHONG + INTERPL";
+	shaders[ShaderOption::PHONG_PHONG_SHADING].value = 3;
+	shaders[ShaderOption::PHONG_PHONG_SHADING].name = "PHONG + PHONG";
+	shaders[ShaderOption::BLINN_PHONG_PHONG_SHADING].value = 4;
+	shaders[ShaderOption::BLINN_PHONG_PHONG_SHADING].name = "BLINN-PHONG + INTERPL";
+	shaders[ShaderOption::TOON_SHADING].value = 5;
 	shaders[ShaderOption::TOON_SHADING].name = "TOON SHADING";
 
 }

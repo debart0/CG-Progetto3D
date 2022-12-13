@@ -49,9 +49,10 @@ void buildOpenGLMenu()
 
 	int shaderSubMenu = glutCreateMenu(shader_menu_function);
 	glutAddMenuEntry(shaders[ShaderOption::NONE].name.c_str(), ShaderOption::NONE);
-	glutAddMenuEntry(shaders[ShaderOption::GOURAD_SHADING].name.c_str(), ShaderOption::GOURAD_SHADING);
-	glutAddMenuEntry(shaders[ShaderOption::PHONG_SHADING].name.c_str(), ShaderOption::PHONG_SHADING);
-	glutAddMenuEntry(shaders[ShaderOption::BLINN_PHONG_SHADING].name.c_str(), ShaderOption::BLINN_PHONG_SHADING);
+	glutAddMenuEntry(shaders[ShaderOption::PHONG_INTERPL_SHADING].name.c_str(), ShaderOption::PHONG_INTERPL_SHADING);
+	glutAddMenuEntry(shaders[ShaderOption::PHONG_PHONG_SHADING].name.c_str(), ShaderOption::PHONG_PHONG_SHADING);
+	glutAddMenuEntry(shaders[ShaderOption::BLINN_PHONG_INTERPL_SHADING].name.c_str(), ShaderOption::BLINN_PHONG_INTERPL_SHADING);
+	glutAddMenuEntry(shaders[ShaderOption::BLINN_PHONG_PHONG_SHADING].name.c_str(), ShaderOption::BLINN_PHONG_PHONG_SHADING);
 	glutAddMenuEntry(shaders[ShaderOption::TOON_SHADING].name.c_str(), ShaderOption::TOON_SHADING);
 
 

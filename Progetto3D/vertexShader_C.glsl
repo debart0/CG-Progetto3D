@@ -168,7 +168,10 @@ void main()
              frag_coord_st=coord_st;
 
     }
-    if (sceltaVS==4)
+    if(sceltaVS==4){
+      
+    }
+    if (sceltaVS==5)
     {
     //Shader  tipo cartoon
         gl_Position = Projection*View*Model*vec4(aPos, 1.0);
