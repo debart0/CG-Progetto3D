@@ -154,11 +154,11 @@ void INIT_Illuminazione()
 	materials[MaterialType::RED_PLASTIC].specular = red_plastic_specular;
 	materials[MaterialType::RED_PLASTIC].shininess = red_plastic_shininess;
 
-	materials[MaterialType::EMERALD].name = "Emerald";
-	materials[MaterialType::EMERALD].ambient = emerald_ambient;
-	materials[MaterialType::EMERALD].diffuse = emerald_diffuse;
-	materials[MaterialType::EMERALD].specular = emerald_specular;
-	materials[MaterialType::EMERALD].shininess = emerald_shininess;
+	materials[MaterialType::VERDE].name = "VERDE";
+	materials[MaterialType::VERDE].ambient = verde_ambient;
+	materials[MaterialType::VERDE].diffuse = verde_diffuse;
+	materials[MaterialType::VERDE].specular = verde_specular;
+	materials[MaterialType::VERDE].shininess = verde_shininess;
 
 	materials[MaterialType::BRASS].name = "Brass";
 	materials[MaterialType::BRASS].ambient = brass_ambient;
@@ -190,11 +190,11 @@ void INIT_Illuminazione()
 	materials[MaterialType::MARRONE].specular = marrone_specular;
 	materials[MaterialType::MARRONE].shininess = marrone_shininess;
 
-	materials[MaterialType::BRONZO].name = "BRONZO";
-	materials[MaterialType::BRONZO].ambient = copper_ambient;
-	materials[MaterialType::BRONZO].diffuse = copper_diffuse;
-	materials[MaterialType::BRONZO].specular = copper_specular;
-	materials[MaterialType::BRONZO].shininess = copper_shininess;
+	materials[MaterialType::TERRA].name = "TERRA";
+	materials[MaterialType::TERRA].ambient = terra_ambient;
+	materials[MaterialType::TERRA].diffuse = terra_diffuse;
+	materials[MaterialType::TERRA].specular = terra_specular;
+	materials[MaterialType::TERRA].shininess = terra_shininess;
 
 	materials[MaterialType::NO_MATERIAL].name = "NO_MATERIAL";
 	materials[MaterialType::NO_MATERIAL].ambient = glm::vec3(1, 1, 1);
@@ -342,7 +342,7 @@ void INIT_VAO(void)
 	Piano.AABB.TL = Piano.ModelM * Piano.AABB.TL;
 	Piano.AABB.BR = Piano.ModelM * Piano.AABB.BR;
 	Piano.AABB = adjustBoundingBox(Piano.AABB);
-	Piano.material = MaterialType::EMERALD;
+	Piano.material = MaterialType::VERDE;
 	Piano.texture = TextureType::ERBA;
 	Piano.alive = true;
 	Piano.killable = false;
@@ -358,22 +358,21 @@ void INIT_VAO(void)
 	//Strada.ModelM = rotate(Strada.ModelM, radians(90.0f), vec3(1.0, 0.0, 0.0));
 	Strada.sceltaVS = 1;
 	Strada.sceltaFS = 1;
-	Strada.material = MaterialType::NO_MATERIAL;
+	Strada.material = MaterialType::TERRA;
 	Strada.texture = TextureType::SENTIERO;
 	Strada.killable = false;
 	Strada.alive = true;
 	Scena.push_back(Strada);
 
-	//Albero test
-	//Posso fare che un tronco punti anche al suo cono con un puntatore, magari metto un campo destroyable e un campo relative
+	//Albero 1
 	crea_cilindro(&Tronco, vec4(1.0, 0.0, 0.0, 1.0), 8, 8, vec2(4.0, 1.0));
 	crea_VAO_Vector(&Tronco);
 	Tronco.nome = "Tronco";
 	Tronco.BBOriginale = calcolaBoundingBox(&Tronco);
 
 	Tronco.ModelM = mat4(1.0);
-	Tronco.ModelM = translate(Tronco.ModelM, vec3(5.0, 0.0, 20.0));
-	Tronco.ModelM = scale(Tronco.ModelM, vec3(2.0f, 5.0f, 2.0f));
+	Tronco.ModelM = translate(Tronco.ModelM, vec3(11.0, -5.0, 20.0));
+	Tronco.ModelM = scale(Tronco.ModelM, vec3(1.5f, 5.0f, 1.5f));
 	Tronco.ModelM = rotate(Tronco.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
 
 	Tronco.sceltaVS = 1;
@@ -385,7 +384,6 @@ void INIT_VAO(void)
 	//Tronco.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Tronco.AABB.BR;
 	Tronco.AABB = rotateBoundingBox(Tronco.AABB);
 	Tronco.AABB = adjustBoundingBox(Tronco.AABB);
-
 	Tronco.material = MaterialType::MARRONE;
 	Tronco.texture = TextureType::TRONCO;
 	Tronco.killable = true;
@@ -399,7 +397,7 @@ void INIT_VAO(void)
 	Foglie.nome = "Foglie";
 	Foglie.BBOriginale = calcolaBoundingBox(&Foglie);
 	Foglie.ModelM = mat4(1.0);
-	Foglie.ModelM = translate(Foglie.ModelM, vec3(5.0, 8.0, 20.0));
+	Foglie.ModelM = translate(Foglie.ModelM, vec3(11.0, 3.0, 20.0));
 	Foglie.ModelM = scale(Foglie.ModelM, vec3(4.0f, 8.0f, 4.0f));
 	Foglie.ModelM = rotate(Foglie.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
 	Foglie.sceltaVS = 1;
@@ -410,7 +408,7 @@ void INIT_VAO(void)
 	//Foglie.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Foglie.AABB.TL;
 	//Foglie.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Foglie.AABB.BR;
 	Foglie.AABB = adjustBoundingBox(Foglie.AABB);
-	Foglie.material = MaterialType::EMERALD;
+	Foglie.material = MaterialType::VERDE;
 	Foglie.texture = TextureType::FOGLIE;	
 	Foglie.killable = true;
 	Tronco.hp = 3;
@@ -421,11 +419,103 @@ void INIT_VAO(void)
 	Foglie.linkedMesh = &Tronco;
 	/*printf("Hitbox di Tronco Originali: : %f, %f, %f--- %f, %f, %f\n", Tronco.BBOriginale.TL.x, Tronco.BBOriginale.TL.y, Tronco.BBOriginale.TL.z, Tronco.BBOriginale.BR.x, Tronco.BBOriginale.BR.y, Tronco.BBOriginale.BR.z);
 	printf("Hitbox di Tronco: : %f, %f, %f--- %f, %f, %f\n", Tronco.AABB.TL.x, Tronco.AABB.TL.y, Tronco.AABB.TL.z, Tronco.AABB.BR.x, Tronco.AABB.BR.y, Tronco.AABB.BR.z);*/
-
 	Scena.push_back(Tronco);
 	Scena.push_back(Foglie);
-	//Scena[counter].linkedMesh = &Scena[counter - 1];
-	//Scena[counter-1].linkedMesh = &Scena[counter];
+
+	//Albero 2
+	crea_cilindro(&Tronco2, vec4(1.0, 0.0, 0.0, 1.0), 8, 8, vec2(4.0, 2.0));
+	crea_VAO_Vector(&Tronco2);
+	Tronco2.nome = "Tronco2";
+	Tronco2.BBOriginale = calcolaBoundingBox(&Tronco2);
+	Tronco2.ModelM = mat4(1.0);
+	Tronco2.ModelM = translate(Tronco2.ModelM, vec3(20.0, -4.0, -20.0));
+	Tronco2.ModelM = scale(Tronco2.ModelM, vec3(1.5f, 6.0f, 1.5f));
+	Tronco2.ModelM = rotate(Tronco2.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
+	Tronco2.sceltaVS = 1;
+	Tronco2.sceltaFS = 1;
+	Tronco2.AABB = Tronco2.BBOriginale;
+	Tronco2.AABB.TL = Tronco2.ModelM * Tronco2.AABB.TL;
+	Tronco2.AABB.BR = Tronco2.ModelM * Tronco2.AABB.BR;
+	Tronco2.AABB = rotateBoundingBox(Tronco2.AABB);
+	Tronco2.AABB = adjustBoundingBox(Tronco2.AABB);
+	Tronco2.material = MaterialType::MARRONE;
+	Tronco2.texture = TextureType::TRONCO;
+	Tronco2.killable = true;
+	crea_cono(&Foglie2, vec4(1.0, 0.0, 0.0, 1.0), 8, 8, vec2(3.0, 3.0));
+	crea_VAO_Vector(&Foglie2);
+	Foglie2.nome = "Foglie2";
+	Foglie2.BBOriginale = calcolaBoundingBox(&Foglie2);
+	Foglie2.ModelM = mat4(1.0);
+	Foglie2.ModelM = translate(Foglie2.ModelM, vec3(20.0, 8.0, -20.0));
+	Foglie2.ModelM = scale(Foglie2.ModelM, vec3(4.0f, 14.0f, 4.0f));
+	Foglie2.ModelM = rotate(Foglie2.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
+	Foglie2.sceltaVS = 1;
+	Foglie2.sceltaFS = 1;
+	Foglie2.AABB = Foglie2.BBOriginale;
+	Foglie2.AABB.TL = Foglie2.ModelM * Foglie2.AABB.TL;
+	Foglie2.AABB.BR = Foglie2.ModelM * Foglie2.AABB.BR;
+	Foglie2.AABB = adjustBoundingBox(Foglie2.AABB);
+	Foglie2.material = MaterialType::VERDE;
+	Foglie2.texture = TextureType::FOGLIE;
+	Foglie2.killable = true;
+	Tronco2.hp = 3;
+	Tronco2.alive = true;
+	Tronco2.linkedMesh = &Foglie2;
+	Foglie2.hp = 3;
+	Foglie2.alive = true;
+	Foglie2.linkedMesh = &Tronco2;
+	/*printf("Hitbox di Tronco2 Originali: : %f, %f, %f--- %f, %f, %f\n", Tronco2.BBOriginale.TL.x, Tronco2.BBOriginale.TL.y, Tronco2.BBOriginale.TL.z, Tronco2.BBOriginale.BR.x, Tronco2.BBOriginale.BR.y, Tronco2.BBOriginale.BR.z);
+	printf("Hitbox di Tronco2: : %f, %f, %f--- %f, %f, %f\n", Tronco2.AABB.TL.x, Tronco2.AABB.TL.y, Tronco2.AABB.TL.z, Tronco2.AABB.BR.x, Tronco2.AABB.BR.y, Tronco2.AABB.BR.z);*/
+	Scena.push_back(Tronco2);
+	Scena.push_back(Foglie2);
+
+	//Albero 3
+	crea_cilindro(&Tronco3, vec4(1.0, 0.0, 0.0, 1.0), 8, 8, vec2(4.0, 2.0));
+	crea_VAO_Vector(&Tronco3);
+	Tronco3.nome = "Tronco3";
+	Tronco3.BBOriginale = calcolaBoundingBox(&Tronco3);
+	Tronco3.ModelM = mat4(1.0);
+	Tronco3.ModelM = translate(Tronco3.ModelM, vec3(-19.0, -2.0, -4.0));
+	Tronco3.ModelM = scale(Tronco3.ModelM, vec3(1.5f, 8.0f, 1.5f));
+	Tronco3.ModelM = rotate(Tronco3.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
+	Tronco3.sceltaVS = 1;
+	Tronco3.sceltaFS = 1;
+	Tronco3.AABB = Tronco3.BBOriginale;
+	Tronco3.AABB.TL = Tronco3.ModelM * Tronco3.AABB.TL;
+	Tronco3.AABB.BR = Tronco3.ModelM * Tronco3.AABB.BR;
+	Tronco3.AABB = rotateBoundingBox(Tronco3.AABB);
+	Tronco3.AABB = adjustBoundingBox(Tronco3.AABB);
+	Tronco3.material = MaterialType::MARRONE;
+	Tronco3.texture = TextureType::TRONCO;
+	Tronco3.killable = true;
+	crea_cono(&Foglie3, vec4(1.0, 0.0, 0.0, 1.0), 8, 8, vec2(3.0, 3.0));
+	crea_VAO_Vector(&Foglie3);
+	Foglie3.nome = "Foglie3";
+	Foglie3.BBOriginale = calcolaBoundingBox(&Foglie3);
+	Foglie3.ModelM = mat4(1.0);
+	Foglie3.ModelM = translate(Foglie3.ModelM, vec3(-19.0, 11.0, -4.0));
+	Foglie3.ModelM = scale(Foglie3.ModelM, vec3(4.5f, 14.0f, 4.5f));
+	Foglie3.ModelM = rotate(Foglie3.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
+	Foglie3.sceltaVS = 1;
+	Foglie3.sceltaFS = 1;
+	Foglie3.AABB = Foglie3.BBOriginale;
+	Foglie3.AABB.TL = Foglie3.ModelM * Foglie3.AABB.TL;
+	Foglie3.AABB.BR = Foglie3.ModelM * Foglie3.AABB.BR;
+	Foglie3.AABB = adjustBoundingBox(Foglie3.AABB);
+	Foglie3.material = MaterialType::VERDE;
+	Foglie3.texture = TextureType::FOGLIE;
+	Foglie3.killable = true;
+	Tronco3.hp = 3;
+	Tronco3.alive = true;
+	Tronco3.linkedMesh = &Foglie3;
+	Foglie3.hp = 3;
+	Foglie3.alive = true;
+	Foglie3.linkedMesh = &Tronco3;
+	/*printf("Hitbox di Tronco3 Originali: : %f, %f, %f--- %f, %f, %f\n", Tronco3.BBOriginale.TL.x, Tronco3.BBOriginale.TL.y, Tronco3.BBOriginale.TL.z, Tronco3.BBOriginale.BR.x, Tronco3.BBOriginale.BR.y, Tronco3.BBOriginale.BR.z);
+	printf("Hitbox di Tronco3: : %f, %f, %f--- %f, %f, %f\n", Tronco3.AABB.TL.x, Tronco3.AABB.TL.y, Tronco3.AABB.TL.z, Tronco3.AABB.BR.x, Tronco3.AABB.BR.y, Tronco3.AABB.BR.z);*/
+	Scena.push_back(Tronco3);
+	Scena.push_back(Foglie3);
+
 	//MURETTO
 	//crea_cubo(&Muretto, vec2(2.0, 1.0));
 	crea_cubo_ridondante(&Muretto, vec2(5.0, 1.0));
@@ -446,8 +536,8 @@ void INIT_VAO(void)
 	Muretto.killable = false;
 	Muretto.alive = true;
 	/*printf("Hitbox di Muretto Originali: : %f, %f, %f--- %f, %f, %f\n", Muretto.BBOriginale.TL.x, Muretto.BBOriginale.TL.y, Muretto.BBOriginale.TL.z, Muretto.BBOriginale.BR.x, Muretto.BBOriginale.BR.y, Muretto.BBOriginale.BR.z);
-	printf("Hitbox di Muretto: : %f, %f, %f--- %f, %f, %f\n", Muretto.AABB.TL.x, Muretto.AABB.TL.y, Muretto.AABB.TL.z, Muretto.AABB.BR.x, Muretto.AABB.BR.y, Muretto.AABB.BR.z);
-	Scena.push_back(Muretto);*/
+	printf("Hitbox di Muretto: : %f, %f, %f--- %f, %f, %f\n", Muretto.AABB.TL.x, Muretto.AABB.TL.y, Muretto.AABB.TL.z, Muretto.AABB.BR.x, Muretto.AABB.BR.y, Muretto.AABB.BR.z);*/
+	Scena.push_back(Muretto);
 
 	//Gambe
 	crea_cubo_ridondante(&Gamba1, vec2(2.0, 1.0));

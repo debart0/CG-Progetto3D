@@ -54,13 +54,13 @@ typedef struct {
 
 typedef enum {
 	RED_PLASTIC,
-	EMERALD,
+	VERDE,
 	BRASS,
 	SNOW_WHITE,
 	YELLOW,
 	ROSA,
 	MARRONE,
-	BRONZO,
+	TERRA,
 	NO_MATERIAL
 } MaterialType;
 

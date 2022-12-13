@@ -37,12 +37,15 @@ void buildOpenGLMenu()
 {
 	int materialSubMenu = glutCreateMenu(material_menu_function);
 
-	glutAddMenuEntry(materials[MaterialType::EMERALD].name.c_str(), MaterialType::EMERALD);
+	glutAddMenuEntry(materials[MaterialType::RED_PLASTIC].name.c_str(), MaterialType::RED_PLASTIC);
+	glutAddMenuEntry(materials[MaterialType::VERDE].name.c_str(), MaterialType::VERDE);
 	glutAddMenuEntry(materials[MaterialType::BRASS].name.c_str(), MaterialType::BRASS);
 	glutAddMenuEntry(materials[MaterialType::SNOW_WHITE].name.c_str(), MaterialType::SNOW_WHITE);
 	glutAddMenuEntry(materials[MaterialType::YELLOW].name.c_str(), MaterialType::YELLOW);
 	glutAddMenuEntry(materials[MaterialType::ROSA].name.c_str(), MaterialType::ROSA);
 	glutAddMenuEntry(materials[MaterialType::MARRONE].name.c_str(), MaterialType::MARRONE);
+	glutAddMenuEntry(materials[MaterialType::TERRA].name.c_str(), MaterialType::TERRA);
+	glutAddMenuEntry(materials[MaterialType::NO_MATERIAL].name.c_str(), MaterialType::NO_MATERIAL);
 
 	int shaderSubMenu = glutCreateMenu(shader_menu_function);
 	glutAddMenuEntry(shaders[ShaderOption::NONE].name.c_str(), ShaderOption::NONE);
@@ -55,8 +58,8 @@ void buildOpenGLMenu()
 	glutCreateMenu(main_menu_func); // richiama main_menu_func() alla selezione di una voce menu
 	glutAddMenuEntry("Opzioni", -1); //-1 significa che non si vuole gestire questa riga
 	glutAddMenuEntry("", -1);
-	glutAddMenuEntry("Wireframe", MenuOption::WIRE_FRAME);
-	glutAddMenuEntry("Face fill", MenuOption::FACE_FILL);
+	//glutAddMenuEntry("Wireframe", MenuOption::WIRE_FRAME);
+	//glutAddMenuEntry("Face fill", MenuOption::FACE_FILL);
 	glutAddSubMenu("Material", materialSubMenu);
 	glutAddSubMenu("Shader", shaderSubMenu);
 	glutAttachMenu(GLUT_MIDDLE_BUTTON);
