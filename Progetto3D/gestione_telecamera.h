@@ -94,8 +94,6 @@ void moveCameraUp()
 	vec3 upDirection = cross(vec3(tmpDirection), direzione_scorrimento);
 	vec4 tmpPosition = ViewSetup.position;
 	tmpPosition -= vec4(upDirection, 0.0);
-	printf("moveCameraUp: direzione_scorrimento %f %f %f\n", direzione_scorrimento.x, direzione_scorrimento.y, direzione_scorrimento.z);
-	printf("moveCameraUp: upDirection %f %f %f\n", upDirection.x, upDirection.y, upDirection.z);
 	if (!checkCollisionCamera(Scena, tmpPosition)) {
 		ViewSetup.direction = tmpDirection;
 		ViewSetup.position = tmpPosition;

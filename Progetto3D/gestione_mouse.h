@@ -157,9 +157,9 @@ void mouse(int button, int state, int x, int y)
 					if (Scena[selected_obj].hp <= 0)
 						Scena[selected_obj].alive = false;
 					if (Scena[selected_obj].linkedMesh != NULL) {
-						printf("All'oggetto e' linkato %s, elimino anche quello\n", Scena[selected_obj].linkedMesh->nome.c_str());
 						Scena[selected_obj].linkedMesh->hp--;
 						if(Scena[selected_obj].linkedMesh->hp <= 0)
+							printf("All'oggetto e' linkato %s, elimino anche quello\n", Scena[selected_obj].linkedMesh->nome.c_str());
 							Scena[selected_obj].linkedMesh->alive = false;
 					}
 				}

@@ -244,7 +244,7 @@ BoundingBox calcolaBoundingBoxOBJ(vector<MeshObj> meshObjVector) {
 bool checkCollisionCamera(vector<Mesh> Scena, vec4 cameraPosition) {
 	Mesh mesh;
 	bool collisionX, collisionY, collisionZ;
-	printf("Coordinate di telecamera %f %f %f\n", cameraPosition.x, cameraPosition.y, cameraPosition.z);
+	//printf("Coordinate di telecamera %f %f %f\n", cameraPosition.x, cameraPosition.y, cameraPosition.z);
 	for (int i = 1; i < Scena.size(); i++) {
 		mesh = Scena[i];
 		//printf("Controllo hitbox di %s\n", mesh.nome.c_str());

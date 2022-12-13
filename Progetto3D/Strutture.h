@@ -68,8 +68,8 @@ typedef enum {
 	NONE,
 	GOURAD_SHADING,
 	PHONG_SHADING,
-	ONDE_SHADING,
-	BANDIERA_SHADING,
+	BLINN_PHONG_SHADING,
+	TOON_SHADING
 } ShaderOption;
 
 typedef struct {
@@ -84,9 +84,7 @@ typedef enum {
 	GOURAUD,
 	PHONG,
 	BLINN,
-	TOON,
-	PASS_THROUGH,
-	WAVE
+	TOON
 } ShadingType;
 
 typedef enum {

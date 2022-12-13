@@ -51,8 +51,8 @@ void buildOpenGLMenu()
 	glutAddMenuEntry(shaders[ShaderOption::NONE].name.c_str(), ShaderOption::NONE);
 	glutAddMenuEntry(shaders[ShaderOption::GOURAD_SHADING].name.c_str(), ShaderOption::GOURAD_SHADING);
 	glutAddMenuEntry(shaders[ShaderOption::PHONG_SHADING].name.c_str(), ShaderOption::PHONG_SHADING);
-	glutAddMenuEntry(shaders[ShaderOption::ONDE_SHADING].name.c_str(), ShaderOption::ONDE_SHADING);
-	glutAddMenuEntry(shaders[ShaderOption::BANDIERA_SHADING].name.c_str(), ShaderOption::BANDIERA_SHADING);
+	glutAddMenuEntry(shaders[ShaderOption::BLINN_PHONG_SHADING].name.c_str(), ShaderOption::BLINN_PHONG_SHADING);
+	glutAddMenuEntry(shaders[ShaderOption::TOON_SHADING].name.c_str(), ShaderOption::TOON_SHADING);
 
 
 	glutCreateMenu(main_menu_func); // richiama main_menu_func() alla selezione di una voce menu

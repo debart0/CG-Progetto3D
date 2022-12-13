@@ -210,10 +210,10 @@ void INIT_Illuminazione()
 	shaders[ShaderOption::GOURAD_SHADING].name = "GOURAD SHADING";
 	shaders[ShaderOption::PHONG_SHADING].value = 2;
 	shaders[ShaderOption::PHONG_SHADING].name = "PHONG SHADING";
-	shaders[ShaderOption::ONDE_SHADING].value = 3;
-	shaders[ShaderOption::ONDE_SHADING].name = "ONDE SHADING";
-	shaders[ShaderOption::BANDIERA_SHADING].value = 4;
-	shaders[ShaderOption::BANDIERA_SHADING].name = "BANDIERA SHADING";
+	shaders[ShaderOption::BLINN_PHONG_SHADING].value = 3;
+	shaders[ShaderOption::BLINN_PHONG_SHADING].name = "BLINN PHONG SHADING";
+	shaders[ShaderOption::TOON_SHADING].value = 4;
+	shaders[ShaderOption::TOON_SHADING].name = "TOON SHADING";
 
 }
 
@@ -309,8 +309,14 @@ void collegaMesh() {
 	Scena[3].linkedMesh = &Scena[4];
 	Scena[4].linkedMesh = &Scena[3];
 
-	printf("%s linked: %s\n", Scena[3].nome.c_str(), Scena[3].linkedMesh->nome.c_str());
-	printf("%s linked: %s\n", Scena[4].nome.c_str(), Scena[4].linkedMesh->nome.c_str());
+	Scena[5].linkedMesh = &Scena[6];
+	Scena[6].linkedMesh = &Scena[5];
+
+	Scena[7].linkedMesh = &Scena[8];
+	Scena[8].linkedMesh = &Scena[7];
+
+	//printf("%s linked: %s\n", Scena[3].nome.c_str(), Scena[3].linkedMesh->nome.c_str());
+	//printf("%s linked: %s\n", Scena[4].nome.c_str(), Scena[4].linkedMesh->nome.c_str());
 }
 
 void INIT_VAO(void)
@@ -376,7 +382,7 @@ void INIT_VAO(void)
 	Tronco.ModelM = rotate(Tronco.ModelM, radians(180.0f), vec3(1.0, 0.0, 0.0));
 
 	Tronco.sceltaVS = 1;
-	Tronco.sceltaFS = 1;
+	Tronco.sceltaFS = 3;
 	Tronco.AABB = Tronco.BBOriginale;
 	Tronco.AABB.TL = Tronco.ModelM * Tronco.AABB.TL;
 	Tronco.AABB.BR = Tronco.ModelM * Tronco.AABB.BR;
@@ -425,7 +431,7 @@ void INIT_VAO(void)
 	//Albero 2
 	crea_cilindro(&Tronco2, vec4(1.0, 0.0, 0.0, 1.0), 8, 8, vec2(4.0, 2.0));
 	crea_VAO_Vector(&Tronco2);
-	Tronco2.nome = "Tronco2";
+	Tronco2.nome = "Tronco 2";
 	Tronco2.BBOriginale = calcolaBoundingBox(&Tronco2);
 	Tronco2.ModelM = mat4(1.0);
 	Tronco2.ModelM = translate(Tronco2.ModelM, vec3(20.0, -4.0, -20.0));
@@ -443,7 +449,7 @@ void INIT_VAO(void)
 	Tronco2.killable = true;
 	crea_cono(&Foglie2, vec4(1.0, 0.0, 0.0, 1.0), 8, 8, vec2(3.0, 3.0));
 	crea_VAO_Vector(&Foglie2);
-	Foglie2.nome = "Foglie2";
+	Foglie2.nome = "Foglie 2";
 	Foglie2.BBOriginale = calcolaBoundingBox(&Foglie2);
 	Foglie2.ModelM = mat4(1.0);
 	Foglie2.ModelM = translate(Foglie2.ModelM, vec3(20.0, 8.0, -20.0));
@@ -472,7 +478,7 @@ void INIT_VAO(void)
 	//Albero 3
 	crea_cilindro(&Tronco3, vec4(1.0, 0.0, 0.0, 1.0), 8, 8, vec2(4.0, 2.0));
 	crea_VAO_Vector(&Tronco3);
-	Tronco3.nome = "Tronco3";
+	Tronco3.nome = "Tronco 3";
 	Tronco3.BBOriginale = calcolaBoundingBox(&Tronco3);
 	Tronco3.ModelM = mat4(1.0);
 	Tronco3.ModelM = translate(Tronco3.ModelM, vec3(-19.0, -2.0, -4.0));
@@ -490,7 +496,7 @@ void INIT_VAO(void)
 	Tronco3.killable = true;
 	crea_cono(&Foglie3, vec4(1.0, 0.0, 0.0, 1.0), 8, 8, vec2(3.0, 3.0));
 	crea_VAO_Vector(&Foglie3);
-	Foglie3.nome = "Foglie3";
+	Foglie3.nome = "Foglie 3";
 	Foglie3.BBOriginale = calcolaBoundingBox(&Foglie3);
 	Foglie3.ModelM = mat4(1.0);
 	Foglie3.ModelM = translate(Foglie3.ModelM, vec3(-19.0, 11.0, -4.0));

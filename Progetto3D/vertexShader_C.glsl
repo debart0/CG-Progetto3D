@@ -29,22 +29,22 @@ struct Material {
     vec3 diffuse;
     vec3 specular;
     float shininess;
-}; 
+};
 uniform Material material;
 
- 
+
 
 out vec2  frag_coord_st;
 out vec4 ourColor; // output a color to the fragment shader
 out vec3 N,V,L,R,H;
- 
+
 void main()
 {
     ourColor = aColor; // set ourColor to the input color we got from the vertex data
-     
+
     if (sceltaVS==0)
     {
-           gl_Position = Projection*View*Model*vec4(aPos, 1.0); 
+           gl_Position = Projection*View*Model*vec4(aPos, 1.0);
     }
 
     if (sceltaVS==1)
@@ -63,11 +63,11 @@ void main()
             //trasformare le normali nel vertice in esame nel sistema di coordinate di vista
 
             //
-            
-             mat3 G= mat3(transpose(inverse(View*Model)));
-             N= normalize(G*vertexNormal);     
 
-            
+             mat3 G= mat3(transpose(inverse(View*Model)));
+             N= normalize(G*vertexNormal);
+
+
             //Calcoliamo la direzione della luce L, la direzione riflessione R e di vista
 
               V= normalize(viewPos - eyePosition.xyz);
@@ -88,14 +88,14 @@ void main()
 
             vec3 specular =  light.power * light.color * coseno_angolo_alfa * material.specular;
 
-            ourColor = vec4(ambient + diffuse + specular, 1.0);   
+            ourColor = vec4(ambient + diffuse + specular, 1.0);
              frag_coord_st=coord_st;
-            
+
     }
 
-       if (sceltaVS==2)
+    if (sceltaVS==2)
     {
-  
+
           //Modello di illuminazione di Blinn-Phong con shading interpolativo
 
             gl_Position = Projection*View*Model*vec4(aPos, 1.0);
@@ -110,18 +110,18 @@ void main()
             //trasformare le normali nel vertice in esame nel sistema di coordinate di vista
 
             //
-           
+
            mat3 G= mat3(transpose(inverse(View*Model)));
             N= normalize(G*vertexNormal);
-                     
 
-            
+
+
             //Calcoliamo la direzione della luce L, la direzione riflessione R e di vista
 
               V= normalize(viewPos - eyePosition.xyz);
               L = normalize((eyeLightPos- eyePosition).xyz);
-             
-              H=normalize(L+V); //Costruisce il vettore H a metà tra direzione di luce e di vista
+
+              H=normalize(L+V); //Costruisce il vettore H a metï¿½ tra direzione di luce e di vista
             //ambientale
             vec3 ambient = strenght*light.power * material.ambient;
 
@@ -137,7 +137,7 @@ void main()
 
             ourColor = vec4(ambient + diffuse + specular, 1.0);
              frag_coord_st=coord_st;
-            
+
     }
     if (sceltaVS==3)
     {
@@ -154,11 +154,11 @@ void main()
             //trasformare le normali nel vertice in esame nel sistema di coordinate di vista
 
               mat3 G= mat3(transpose(inverse(View*Model)));
-             N= normalize(G*vertexNormal);     
+             N= normalize(G*vertexNormal);
 
-                     
 
-            
+
+
             //Calcoliamo la direzione della luce L, la direzione riflessione R e di vista
 
               V= normalize(viewPos - eyePosition.xyz);
@@ -166,33 +166,32 @@ void main()
              R = reflect(-L,N);  //Costruisce la direzione riflessa di L rispesso alla normale
 
              frag_coord_st=coord_st;
-             
+
     }
-     if (sceltaVS==4)
+    if (sceltaVS==4)
     {
     //Shader  tipo cartoon
         gl_Position = Projection*View*Model*vec4(aPos, 1.0);
         //Trasformare le coordinate del vertice da elaborare (aPos) in coordinate di vista
-        
-        
+
+
         vec4 eyePosition= View*Model*vec4(aPos,1.0);
 
         vec4 eyeLightPos= View * vec4(light.position, 1.0);
         L = normalize((eyeLightPos- eyePosition).xyz);
           mat3 G= mat3(transpose(inverse(View*Model)));
-             N= normalize(G*vertexNormal);     
+             N= normalize(G*vertexNormal);
 
         float intensity= normalize(dot(L,N));
         if (intensity > 0.95)
-	    	ourColor  = vec4(1.0,0.5,0.5,1.0);
-	    else if (intensity > 0.5)
-		    ourColor  = vec4(0.8,0.4,0.4,1.0);
-	    else if (intensity > 0.25)
-	    	ourColor  = vec4(0.7,0.3,0.3,1.0);
-    	else
-		ourColor  = vec4(0.6,0.3,0.3,1.0);
-         frag_coord_st=coord_st;
-    }     
-    
-}  
+	    	  ourColor  = vec4(1.0,0.5,0.5,1.0);
+	      else if (intensity > 0.5)
+		      ourColor  = vec4(0.8,0.4,0.4,1.0);
+	      else if (intensity > 0.25)
+	    	  ourColor  = vec4(0.7,0.3,0.3,1.0);
+        else
+		      ourColor  = vec4(0.6,0.3,0.3,1.0);
+        frag_coord_st=coord_st;
+    }
 
+}
