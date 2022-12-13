@@ -240,7 +240,6 @@ BoundingBox calcolaBoundingBoxOBJ(vector<MeshObj> meshObjVector) {
 	return box;
 }
 
-//TODO fare che parta dalla posizione di scena 1 invece che 2  (togliere quella sfera)
 bool checkCollisionCamera(vector<Mesh> Scena, vec4 cameraPosition) {
 	Mesh mesh;
 	bool collisionX, collisionY, collisionZ;

@@ -9,6 +9,7 @@ extern vec3 asse;
 extern string Operazione;
 extern string stringa_asse;
 extern vector<Mesh> Scena;
+extern vec4 defaultCameraPosition;
 
 void modifyModelMatrix(glm::vec3 translation_vector, glm::vec3 rotation_vector, GLfloat angle, GLfloat scale_factor)
 {
@@ -117,7 +118,12 @@ void moveCameraDown()
 	}
 
 }
-
+void resettaCamera() {
+	ViewSetup.position = defaultCameraPosition;
+	ViewSetup.target = glm::vec4(0.0, 0.0, 0.0, 0.0);
+	ViewSetup.direction = ViewSetup.target - ViewSetup.position;
+	ViewSetup.upVector = glm::vec4(0.0, 1.0, 0.0, 0.0);
+}
 //Gestione eventi tastiera per il movimento della telecamera
 void keyboardPressedEvent(unsigned char key, int x, int y)
 {
@@ -150,6 +156,9 @@ void keyboardPressedEvent(unsigned char key, int x, int y)
 		moveCameraDown();
 		break;
 
+	case 'R':
+		resettaCamera();
+		break;
 	case 'v':  //Visualizzazione ancora
 		visualizzaAncora = TRUE;
 		break;

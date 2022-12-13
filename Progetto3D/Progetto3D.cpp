@@ -54,7 +54,6 @@ static unsigned int loc_view_pos, MatModelR, MatViewR, MatrixProjR, loc_view_pos
 
 unsigned int idTex, texture, texture1, cubemapTexture, texturePiano, textureTronco, textureFoglie, textureLegno, textureRockyTrail, programIdr;
 
-//TODO mettere un raggio per ogni oggetto
 float raggio_sfera=4;
 
 string Operazione;
@@ -64,6 +63,7 @@ int pval = 140;
 
 float Theta = -90.0f;
 float Phi = 0.0f;
+static vec4 defaultCameraPosition = glm::vec4(50.0, 20.0, 50.0, 0.0);
 
 vector<std::string> skyBoxFaces
 {
@@ -793,37 +793,6 @@ void INIT_VAO(void)
 	string name;
 	string path;
 	BoundingBox bbobj;
-	/*
-	name = "raptor_01.obj";
-	path = Meshdir + name;
-	obj = loadAssImp(path.c_str(), Model3D);   //OK ombrellone.obj, divano.obj, low_poly_house,man
-
-	nmeshes = Model3D.size();
-	printf("Model3D size: %d\n", nmeshes);
-	for (int i = 0; i < nmeshes; i++)
-	{
-		crea_VAO_Vector_MeshObj(&Model3D[i]);
-		Model3D[i].ModelM = mat4(1.0);
-		//Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(-7.0, 0.8, 12.0));
-		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(0.0, 0.0, 0.0));
-
-		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(2.5, 2.5, 2.5));
-		Model3D[i].nome = "Raptor";
-
-		Model3D[i].sceltaVS = 1;
-		Model3D[i].sceltaFS = 5;   //No texture
-	}
-	bbobj = calcolaBoundingBoxOBJ(Model3D);
-	//Piano.AABB = Piano.BBOriginale;
-	//Piano.AABB.TL = Piano.ModelM * Piano.AABB.TL;
-	//Piano.AABB.BR = Piano.ModelM * Piano.AABB.BR;
-	//bbobj.TL += vec4(0.5, 0.5, 0.5, 0.0) * bbobj.TL;
-	//bbobj.BR += vec4(0.5, 0.5, 0.5, 0.0) * bbobj.BR;
-	printf("Hitbox di Raptor: : %f, %f, %f--- %f, %f, %f\n", bbobj.TL.x, bbobj.TL.y, bbobj.TL.z, bbobj.BR.x, bbobj.BR.y, bbobj.BR.z);
-	BoundingBoxOBJVector.push_back(bbobj);
-	ScenaObj.push_back(Model3D);
-
-	Model3D.clear();*/
 	
 	name = "waterWell.obj";
 	path = Meshdir + name;
@@ -854,7 +823,123 @@ void INIT_VAO(void)
 	ScenaObj.push_back(Model3D);
 
 	Model3D.clear();
+	
+	name = "LProck2.obj";
+	path = Meshdir + name;
+	obj = loadAssImp(path.c_str(), Model3D);
+	nmeshes = Model3D.size();
+	//printf("Model3D size: %d\n", nmeshes);
+	for (int i = 0; i < nmeshes; i++)
+	{
+		crea_VAO_Vector_MeshObj(&Model3D[i]);
+		Model3D[i].ModelM = mat4(1.0);
+		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(-22.0, -7.5, -20.0));
+		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(2.3, 2.5, 3));
+		Model3D[i].ModelM = rotate(Model3D[i].ModelM, radians(-21.0f), vec3(0.0, 1.0, 0.0));
+		Model3D[i].nome = "Roccia 1";
+		Model3D[i].sceltaVS = 1;
+		Model3D[i].sceltaFS = 6;
+	}
+	bbobj = calcolaBoundingBoxOBJ(Model3D);
+	bbobj.TL = Model3D[0].ModelM * bbobj.TL;
+	bbobj.BR = Model3D[0].ModelM * bbobj.BR;
+	bbobj = rotateBoundingBox(bbobj);
+	//printf("Hitbox di Roccia: : %f, %f, %f--- %f, %f, %f\n", bbobj.TL.x, bbobj.TL.y, bbobj.TL.z, bbobj.BR.x, bbobj.BR.y, bbobj.BR.z);
+	BoundingBoxOBJVector.push_back(bbobj);
+	ScenaObj.push_back(Model3D);
+	Model3D.clear();
+	name = "LProck1.obj";
+	path = Meshdir + name;
+	obj = loadAssImp(path.c_str(), Model3D);
+	nmeshes = Model3D.size();
+	//printf("Model3D size: %d\n", nmeshes);
+	for (int i = 0; i < nmeshes; i++)
+	{
+		crea_VAO_Vector_MeshObj(&Model3D[i]);
+		Model3D[i].ModelM = mat4(1.0);
+		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(-18.0, -8.5, -18.0));
+		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(4, 1.5, 3));
+		Model3D[i].ModelM = rotate(Model3D[i].ModelM, radians(33.0f), vec3(0.0, 1.0, 0.0));
+		Model3D[i].nome = "Roccia 1";
+		Model3D[i].sceltaVS = 1;
+		Model3D[i].sceltaFS = 6;
+	}
+	bbobj = calcolaBoundingBoxOBJ(Model3D);
+	bbobj.TL = Model3D[0].ModelM * bbobj.TL;
+	bbobj.BR = Model3D[0].ModelM * bbobj.BR;
+	BoundingBoxOBJVector.push_back(bbobj);
+	ScenaObj.push_back(Model3D);
+	Model3D.clear();
 
+	name = "LProck2.obj";
+	path = Meshdir + name;
+	obj = loadAssImp(path.c_str(), Model3D);
+	nmeshes = Model3D.size();
+	//printf("Model3D size: %d\n", nmeshes);
+	for (int i = 0; i < nmeshes; i++)
+	{
+		crea_VAO_Vector_MeshObj(&Model3D[i]);
+		Model3D[i].ModelM = mat4(1.0);
+		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(17.0, -6.0, 11.0));
+		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(5.3, 4.0, 3.1));
+		Model3D[i].ModelM = rotate(Model3D[i].ModelM, radians(20.0f), vec3(0.0, 1.0, 0.0));
+		Model3D[i].nome = "Roccia 3";
+		Model3D[i].sceltaVS = 1;
+		Model3D[i].sceltaFS = 6;
+	}
+	bbobj = calcolaBoundingBoxOBJ(Model3D);
+	bbobj.TL = Model3D[0].ModelM * bbobj.TL;
+	bbobj.BR = Model3D[0].ModelM * bbobj.BR;
+	bbobj = rotateBoundingBox(bbobj);
+	BoundingBoxOBJVector.push_back(bbobj);
+	ScenaObj.push_back(Model3D);
+	Model3D.clear();
+	name = "LProck2.obj";
+	path = Meshdir + name;
+	obj = loadAssImp(path.c_str(), Model3D);
+	nmeshes = Model3D.size();
+	//printf("Model3D size: %d\n", nmeshes);
+	for (int i = 0; i < nmeshes; i++)
+	{
+		crea_VAO_Vector_MeshObj(&Model3D[i]);
+		Model3D[i].ModelM = mat4(1.0);
+		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(21.0, -8.0, 5.0));
+		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(3.3, 2.0, 4.1));
+		Model3D[i].ModelM = rotate(Model3D[i].ModelM, radians(0.0f), vec3(0.0, 1.0, 0.0));
+		Model3D[i].nome = "Roccia 4";
+		Model3D[i].sceltaVS = 1;
+		Model3D[i].sceltaFS = 6;
+	}
+	bbobj = calcolaBoundingBoxOBJ(Model3D);
+	bbobj.TL = Model3D[0].ModelM * bbobj.TL;
+	bbobj.BR = Model3D[0].ModelM * bbobj.BR;
+	bbobj = rotateBoundingBox(bbobj);
+	BoundingBoxOBJVector.push_back(bbobj);
+	ScenaObj.push_back(Model3D);
+	Model3D.clear();
+
+	name = "LProck3.obj";
+	path = Meshdir + name;
+	obj = loadAssImp(path.c_str(), Model3D);
+	nmeshes = Model3D.size();
+	for (int i = 0; i < nmeshes; i++)
+	{
+		crea_VAO_Vector_MeshObj(&Model3D[i]);
+		Model3D[i].ModelM = mat4(1.0);
+		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(24.0, -7.0, 24.0));
+		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(3.7, 3.0, 2.5));
+		Model3D[i].ModelM = rotate(Model3D[i].ModelM, radians(20.0f), vec3(0.0, 1.0, 0.0));
+		Model3D[i].nome = "Roccia 4";
+		Model3D[i].sceltaVS = 1;
+		Model3D[i].sceltaFS = 6;
+	}
+	bbobj = calcolaBoundingBoxOBJ(Model3D);
+	bbobj.TL = Model3D[0].ModelM * bbobj.TL;
+	bbobj.BR = Model3D[0].ModelM * bbobj.BR;
+	bbobj = rotateBoundingBox(bbobj);
+	BoundingBoxOBJVector.push_back(bbobj);
+	ScenaObj.push_back(Model3D);
+	Model3D.clear();
 
 	//Queste due sfere sono "di debug" per vedere gli angoli della bounding box di un modello caricato via OBJ
 	/*crea_sfera(&Sfera1, vec4(1.0, 0.0, 0.0, 1.0));
@@ -878,9 +963,7 @@ void INIT_VAO(void)
 	Sfera2.material = MaterialType::EMERALD;
 	Sfera2.texture = TextureType::SENZA;
 	Scena.push_back(Sfera2);*/
-	/*printf("\nIn fondo al init vao\n");
-	printf("%s linked: %s\n", Scena[2].nome.c_str(), Scena[2].linkedMesh->nome.c_str());
-	printf("%s linked: %s\n", Scena[3].nome.c_str(), Scena[3].linkedMesh->nome.c_str());*/
+
 }
 
 
@@ -908,10 +991,7 @@ void INIT_CAMERA_PROJECTION(void)
 	//Imposto la telecamera
 
 	ViewSetup = {};
-	ViewSetup.position = glm::vec4(0.0, 0.2, 50.0, 0.0);
-	ViewSetup.target = glm::vec4(0.0, 0.0, 0.0, 0.0);
-	ViewSetup.direction = ViewSetup.target - ViewSetup.position;
-	ViewSetup.upVector = glm::vec4(0.0, 1.0, 0.0, 0.0);
+	resettaCamera();
 
 
 	//Imposto la proiezione prospettica
