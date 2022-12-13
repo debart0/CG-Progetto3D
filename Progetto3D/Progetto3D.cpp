@@ -357,7 +357,7 @@ void INIT_VAO(void)
 	Scena.push_back(Piano);
 
 	//STRADINA
-	crea_piano(&Strada, vec4(0.2, 0.2, 0.9, 1.0), vec2(5.0, 50.0));
+	crea_piano(&Strada, vec4(0.2, 0.2, 0.9, 1.0), vec2(1.0, 12.5));
 	crea_VAO_Vector(&Strada);
 	Strada.nome = "STRADA";
 	Strada.ModelM = mat4(1.0);
