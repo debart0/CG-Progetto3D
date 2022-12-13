@@ -69,6 +69,7 @@ void InterpolazioneHermite(float* t, Mesh* Fig, vec4 color_top, vec4 color_bot)
 
 
 BoundingBox calcolaBoundingBox(Mesh* fig) {
+	string LOG_TAG = "calcolaBoundingBox";
 	vec3 min = fig->vertici.at(0);
 	vec3 max = fig->vertici.at(0);
 	vec3 topLeftCorner, bottomRightCorner;
@@ -81,7 +82,7 @@ BoundingBox calcolaBoundingBox(Mesh* fig) {
 		if (max.z < vertice.z) max.z = vertice.z;
 	}
 	//Controllo se alcune coordinate sono identiche (nel caso di un piano, ad esempio)
-	if (max.x == min.x) {
+	/*if (max.x == min.x) {
 		max.x += 2.5;
 		min.x -= 2.5;
 	}
@@ -92,7 +93,22 @@ BoundingBox calcolaBoundingBox(Mesh* fig) {
 	if (max.z == min.z) {
 		max.z += 2.5;
 		min.z -= 2.5;
+	}*/
+	/*if (abs(max.x - min.x) < 5) {
+		logger(LOG_TAG, "X troppo piccole");
+		max.x += 2.5;
+		min.x -= 2.5;
 	}
+	if (abs(max.y - min.y) < 5) {
+		logger(LOG_TAG, "Y troppo piccole");
+		max.y += 2.5;
+		min.y -= 2.5;
+	}
+	if (abs(max.z - min.z) < 5) {
+		logger(LOG_TAG, "Z troppo piccole");
+		max.z += 2.5;
+		min.z -= 2.5;
+	}*/
 	topLeftCorner.x = min.x;
 	topLeftCorner.y = max.y;
 	topLeftCorner.z = max.z;
@@ -114,7 +130,7 @@ BoundingBox calcolaBoundingBox(Mesh* fig) {
 	return box;
 }
 
-BoundingBox rotazioneBoundingBox(BoundingBox aabb) {
+BoundingBox rotateBoundingBox(BoundingBox aabb) {
 	vector<vec3> tmp{ aabb.TL, aabb.BR };
 	vec3 min = aabb.TL;
 	vec3 max = aabb.TL;
@@ -136,6 +152,40 @@ BoundingBox rotazioneBoundingBox(BoundingBox aabb) {
 	return newAABB;
 }
 
+BoundingBox resizeBoundingBox(BoundingBox aabb) {
+	string LOG_TAG = "allargaBoundingBox";
+	vec3 newTL, newBR;
+	newTL = aabb.TL;
+	newBR = aabb.BR;
+	if (abs(newBR.x - newTL.x) < 5) {
+		logger(LOG_TAG, "X troppo piccole");
+		newBR.x += 2.5;
+		newTL.x -= 2.5;
+	}
+	if (abs(newTL.y - newBR.y) < 5) {
+		logger(LOG_TAG, "Y troppo piccole");
+		newTL.y += 2.5;
+		newBR.y -= 2.5;
+	}
+	if (abs(newTL.z - newBR.z) < 5) {
+		logger(LOG_TAG, "Z troppo piccole");
+		newTL.z += 2.5;
+		newBR.z -= 2.5;
+	}
+	BoundingBox newAABB;
+	newAABB.TL = vec4(newTL, 0.0);
+	newAABB.BR = vec4(newBR, 0.0);
+	return newAABB;
+
+
+}
+
+BoundingBox adjustBoundingBox(BoundingBox aabb) {
+	BoundingBox newAABB;
+	newAABB = resizeBoundingBox(aabb);
+	newAABB = rotateBoundingBox(newAABB);
+	return newAABB;
+}
 
 BoundingBox calcolaBoundingBoxOBJ(vector<MeshObj> meshObjVector) {
 	string LOG_TAG = "calcolaBoundingBoxOBJ";
@@ -145,7 +195,6 @@ BoundingBox calcolaBoundingBoxOBJ(vector<MeshObj> meshObjVector) {
 	vec3 topLeftCorner, bottomRightCorner;
 	for (MeshObj fig : meshObjVector) {
 		i++;
-		printf("Modello num %d\n", i);
 		for (vec3 vertice : fig.vertici) {
 			if (min.x > vertice.x) min.x = vertice.x;
 			if (min.y > vertice.y) min.y = vertice.y;
@@ -157,17 +206,17 @@ BoundingBox calcolaBoundingBoxOBJ(vector<MeshObj> meshObjVector) {
 	}
 		//Controllo se alcune coordinate sono identiche (nel caso di un piano, ad esempio)
 		if (abs(max.x - min.x)<5) {
-			logger(LOG_TAG, "X troppo piccole\n");
+			logger(LOG_TAG, "X troppo piccole");
 			max.x += 2.5;
 			min.x -= 2.5;
 		}
 		if (abs(max.y- min.y)<5) {
-			logger(LOG_TAG, "Y troppo piccole\n");
+			logger(LOG_TAG, "Y troppo piccole");
 			max.y += 2.5;
 			min.y -= 2.5;
 		}
 		if (abs(max.z - min.z)<5) {
-			logger(LOG_TAG, "Z troppo piccole\n");
+			logger(LOG_TAG, "Z troppo piccole");
 			max.z += 2.5;
 			min.z -= 2.5;
 		}

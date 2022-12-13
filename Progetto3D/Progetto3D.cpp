@@ -340,8 +340,7 @@ void INIT_VAO(void)
 	Piano.AABB = Piano.BBOriginale;
 	Piano.AABB.TL = Piano.ModelM * Piano.AABB.TL;
 	Piano.AABB.BR = Piano.ModelM * Piano.AABB.BR;
-	Piano.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Piano.AABB.TL;
-	Piano.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Piano.AABB.BR;
+	Piano.AABB = adjustBoundingBox(Piano.AABB);
 	Piano.material = MaterialType::EMERALD;
 	Piano.texture = TextureType::ERBA;
 	Piano.alive = true;
@@ -367,9 +366,10 @@ void INIT_VAO(void)
 	Tronco.AABB = Tronco.BBOriginale;
 	Tronco.AABB.TL = Tronco.ModelM * Tronco.AABB.TL;
 	Tronco.AABB.BR = Tronco.ModelM * Tronco.AABB.BR;
-	Tronco.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Tronco.AABB.TL;
-	Tronco.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Tronco.AABB.BR;
-	Tronco.AABB = rotazioneBoundingBox(Tronco.AABB);
+	//Tronco.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Tronco.AABB.TL;
+	//Tronco.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Tronco.AABB.BR;
+	Tronco.AABB = rotateBoundingBox(Tronco.AABB);
+	Tronco.AABB = adjustBoundingBox(Tronco.AABB);
 
 	Tronco.material = MaterialType::MARRONE;
 	Tronco.texture = TextureType::TRONCO;
@@ -392,9 +392,9 @@ void INIT_VAO(void)
 	Foglie.AABB = Foglie.BBOriginale;
 	Foglie.AABB.TL = Foglie.ModelM * Foglie.AABB.TL;
 	Foglie.AABB.BR = Foglie.ModelM * Foglie.AABB.BR;
-	Foglie.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Foglie.AABB.TL;
-	Foglie.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Foglie.AABB.BR;
-	Foglie.AABB = rotazioneBoundingBox(Foglie.AABB);
+	//Foglie.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Foglie.AABB.TL;
+	//Foglie.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Foglie.AABB.BR;
+	Foglie.AABB = adjustBoundingBox(Foglie.AABB);
 	Foglie.material = MaterialType::EMERALD;
 	Foglie.texture = TextureType::FOGLIE;	
 	Foglie.killable = true;
@@ -404,6 +404,8 @@ void INIT_VAO(void)
 	Foglie.hp = 3;
 	Foglie.alive = true;
 	Foglie.linkedMesh = &Tronco;
+	printf("Hitbox di Tronco Originali: : %f, %f, %f--- %f, %f, %f\n", Tronco.BBOriginale.TL.x, Tronco.BBOriginale.TL.y, Tronco.BBOriginale.TL.z, Tronco.BBOriginale.BR.x, Tronco.BBOriginale.BR.y, Tronco.BBOriginale.BR.z);
+	printf("Hitbox di Tronco: : %f, %f, %f--- %f, %f, %f\n", Tronco.AABB.TL.x, Tronco.AABB.TL.y, Tronco.AABB.TL.z, Tronco.AABB.BR.x, Tronco.AABB.BR.y, Tronco.AABB.BR.z);
 
 	Scena.push_back(Tronco);
 	Scena.push_back(Foglie);
@@ -442,15 +444,14 @@ void INIT_VAO(void)
 	Muretto.AABB = Muretto.BBOriginale;
 	Muretto.AABB.TL = Muretto.ModelM * Muretto.AABB.TL;
 	Muretto.AABB.BR = Muretto.ModelM * Muretto.AABB.BR;
-	Muretto.AABB.TL += vec4(1.0, 1.0, 0.2, 0.0) * Muretto.AABB.TL;
-	Muretto.AABB.BR += vec4(1.0, 1.0, 0.2, 0.0) * Muretto.AABB.BR;
-	Muretto.AABB = rotazioneBoundingBox(Muretto.AABB);
+	Muretto.AABB = adjustBoundingBox(Muretto.AABB);
 	Muretto.sceltaVS = 1;
 	Muretto.sceltaFS = 1;
 	Muretto.material = MaterialType::MARRONE;
 	Muretto.texture = TextureType::LEGNO;
 	Muretto.killable = false;
 	Muretto.alive = true;
+	printf("Hitbox di Muretto Originali: : %f, %f, %f--- %f, %f, %f\n", Muretto.BBOriginale.TL.x, Muretto.BBOriginale.TL.y, Muretto.BBOriginale.TL.z, Muretto.BBOriginale.BR.x, Muretto.BBOriginale.BR.y, Muretto.BBOriginale.BR.z);
 	printf("Hitbox di Muretto: : %f, %f, %f--- %f, %f, %f\n", Muretto.AABB.TL.x, Muretto.AABB.TL.y, Muretto.AABB.TL.z, Muretto.AABB.BR.x, Muretto.AABB.BR.y, Muretto.AABB.BR.z);
 	Scena.push_back(Muretto);
 
@@ -465,8 +466,7 @@ void INIT_VAO(void)
 	Gamba1.AABB = Gamba1.BBOriginale;
 	Gamba1.AABB.TL = Gamba1.ModelM * Gamba1.AABB.TL;
 	Gamba1.AABB.BR = Gamba1.ModelM * Gamba1.AABB.BR;
-	Gamba1.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba1.AABB.TL;
-	Gamba1.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba1.AABB.BR;
+	Gamba1.AABB = adjustBoundingBox(Gamba1.AABB);
 	Gamba1.sceltaVS = 1;
 	Gamba1.sceltaFS = 1;
 	Gamba1.material = MaterialType::MARRONE;
@@ -485,8 +485,8 @@ void INIT_VAO(void)
 	Gamba2.AABB = Gamba2.BBOriginale;
 	Gamba2.AABB.TL = Gamba2.ModelM * Gamba2.AABB.TL;
 	Gamba2.AABB.BR = Gamba2.ModelM * Gamba2.AABB.BR;
-	Gamba2.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba2.AABB.TL;
-	Gamba2.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba2.AABB.BR;
+	Gamba2.AABB = adjustBoundingBox(Gamba2.AABB);
+
 	Gamba2.sceltaVS = 1;
 	Gamba2.sceltaFS = 1;
 	Gamba2.material = MaterialType::MARRONE;
@@ -505,8 +505,8 @@ void INIT_VAO(void)
 	Gamba3.AABB = Gamba3.BBOriginale;
 	Gamba3.AABB.TL = Gamba3.ModelM * Gamba3.AABB.TL;
 	Gamba3.AABB.BR = Gamba3.ModelM * Gamba3.AABB.BR;
-	Gamba3.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba3.AABB.TL;
-	Gamba3.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba3.AABB.BR;
+	Gamba3.AABB = adjustBoundingBox(Gamba3.AABB);
+
 	Gamba3.sceltaVS = 1;
 	Gamba3.sceltaFS = 1;
 	Gamba3.material = MaterialType::MARRONE;
@@ -525,8 +525,7 @@ void INIT_VAO(void)
 	Gamba4.AABB = Gamba4.BBOriginale;
 	Gamba4.AABB.TL = Gamba4.ModelM * Gamba4.AABB.TL;
 	Gamba4.AABB.BR = Gamba4.ModelM * Gamba4.AABB.BR;
-	Gamba4.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba4.AABB.TL;
-	Gamba4.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba4.AABB.BR;
+	Gamba4.AABB = adjustBoundingBox(Gamba4.AABB);
 	Gamba4.sceltaVS = 1;
 	Gamba4.sceltaFS = 1;
 	Gamba4.material = MaterialType::MARRONE;
@@ -545,8 +544,7 @@ void INIT_VAO(void)
 	Gamba5.AABB = Gamba5.BBOriginale;
 	Gamba5.AABB.TL = Gamba5.ModelM * Gamba5.AABB.TL;
 	Gamba5.AABB.BR = Gamba5.ModelM * Gamba5.AABB.BR;
-	Gamba5.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba5.AABB.TL;
-	Gamba5.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba5.AABB.BR;
+	Gamba5.AABB = adjustBoundingBox(Gamba5.AABB);
 	Gamba5.sceltaVS = 1;
 	Gamba5.sceltaFS = 1;
 	Gamba5.material = MaterialType::MARRONE;
@@ -567,16 +565,14 @@ void INIT_VAO(void)
 	Muretto2.AABB = Muretto2.BBOriginale;
 	Muretto2.AABB.TL = Muretto2.ModelM * Muretto2.AABB.TL;
 	Muretto2.AABB.BR = Muretto2.ModelM * Muretto2.AABB.BR;
-	Muretto2.AABB.TL += vec4(1.0, 1.0, 0.2, 0.0) * Muretto2.AABB.TL;
-	Muretto2.AABB.BR += vec4(1.0, 1.0, 0.2, 0.0) * Muretto2.AABB.BR;
-	Muretto2.AABB = rotazioneBoundingBox(Muretto2.AABB);
+	Muretto2.AABB = adjustBoundingBox(Muretto2.AABB);
 	Muretto2.sceltaVS = 1;
 	Muretto2.sceltaFS = 1;
 	Muretto2.material = MaterialType::MARRONE;
 	Muretto2.texture = TextureType::LEGNO;
 	Muretto2.killable = false;
 	Muretto2.alive = true;
-	printf("Hitbox di Muretto2: : %f, %f, %f--- %f, %f, %f\n", Muretto2.AABB.TL.x, Muretto2.AABB.TL.y, Muretto2.AABB.TL.z, Muretto2.AABB.BR.x, Muretto2.AABB.BR.y, Muretto2.AABB.BR.z);
+	//printf("Hitbox di Muretto2: : %f, %f, %f--- %f, %f, %f\n", Muretto2.AABB.TL.x, Muretto2.AABB.TL.y, Muretto2.AABB.TL.z, Muretto2.AABB.BR.x, Muretto2.AABB.BR.y, Muretto2.AABB.BR.z);
 	Scena.push_back(Muretto2);
 	
 	//MURETTO 3
@@ -591,16 +587,14 @@ void INIT_VAO(void)
 	Muretto3.AABB = Muretto3.BBOriginale;
 	Muretto3.AABB.TL = Muretto3.ModelM * Muretto3.AABB.TL;
 	Muretto3.AABB.BR = Muretto3.ModelM * Muretto3.AABB.BR;
-	Muretto3.AABB.TL += vec4(1.0, 1.0, 0.2, 0.0) * Muretto3.AABB.TL;
-	Muretto3.AABB.BR += vec4(1.0, 1.0, 0.2, 0.0) * Muretto3.AABB.BR;
-	Muretto3.AABB = rotazioneBoundingBox(Muretto3.AABB);
+	Muretto3.AABB = adjustBoundingBox(Muretto3.AABB);
 	Muretto3.sceltaVS = 1;
 	Muretto3.sceltaFS = 1;
 	Muretto3.material = MaterialType::MARRONE;
 	Muretto3.texture = TextureType::LEGNO;
 	Muretto3.killable = false;
 	Muretto3.alive = true;
-	printf("Hitbox di Muretto3: : %f, %f, %f--- %f, %f, %f\n", Muretto3.AABB.TL.x, Muretto3.AABB.TL.y, Muretto3.AABB.TL.z, Muretto3.AABB.BR.x, Muretto3.AABB.BR.y, Muretto3.AABB.BR.z);
+	//printf("Hitbox di Muretto3: : %f, %f, %f--- %f, %f, %f\n", Muretto3.AABB.TL.x, Muretto3.AABB.TL.y, Muretto3.AABB.TL.z, Muretto3.AABB.BR.x, Muretto3.AABB.BR.y, Muretto3.AABB.BR.z);
 	Scena.push_back(Muretto3);
 
 
@@ -615,8 +609,7 @@ void INIT_VAO(void)
 	Gamba6.AABB = Gamba6.BBOriginale;
 	Gamba6.AABB.TL = Gamba6.ModelM * Gamba6.AABB.TL;
 	Gamba6.AABB.BR = Gamba6.ModelM * Gamba6.AABB.BR;
-	Gamba6.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba6.AABB.TL;
-	Gamba6.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba6.AABB.BR;
+	Gamba6.AABB = adjustBoundingBox(Gamba6.AABB);
 	Gamba6.sceltaVS = 1;
 	Gamba6.sceltaFS = 1;
 	Gamba6.material = MaterialType::MARRONE;
@@ -635,8 +628,7 @@ void INIT_VAO(void)
 	Gamba7.AABB = Gamba7.BBOriginale;
 	Gamba7.AABB.TL = Gamba7.ModelM * Gamba7.AABB.TL;
 	Gamba7.AABB.BR = Gamba7.ModelM * Gamba7.AABB.BR;
-	Gamba7.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba7.AABB.TL;
-	Gamba7.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba7.AABB.BR;
+	Gamba7.AABB = adjustBoundingBox(Gamba7.AABB);
 	Gamba7.sceltaVS = 1;
 	Gamba7.sceltaFS = 1;
 	Gamba7.material = MaterialType::MARRONE;
@@ -655,8 +647,7 @@ void INIT_VAO(void)
 	Gamba8.AABB = Gamba8.BBOriginale;
 	Gamba8.AABB.TL = Gamba8.ModelM * Gamba8.AABB.TL;
 	Gamba8.AABB.BR = Gamba8.ModelM * Gamba8.AABB.BR;
-	Gamba8.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba8.AABB.TL;
-	Gamba8.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba8.AABB.BR;
+	Gamba8.AABB = adjustBoundingBox(Gamba8.AABB);
 	Gamba8.sceltaVS = 1;
 	Gamba8.sceltaFS = 1;
 	Gamba8.material = MaterialType::MARRONE;
@@ -675,8 +666,7 @@ void INIT_VAO(void)
 	Gamba9.AABB = Gamba9.BBOriginale;
 	Gamba9.AABB.TL = Gamba9.ModelM * Gamba9.AABB.TL;
 	Gamba9.AABB.BR = Gamba9.ModelM * Gamba9.AABB.BR;
-	Gamba9.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba9.AABB.TL;
-	Gamba9.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba9.AABB.BR;
+	Gamba9.AABB = adjustBoundingBox(Gamba9.AABB);
 	Gamba9.sceltaVS = 1;
 	Gamba9.sceltaFS = 1;
 	Gamba9.material = MaterialType::MARRONE;
@@ -694,9 +684,8 @@ void INIT_VAO(void)
 	Gamba10.ModelM = scale(Gamba10.ModelM, vec3(0.5, 1.0, 0.5));
 	Gamba10.AABB = Gamba10.BBOriginale;
 	Gamba10.AABB.TL = Gamba10.ModelM * Gamba10.AABB.TL;
-	Gamba10.AABB.BR = Gamba10.ModelM * Gamba10.AABB.BR;
-	Gamba10.AABB.TL += vec4(0.2, 0.2, 0.2, 0.0) * Gamba10.AABB.TL;
-	Gamba10.AABB.BR += vec4(0.2, 0.2, 0.2, 0.0) * Gamba10.AABB.BR;
+	Gamba10.AABB.BR = Gamba10.ModelM * Gamba10.AABB.BR;	
+	Gamba10.AABB = adjustBoundingBox(Gamba10.AABB);
 	Gamba10.sceltaVS = 1;
 	Gamba10.sceltaFS = 1;
 	Gamba10.material = MaterialType::MARRONE;
@@ -765,7 +754,7 @@ void INIT_VAO(void)
 	bbobj = calcolaBoundingBoxOBJ(Model3D);
 	bbobj.TL = Model3D[0].ModelM * bbobj.TL;
 	bbobj.BR = Model3D[0].ModelM * bbobj.BR;
-	bbobj = rotazioneBoundingBox(bbobj);
+	bbobj = rotateBoundingBox(bbobj);
 	//printf("Hitbox di Pozzo: : %f, %f, %f--- %f, %f, %f\n", bbobj.TL.x, bbobj.TL.y, bbobj.TL.z, bbobj.BR.x, bbobj.BR.y, bbobj.BR.z);
 	BoundingBoxOBJVector.push_back(bbobj);
 
