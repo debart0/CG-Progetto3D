@@ -213,7 +213,7 @@ void INIT_Illuminazione()
 	shaders[ShaderOption::PHONG_PHONG_SHADING].value = 3;
 	shaders[ShaderOption::PHONG_PHONG_SHADING].name = "PHONG + PHONG";
 	shaders[ShaderOption::BLINN_PHONG_PHONG_SHADING].value = 4;
-	shaders[ShaderOption::BLINN_PHONG_PHONG_SHADING].name = "BLINN-PHONG + INTERPL";
+	shaders[ShaderOption::BLINN_PHONG_PHONG_SHADING].name = "BLINN-PHONG + PHONG";
 	shaders[ShaderOption::TOON_SHADING].value = 5;
 	shaders[ShaderOption::TOON_SHADING].name = "TOON SHADING";
 
@@ -930,6 +930,52 @@ void INIT_VAO(void)
 		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(3.7, 3.0, 2.5));
 		Model3D[i].ModelM = rotate(Model3D[i].ModelM, radians(20.0f), vec3(0.0, 1.0, 0.0));
 		Model3D[i].nome = "Roccia 4";
+		Model3D[i].sceltaVS = 1;
+		Model3D[i].sceltaFS = 6;
+	}
+	bbobj = calcolaBoundingBoxOBJ(Model3D);
+	bbobj.TL = Model3D[0].ModelM * bbobj.TL;
+	bbobj.BR = Model3D[0].ModelM * bbobj.BR;
+	bbobj = rotateBoundingBox(bbobj);
+	BoundingBoxOBJVector.push_back(bbobj);
+	ScenaObj.push_back(Model3D);
+	Model3D.clear();
+	//Animali
+	name = "pigeon.obj";
+	path = Meshdir + name;
+	obj = loadAssImp(path.c_str(), Model3D);
+	nmeshes = Model3D.size();
+	for (int i = 0; i < nmeshes; i++)
+	{
+		crea_VAO_Vector_MeshObj(&Model3D[i]);
+		Model3D[i].ModelM = mat4(1.0);
+		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(11.0, -9.7, -15.0));
+		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(0.3, 0.3, 0.3));
+		Model3D[i].ModelM = rotate(Model3D[i].ModelM, radians(20.0f), vec3(0.0, 1.0, 0.0));
+		Model3D[i].nome = "Piccione";
+		Model3D[i].sceltaVS = 1;
+		Model3D[i].sceltaFS = 6;
+	}
+	bbobj = calcolaBoundingBoxOBJ(Model3D);
+	bbobj.TL = Model3D[0].ModelM * bbobj.TL;
+	bbobj.BR = Model3D[0].ModelM * bbobj.BR;
+	bbobj = rotateBoundingBox(bbobj);
+	BoundingBoxOBJVector.push_back(bbobj);
+	ScenaObj.push_back(Model3D);
+	Model3D.clear();
+
+	name = "pigeon.obj";
+	path = Meshdir + name;
+	obj = loadAssImp(path.c_str(), Model3D);
+	nmeshes = Model3D.size();
+	for (int i = 0; i < nmeshes; i++)
+	{
+		crea_VAO_Vector_MeshObj(&Model3D[i]);
+		Model3D[i].ModelM = mat4(1.0);
+		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(17.0, -1.6, 11.0));
+		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(0.4, 0.4, 0.4));
+		Model3D[i].ModelM = rotate(Model3D[i].ModelM, radians(60.0f), vec3(0.0, 1.0, 0.0));
+		Model3D[i].nome = "Piccione 2";
 		Model3D[i].sceltaVS = 1;
 		Model3D[i].sceltaFS = 6;
 	}
