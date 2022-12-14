@@ -52,7 +52,7 @@ static unsigned int loc_view_pos, MatModelR, MatViewR, MatrixProjR, loc_view_pos
 
  
 
-unsigned int idTex, texture, texture1, cubemapTexture, texturePiano, textureTronco, textureFoglie, textureLegno, textureRockyTrail, programIdr;
+unsigned int idTex, cubemapTexture, texturePiano, textureTronco, textureFoglie, textureLegno, textureRockyTrail, programIdr;
 
 float raggio_sfera=4;
 
@@ -1179,10 +1179,6 @@ void drawScene(void)
 				case TextureType::LEGNO:
 					glUniform1i(loc_texture, 0);
 					glBindTexture(GL_TEXTURE_2D, textureLegno);
-					break;
-				case TextureType::MATTONI:
-					glUniform1i(loc_texture, 0);
-					glBindTexture(GL_TEXTURE_2D, texture);
 					break;
 				case TextureType::SENTIERO:
 					glUniform1i(loc_texture, 0);

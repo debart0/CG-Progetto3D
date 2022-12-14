@@ -3,7 +3,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-extern unsigned int idTex, texture, texture1, cubemapTexture, texturePiano, textureTronco, textureFoglie, textureLegno, textureRockyTrail;
+extern unsigned int idTex, cubemapTexture, texturePiano, textureTronco, textureFoglie, textureLegno, textureRockyTrail;
 extern string Imagedir;
 extern vector<std::string> skyBoxFaces, rockwallFaces;
 
@@ -86,14 +86,6 @@ void caricaTexture() {
 	string path;
 
 	cubemapTexture = loadCubemap(skyBoxFaces, 0);
-
-	name = "muromattoni.jpg";
-	path = Imagedir + name;
-	texture = loadTexture(path.c_str(), 0);
-
-	name = "steve.jpg";
-	path = Imagedir + name;
-	texture1 = loadTexture(path.c_str(), 0);
 
 	name = "grass_seamless.jpg";
 	path = Imagedir + name;

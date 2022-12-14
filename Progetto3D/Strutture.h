@@ -94,7 +94,6 @@ typedef enum {
 	ERBA,
 	FOGLIE,
 	MURO,
-	MATTONI,
 	SENTIERO,
 	LEGNO
 } TextureType;
